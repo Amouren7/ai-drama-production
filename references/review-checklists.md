@@ -1,0 +1,161 @@
+# Review Checklists
+
+Use PASS / WARN / FAIL. Any average score below 8/10 or any single item below 6/10 requires revision.
+
+## Story And Script Review
+
+Score 1-10:
+
+- premise clarity: audience understands the core conflict quickly
+- hook strength: first 3 seconds create curiosity or surprise
+- character desire: protagonist wants something concrete
+- conflict escalation: each scene increases pressure or reveals new information
+- reversal density: every 10-15 seconds has a turn, reveal, joke, escalation, or emotional beat
+- dialogue force: lines are short, playable, and character-specific
+- emotional logic: actions follow motivation
+- ending button: final image or line lands cleanly
+
+Repair:
+
+- If premise is vague, rewrite as "A [person] must [goal] before [deadline], but [obstacle]."
+- If scenes feel flat, add a choice, secret, countdown, contradiction, or status reversal.
+- If dialogue is long, cut to the most charged sentence.
+
+## Director Analysis Review
+
+Score 1-10:
+
+- visible action: abstract emotion is translated into physical behavior
+- action chain: movement flows continuously
+- camera direction: lens distance and motion are clear
+- lighting specificity: source, direction, color temperature, and contrast are concrete
+- audio specificity: dialogue, ambience, effects, and music are controlled
+- beat density: duration can support the number of actions
+- story fidelity: every script beat is preserved or intentionally adapted
+
+Repair:
+
+- Replace "sad/angry/nervous" with posture, gesture, eye movement, breath, hand action, blocking.
+- Replace "cinematic lighting" with exact source and direction.
+- Split overloaded shots or extend duration.
+
+## Art Design Review
+
+Score 1-10:
+
+- identity distinctiveness: face, silhouette, costume, and prop are memorable
+- consistency anchors: stable traits are named
+- style unity: all characters and scenes share one art direction
+- generation clarity: image prompts avoid ambiguity
+- scene usability: layouts are usable as reference images
+- variant control: reuse/new/variant states are clear
+- core location anchor: heavily reused scenes have a stable hero reference
+- production repair plan: difficult hands, props, text, perspective, and multi-character compositions have a repair method
+
+Repair:
+
+- Add a signature prop, color block, hairstyle, or silhouette if a character is generic.
+- Remove conflicting style words.
+- For scene grids, remove characters unless needed for scale.
+- For hard multi-character shots, split background, character, prop, and expression assets into layers before video generation.
+
+## Storyboard Imageability Review
+
+Score 1-10:
+
+- viewpoint clarity: first-person/third-person/over-the-shoulder/subjective POV is explicit
+- shot-size rhythm: adjacent shots vary intentionally
+- expression clarity: facial expression and psychology are concrete
+- adjacent-shot continuity: each shot connects spatially and emotionally to the previous/next shot
+- imageability: each row can be drawn from the instruction
+- simplicity: each shot is reduced to a clear "who does what" or "what object is where"
+
+Repair:
+
+- Replace literary meaning with visible action.
+- Add reaction shots, insert shots, and close-ups where emotion or information is unclear.
+- Rough-cut still images before final video generation when continuity is uncertain.
+
+## Seedance Prompt Review
+
+Score 1-10:
+
+- reference roles: every `@` reference states its purpose
+- static/dynamic separation: prompt describes changes, not repeated reference details
+- narrative writing: reads like film direction rather than keyword tags
+- duration fit: action beats match seconds
+- camera feasibility: no contradictory camera moves
+- audio design: at least ambience, dialogue, music, or sound effects are specified
+- continuity: prior and next shots can connect
+- platform limits: per-shot references stay within allowed counts
+- first/last frame suitability: controlled falls, reveals, transitions, and position changes are assigned to first/last-frame workflows when useful
+
+Repair:
+
+- If `@图片1 @图片2` is naked, rewrite as "以 @图片1 中的角色为主角，场景参考 @图片2 的空间布局".
+- If a 5s prompt has 4+ actions, cut to 1-2 actions or make it 10-15s.
+- Replace negatives with positive instructions.
+- For 10s+ prompts, add time-coded segments.
+
+## Motion Comic Panel Consistency Review
+
+Score 1-10 (applicable only in motion comic mode):
+
+- style prefix consistency: every panel prompt shares the same style prefix string
+- character face consistency: character face does not visibly change across panels referencing the same character image
+- costume/prop consistency: clothing, gear, and signature props remain identifiable across panels
+- color temperature logic: adjacent panels do not have conflicting color temperatures
+- camera angle variety: panels vary composition (wide/medium/close-up) — not every panel is the same shot size
+- voiceover split quality: no single panel is overloaded with text; splits feel natural
+- motion variety: adjacent panels do not all use the same motion type (push-in/pull-out/pan/zoom)
+- panel duration sanity: no panel is under 1.5s (too fast to read) or over 8s (too long to hold without content switch)
+
+Repair:
+
+- If character drifts, check that the exact same reference image is cited and the identity anchor description is present.
+- If panels feel repetitive, insert a reaction panel, detail insert, or angle change between two similar compositions.
+- If pacing feels wrong, watch with scratch voiceover and adjust durations in 0.5s increments.
+- If three+ consecutive panels use the same motion, change the middle panel to a still or different motion type.
+
+## Postproduction Review
+
+Score 1-10:
+
+- still rough cut: storyboard images were checked in timeline before expensive generation
+- voice timing: dialogue duration matches shot duration
+- sound coverage: quiet scenes include ambience or foley, not dead silence
+- music restraint: music supports genre/reveal/climax without flattening drama
+- repair workflow: low-FPS, soft, or unstable clips have interpolation/upscale/compositing plan
+- edit flexibility: hard action scenes have alternate takes, inserts, and match-cut options
+
+Repair:
+
+- Add scratch voice and retime shots before final prompts.
+- Interpolate/upscale original generated clips before final export.
+- Add ambience/effects before adding more music.
+
+## Compliance Review
+
+Flag and repair:
+
+- real-person face references: use fictional AI-generated character references instead
+- copyrighted IP dependence: transform into original characters/worlds; keep only high-level genre inspiration
+- political sensitivity or real public figures: remove or fictionalize
+- minors in sexualized contexts: remove
+- explicit sex or graphic gore: soften or cut
+- dangerous imitation instructions: remove procedural detail
+- defamation or impersonation: avoid real names and likenesses
+
+## Final Markdown Review
+
+Before delivering:
+
+- no unfinished placeholders remain
+- all reference numbers in prompts exist in the material map
+- each prompt has duration, references, camera/action, emotion, and sound
+- every character and scene has a visual anchor
+- production plan includes image asset workflow, still rough cut, audio passes, iteration, and edit strategy
+- assumptions and defaults are clearly stated
+- [Motion comic] panel mapping covers every voiceover line
+- [Motion comic] camera motion assignment is present for every panel
+- [Motion comic] 剪映 assembly guide includes timeline layout, transitions, and keyframe settings

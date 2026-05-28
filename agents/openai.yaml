@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI Drama Production"
+  short_description: "Guide AI drama from idea to shot prompts"
+  default_prompt: "Use $ai-drama-production to guide me from a story idea to a complete AI drama production markdown."
