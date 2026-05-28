@@ -1,5 +1,7 @@
 # AI Drama Production
 
+> **[中文版文档](README.zh-CN.md)**
+
 A Claude Code skill for AI drama and motion comic production. Two modes, one workflow:
 
 - **🎬 Film mode** — continuous video generation pipeline for Seedance/即梦, targeting AI short films, trailers, and cinematic sequences
