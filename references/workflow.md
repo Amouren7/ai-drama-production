@@ -155,6 +155,80 @@ For each shot:
 
 Use one generation prompt for one coherent generation unit. For complex action, generate multiple variations and plan edit points.
 
+### 5.5 Storyboard Panel Generation (NEW — Before Any Video Generation)
+
+**为什么先做分镜板图：**
+
+文字提示词描述的构图在经过视频模型时会被"重新想象"一次。用生图AI先生成静态分镜板图，相当于在视频生成之前加一道视觉把关：构图是否准确、角色位置是否合理、光影方向是否一致、景别切换是否流畅。一张图改构图只需一次生成；一段视频改构图就要重做整个镜头。
+
+**5.5.1 从视频提示词生成分镜板图**
+
+为每个镜头生成一张静态分镜板图：
+
+- 提取视频提示词中 `0-1秒` 的关键帧描述作为生图提示词主体
+- 保持与视频提示词相同的画幅比例（9:16 / 16:9）
+- 引用同一套角色参考图（@图片1 阿杰、@图片2 阿May 等）
+- 引用场景参考图（@图片5 街道场景等）
+- 移除视频提示词中的时间分段、运镜、声音等非图像信息
+- 保留：角色位置、表情、服装、构图、景别、光影方向
+
+> 一条视频提示词 → 一张分镜板图。不需要为每帧生图，只生"开场关键帧"即可。
+
+完整提示词模板见 `references/templates.md` → "Storyboard Panel Prompt Template"。
+
+**5.5.2 分镜板图审查清单**
+
+生成所有镜头的分镜板图后，按以下要点逐一检查：
+
+| 检查项 | 说明 |
+|--------|------|
+| 角色一致性 | 角色面容、服装、身材是否和角色参考图一致 |
+| 构图准确性 | 是否和文字分镜描述一致（人物位置、背景元素） |
+| 景别切换 | 相邻镜头的景别是否有明显变化（避免连续三个中景） |
+| 光影方向 | 主光源方向是否跨镜头一致（除非有明确的光源变化理由） |
+| 角色视线 | 对话场景中人物视线方向是否正确匹配（正反打规则） |
+| 情绪表达 | 角色的表情是否传达了该镜头需要的情绪 |
+| 场景衔接 | 前后镜头的空间位置关系是否逻辑连贯 |
+| 穿帮检查 | 有没有出现不应该在这个场景出现的道具/角色/文字 |
+
+完整审查清单模板见 `references/templates.md` → "Storyboard Panel Review Checklist"。
+
+**5.5.3 审查决策**
+
+每张分镜板图的审查结果：
+
+- **✅ 通过** — 直接进入下一阶段
+- **🔄 修改提示词后重新生成** — 构图或角色不满足要求，修改生图提示词后重试
+- **📝 保留但标注风险** — 构图可用但有细微问题，在视频生成时通过 @图片 参考+提示词修正来弥补
+- **❌ 废弃并重写分镜** — 文字分镜本身在视觉上不可行，退回 Step 5 修改文字分镜
+
+不通过的镜头不应进入视频生成阶段。
+
+**5.5.4 分镜板图 → 视频提示词注入**
+
+审查通过的分镜板图作为该镜头的视觉参考，注入到 Seedance 视频提示词中：
+
+- 在视频提示词的引用素材表中，将该镜头的分镜板图添加为 `@图片` 参考
+- 在提示词正文中声明："以 @图片N（本镜头分镜板图）的构图和角色位置为基础"
+- 提示词正文中不再重复描述已由图展示的静态信息（角色长相、服装颜色、场景布局），只描述图中没有的：动作、运镜、时间变化、声音
+
+**改造前（无分镜板图参考）：**
+
+```prompt
+以 @图片1 中的阿杰为主角。生成 4 秒，9:16 竖屏。
+0-1秒：阿杰站在路边，身穿黑色皮夹克，墨镜，午后阳光...
+```
+
+**改造后（分镜板图作为 @图片 参考）：**
+
+```prompt
+以 @图片1 中的阿杰为主角，以 @图片5（本镜头分镜板图）的构图和角色位置为视觉基准。生成 4 秒，9:16 竖屏。
+0-1秒：阿杰从静止状态开始——他清了清嗓子，头转向右侧，嘴唇微动准备说话。场景光影和角色位置与参考图保持一致。
+1-4秒：他手臂指向画外方向，然后转身走向机车，跨腿——皮裤卡在车把上，身体歪了一下。
+```
+
+注意看：改造后不再描述"站在路边""身穿黑色皮夹克""午后阳光"（已在图中），只描述"开始动"的部分。
+
 ## 6. Iteration And Assembly
 
 Use a loop:
@@ -169,9 +243,9 @@ For action scenes, expect editing. Generate multiple takes, use match cuts, keep
 
 ## 7. Practical Production And Post
 
-Create a still-image rough cut before generating final video:
+Create a still-image rough cut before generating final video. Use the approved storyboard panels from Step 5.5 as the primary rough-cut material:
 
-1. Place storyboard/reference stills on a timeline.
+1. Place storyboard panels (from Step 5.5) on a timeline at their assigned shot durations.
 2. Check shot-size variety, character screen direction, POV clarity, and dialogue rhythm.
 3. Adjust missing reaction shots or inserts before spending video-generation budget.
 4. Use voice timing to decide whether shots need to be longer, shorter, or supplemented.
