@@ -28,12 +28,12 @@ Always produce a Markdown deliverable unless the user asks for another format.
    - constraints: tools, language, aspect ratio, available reference images, safety limits
 3. If the user gives little detail, choose reasonable defaults and make them explicit.
 4. Follow the appropriate workflow:
-   - Film mode → `references/workflow.md`
-   - Motion comic mode → `references/workflow-motion-comic.md`
+   - Film mode -> references/workflow.md
+   - Motion comic mode -> references/workflow-motion-comic.md
 5. Use the relevant templates:
-   - Film mode → `references/templates.md`
-   - Motion comic mode → `references/templates-motion-comic.md`
-6. Run the review gates in `references/review-checklists.md` before finalizing.
+   - Film mode -> references/templates.md
+   - Motion comic mode -> references/templates-motion-comic.md
+6. Run the review gates in references/review-checklists.md before finalizing.
 7. After delivery, explicitly ask what feedback the user has; create a version 2 if needed.
 
 ## Output Contract
@@ -49,8 +49,8 @@ The final Markdown must include:
 - style bible with color, lighting, lens, rhythm, sound, and forbidden drift
 - director analysis: beat-by-beat "讲戏" using concrete actions, camera movement, light, emotion, and sound
 - storyboard table with scene duration, references, camera, action beats, dialogue, audio, and generation prompt
-- storyboard panel generation: per-shot static panel prompts, panel review checklist, panel-to-shot reference mapping
-- Seedance-style multimodal prompt pack using clear `@图片/@视频/@音频` roles
+- storyboard panel generation: dual-pass prompt workflow (same prompt -> static panel -> review -> inject as @图片 -> video), panel review checklist, panel-to-video reference injection table
+- Seedance-style multimodal prompt pack using clear @图片/@视频/@音频 roles
 - production checklist, asset workflow, rough-cut plan, audio plan, iteration plan, and quality/compliance review
 
 ### Motion Comic Mode
@@ -78,15 +78,15 @@ The final Markdown must include:
 - Describe what changes in the shot. Do not repeat static details already visible in reference images.
 - Make every storyboard row image-actionable: who/what, where, camera viewpoint, shot size, expression, and the relationship to the previous/next shot.
 - Keep each continuous shot within beat density: about 1 action beat per 2.5 seconds. For 5 seconds, 1-2 beats is usually enough.
-- For 10-15 second generations, use time ranges such as `0-3s`, `3-7s`, `7-12s`, `12-15s`.
+- For 10-15 second generations, use time ranges such as 0-3s, 3-7s, 7-12s, 12-15s.
 - Reserve the first and last 0.5 seconds for setup and natural settling; avoid key action or dialogue there.
-- Label every `@` reference by purpose, such as "以 @图片1 中的女主为主角" or "参考 @视频1 的运镜节奏".
+- Label every @ reference by purpose, such as "以 @图片1 中的女主为主角" or "参考 @视频1 的运镜节奏".
 - Respect platform limits when writing per-shot prompts: images up to 9, videos up to 3, audio up to 3, mixed input total up to 12, video reference/audio total durations up to 15s each, generation length 4-15s.
 - Avoid negative wording in prompts. Replace "不要切镜" with "全程一镜到底", and "不要说话" with "角色保持沉默".
 - Avoid real-person face reference material, copyrighted IP dependence, political sensitivity, sexualized minors, explicit sexual content, graphic violence, and unsafe imitation.
 - Before video generation, rough-cut the still storyboard images to check shot size, perspective, dialogue timing, and scene continuity.
 - Plan sound like performance: dialogue/voiceover sets timing, ambience and effects carry scenes without music, and music should mark genre, suspense, reveal, or climax.
-- **Generate static storyboard panels before video generation.** After writing per-shot video prompts, generate one static panel image per shot using a text-to-image model before running any video generation. Review these panels for composition, character placement, lighting, shot size, and expression. Use the approved panels as `@图片` references in the final video prompts. This catches composition and continuity problems at the image cost, not the video cost.
+- **One prompt, two passes — static panel first, video second.** Each per-shot video prompt serves two roles. First pass: run it through a text-to-image model to generate a static storyboard panel — omit time-coded segments (0-3s, 3-7s), motion descriptions, and camera movement; keep only the keyframe composition, character placement, lighting, and expression. Second pass: after reviewing the panel, inject it as an @图片 reference back into the **same** prompt and run it through the video model. The video prompt now only describes what changes (motion, camera movement, dialogue, sound) since static details are already visible in the panel. This catches composition problems at image-generation cost instead of video-generation cost, and gives the video model an exact visual anchor.
 
 ### Motion Comic Core Rules
 
@@ -95,7 +95,7 @@ The final Markdown must include:
 - All image prompts in a motion comic must share a unified style prefix. Build the prefix once from the style bible and prepend it to every panel prompt.
 - Every character reference image must be referenced in every panel where that character appears. Do not rely on the model "remembering" the character.
 - Limit 即梦 image prompt reference images to 3-4 per generation: 1 style reference + 1-2 character references + 1 scene reference.
-- Use only 4 camera motions: push-in (进入内心/强调), pull-out (释放/远去/结束), pan (场景过渡/环境展示), zoom (强调细节/反转). Assign by the panel‘s emotional function, not by visual variety.
+- Use only 4 camera motions: push-in (进入内心/强调), pull-out (释放/远去/结束), pan (场景过渡/环境展示), zoom (强调细节/反转). Assign by the panel's emotional function, not by visual variety.
 - Maintain color temperature consistency between adjacent panels. If panel N is warm indoor, panel N+1 should not jump to cold outdoor without a transition panel.
 - If a character has costume or state changes across the story, generate a new character reference image for each variant state and label it clearly.
 - Rough-cut still panels in 剪映 before generating all images: lay out placeholder images in timeline, check pacing with scratch voiceover, then replace with final generated images.
@@ -107,18 +107,18 @@ Load these only when needed:
 
 ### Film Mode
 
-- `references/workflow.md`: full end-to-end film production process
-- `references/templates.md`: intake questions, Markdown skeleton, character/scene/prompt templates
-- `references/production-practice.md`: practical image/video/audio/editing tactics from finished AI short production
+- references/workflow.md: full end-to-end film production process
+- references/templates.md: intake questions, Markdown skeleton, character/scene/prompt templates
+- references/production-practice.md: practical image/video/audio/editing tactics from finished AI short production
 
 ### Motion Comic Mode
 
-- `references/workflow-motion-comic.md`: full end-to-end motion comic production process
-- `references/templates-motion-comic.md`: panel mapping, batch prompt, motion assignment, and 剪映 assembly templates
+- references/workflow-motion-comic.md: full end-to-end motion comic production process
+- references/templates-motion-comic.md: panel mapping, batch prompt, motion assignment, and 剪映 assembly templates
 
 ### Both Modes
 
-- `references/review-checklists.md`: scoring gates and repair strategies
+- references/review-checklists.md: scoring gates and repair strategies
 
 ## Source-Derived Principles
 
