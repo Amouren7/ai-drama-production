@@ -90,23 +90,27 @@ Use these as needed, not all at once:
 | 编号 | 类型 | 用途 | 备注 |
 |---|---|---|---|
 
-## 10. 分镜与 Seedance 提示词
-| 镜头 | 时长 | 视角 | 景别 | 引用素材 | 动作节拍 | 表情/心理 | 前后镜关系 | 运镜 | 音频 | 生成提示词 |
+## 10. 分镜与视频提示词（One Prompt, Two Passes）
+### 10.1 同一条提示词的两种用法
+第一遍（生图）：去掉时间轴，生成 1 张静态图像 -> 分镜板图
+第二遍（生视频）：注入 @板图N 为参考 -> 原提示词出视频
+
+### 10.2 分镜与 Seedance 提示词
+| 镜头 | 时长 | 视角 | 景别 | 引用素材 | 动作节拍 | 表情/心理 | 前后镜关系 | 运镜 | 音频 | 生成提示词 | @板图 |
 |---|---:|---|---|---|---|---|---|---|---|---|
 
-## 11. 分镜板图（NEW — 视频生成前的视觉把关）
-### 分镜板图生成提示词
-| 镜头 | 对应视频提示词 | 分镜板图生图提示词 | 审查结果 | 分镜板图编号 |
-|---|---|---|---|---|
-| 镜头-01 | （引用第10章） | 详见下方Prompt模板 | ✅/🔄/❌ | @板图1 |
-
+## 11. 分镜板图审查（视频生成前的视觉把关）
 ### 分镜板图审查记录
+| 镜头 | @板图编号 | 审查结果 | 注入到视频提示词 |
+|---|---|---|---|
+| 镜头-01 | @板图1 | ✅/🔄/❌ | @图片1(角色)+@板图1(构图基准) |
+
+### 审查要点
 - 角色一致性：
 - 构图准确性：
 - 景别切换合理性：
 - 光影方向跨镜头一致性：
 - 穿帮检查：
-- 需补充的过渡/反应镜头：
 
 ## 12. 画面制作计划
 - 核心场景锚点：
@@ -161,20 +165,63 @@ Create a [3x3/3x4/4x4] cinematic environment reference grid for an AI drama in [
 Create a high-quality cinematic hero reference image for the main recurring location: [location name]. The location will appear in about [percentage] of the film, so the layout must be clear and reusable from multiple camera angles. Include [key props], [spatial layout], [lighting source and color], [mood], [style]. No main characters unless scale is needed, no text, no watermark.
 ```
 
-## Seedance-Style Prompt Template
+## Seedance-Style Prompt Template -- Dual-Use Mode
+
+This template powers **both** the storyboard panel (first pass) and the final video (second pass). The same text, with two small adjustments per pass.
+
+### Complete Prompt (as written -- used for both passes)
 
 ```prompt
-以 @图片1 中的[角色]为主角，场景参考 @图片2 的[场景用途]，参考 @视频1 的[运镜/动作/节奏用途]。生成 [时长] 秒，[画幅]，[风格]。
+以 @图片1 中的[角色]为主角，场景参考 @图片2 的[场景用途]，参考 @视频1 的[运镜/动作/节奏用途]。生成 [时长]，[画幅]，[风格]。
 
-0-3 秒：...
-3-7 秒：...
-7-12 秒：...
-12-15 秒：...
+0-3 秒：[动作/情绪描述]
+3-7 秒：[动作发展]
+7-12 秒：[转折或高潮]
+12-15 秒：[收束]
 
 镜头语言：...
 角色动作与情绪：...
-台词/声音：...
-结尾：动作自然收住，保留情绪余韵。
+结尾：动作自然收住。
+```
+
+### First Pass -> Static Storyboard Panel
+
+Take the complete prompt and apply these changes **only**:
+
+1. 移除时间分段（0-3 秒...12-15 秒）
+2. 移除运镜描述和声音描述
+3. 保留开场关键帧的角色位置、表情、构图、光影
+4. 将 "生成 [时长]" 改为 "生成 1 张静态图像"
+5. 追加场景/道具参考图（"场景参考 @图片N"）
+
+```prompt
+以 @图片1 中的[角色]为主角，场景参考 @图片2 的[场景用途]和 @图片3 的[道具参考]。生成 1 张静态图像，[画幅]，[风格]。
+
+——以下只描述静态构图——
+
+[角色]在画面[位置]，[表情/姿态]，[光照条件]，[背景/道具]，色彩偏[色调]。
+一条静态关键帧，不需要时间轴，不需要运动。
+```
+
+### Second Pass -> Video (with panel as reference)
+
+Take the complete prompt and add the approved panel as @图片 reference:
+
+1. 在引用素材中追加："镜头板图参考 @板图N"
+2. 提示词正文中不再描述已由图展示的静态信息
+3. 只描述动态变化
+
+```prompt
+以 @图片1 中的[角色]为主角，场景参考 @图片2，以 @板图N（本镜头分镜板图）的构图和角色位置为视觉基准。生成 [时长] 秒，[画幅]，[风格]。
+
+——静态信息已在板图中展示，以下只描述变化——
+
+0-3 秒：[只描述动态：角色从静止开始做什么动作，摄像机如何运动]
+3-7 秒：[动作发展]
+7-12 秒：[情绪或节奏变化]
+
+镜头语言：[镜头不在板图中，此处补充]
+结尾：动作自然收住。
 ```
 
 ## Repair Prompt Template
@@ -216,30 +263,20 @@ Create a high-quality cinematic hero reference image for the main recurring loca
 Mysterious cinematic score for [scene purpose], [genre/style], gradually building tension, subtle electronic texture, flowing pulse, restrained percussion, elegant suspense, rising toward a reveal, no vocals, suitable for a short film scene.
 ```
 
-## Storyboard Panel Prompt Template
+## One Prompt, Two Passes -- Quick-Start Reference
 
-Use this template to generate one static storyboard panel image per shot, before any video generation. Each panel becomes a `@图片` reference for the corresponding video prompt.
+Not a separate template -- a transformation rule:
 
-```prompt
-以 @图片[角色参考图编号] 中的[角色名]为主角，以 @图片[场景参考图编号] 的场景空间为背景，参考 @图片[本镜头分镜意图参考] 的构图风格。生成 1 张静态图像，[画幅比例]，[视觉风格]。
+| Pass | Model | What to change in the SAME prompt |
+|:----:|:-----:|------|
+| **1st** | Text-to-Image | Remove time ranges and camera moves; keep keyframe description; change "生成 X秒" to "生成 1 张静态图像" |
+| **2nd** | Text-to-Video | Add "以 @板图N 为视觉基准"; remove static details already visible in the panel; keep motion, camera, sound |
 
-——以下描述该镜头关键帧的画面内容，不分时间轴，只描述静态瞬间——
+**Rule of thumb:** If it would not change between frame 0 and frame 1 of a shot, it belongs in the storyboard panel and does not need to be repeated in the second-pass prompt.
 
-摄像机位置：[视角说明，如"过肩角度"或"侧面中景"]
-景别：[景别说明]
-人物位置：[角色在画面中的位置、朝向]
-人物表情与姿态：[具体的面部表情和身体姿态]
-背景与道具：[场景中的关键背景元素和道具]
-光影：[光源方向、色温、对比度]
-色彩倾向：[如"暖调""冷调""高饱和""低饱和"]
-画面中发生的动作（如有）：[角色在该瞬间的微小动作，如"手刚抬起到一半"]
+## Storyboard Panel Review Checklist
 
-——不要生成视频，不要加时间轴分段，保持静态构图——
-```
-
-### Storyboard Panel Review Checklist
-
-Use this checklist to review every generated storyboard panel before video generation.
+Use this checklist after the first (image) pass, before running the second (video) pass.
 
 ```markdown
 ## 分镜板图审查
@@ -264,32 +301,13 @@ Use this checklist to review every generated storyboard panel before video gener
 - ❌ 需要废弃并重写分镜的镜头编号及原因：
 ```
 
-### Updated Seedance Prompt Template (with Panel Reference)
-
-Use this template after storyboard panels are approved. The key change: `@图片[板图编号]` is injected as the visual base, and the prompt body stops repeating static details already visible in the panel image.
-
-```prompt
-以 @图片1 中的[角色]为主角，场景参考 @图片2 的[场景用途]，以 @图片[板图编号]（本镜头分镜板图）的构图和角色位置为视觉基准，参考 @视频1 的[运镜/动作/节奏用途]。生成 [时长] 秒，[画幅]，[风格]。
-
-——静态信息已在分镜板图中展示，以下只描述画面中的变化和运动——
-
-0-3 秒：[只描述动态变化：角色从什么静止姿态开始做什么动作，摄像机如何运动]
-3-7 秒：[动作发展，情绪变化]
-7-12 秒：[镜头中的转折或情绪高潮]
-
-镜头语言：[运镜方式、节奏]
-角色动作与情绪：[与分镜板图一致的表情基础上，增加的动作/情绪变化]
-台词/声音：[对话、音效]
-结尾：动作自然收住，保留情绪余韵。
-```
-
-### Storyboard Generation-to-Video Reference Map Template
+### Panel-to-Video Reference Map Template
 
 ```markdown
 | 镜头 | 分镜板图 @编号 | 视频提示词中引用的 @图片 | 审查结论 | 备注 |
 |:----:|:-------------:|:------------------------:|:--------:|:----:|
-| 镜头-01 | @板图1 | @图片1(角色)+@图片5(场景)+@板图1(构图) | ✅ 通过 | — |
-| 镜头-02 | @板图2 | @图片1(角色)+@图片5(场景)+@板图2(构图) | ✅ 通过 | — |
+| 镜头-01 | @板图1 | @图片1(角色)+@图片5(场景)+@板图1(构图) | ✅ 通过 | -- |
+| 镜头-02 | @板图2 | @图片1(角色)+@图片5(场景)+@板图2(构图) | ✅ 通过 | -- |
 | 镜头-03 | @板图3 | @图片1(角色)+@图片7(车辆)+@板图3(构图) | 🔄 重生成 | 角色位置与分镜描述不符 |
 | ... | ... | ... | ... | ... |
 ```
