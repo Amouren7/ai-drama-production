@@ -94,15 +94,30 @@ Use these as needed, not all at once:
 | 镜头 | 时长 | 视角 | 景别 | 引用素材 | 动作节拍 | 表情/心理 | 前后镜关系 | 运镜 | 音频 | 生成提示词 |
 |---|---:|---|---|---|---|---|---|---|---|---|
 
-## 11. 画面制作计划
+## 11. 分镜板图（NEW — 视频生成前的视觉把关）
+### 分镜板图生成提示词
+| 镜头 | 对应视频提示词 | 分镜板图生图提示词 | 审查结果 | 分镜板图编号 |
+|---|---|---|---|---|
+| 镜头-01 | （引用第10章） | 详见下方Prompt模板 | ✅/🔄/❌ | @板图1 |
+
+### 分镜板图审查记录
+- 角色一致性：
+- 构图准确性：
+- 景别切换合理性：
+- 光影方向跨镜头一致性：
+- 穿帮检查：
+- 需补充的过渡/反应镜头：
+
+## 12. 画面制作计划
 - 核心场景锚点：
 - 三视图角色资产：
 - 需要垫图/参考图的镜头：
 - 需要 PS/局部重绘/分层合成的镜头：
 - 需要首尾帧的镜头：
 - 需要画质放大/补帧的镜头：
+- 需要分镜板图作为 @图片 参考注入的镜头：
 
-## 12. 生成与剪辑计划
+## 13. 生成与剪辑计划
 - 每条提示词生成次数：
 - 备选镜头：
 - 图片粗剪检查：
@@ -110,7 +125,7 @@ Use these as needed, not all at once:
 - 穿帮修复策略：
 - 音画同步策略：
 
-## 13. 声音与配乐计划
+## 14. 声音与配乐计划
 - 临时配音：
 - 最终配音：
 - 环境音：
@@ -118,7 +133,7 @@ Use these as needed, not all at once:
 - 配乐关键词：
 - 音乐剪辑策略：
 
-## 14. 审核清单
+## 15. 审核清单
 - 剧情：
 - 视觉一致性：
 - 分镜视角/景别：
@@ -199,4 +214,82 @@ Create a high-quality cinematic hero reference image for the main recurring loca
 
 ```prompt
 Mysterious cinematic score for [scene purpose], [genre/style], gradually building tension, subtle electronic texture, flowing pulse, restrained percussion, elegant suspense, rising toward a reveal, no vocals, suitable for a short film scene.
+```
+
+## Storyboard Panel Prompt Template
+
+Use this template to generate one static storyboard panel image per shot, before any video generation. Each panel becomes a `@图片` reference for the corresponding video prompt.
+
+```prompt
+以 @图片[角色参考图编号] 中的[角色名]为主角，以 @图片[场景参考图编号] 的场景空间为背景，参考 @图片[本镜头分镜意图参考] 的构图风格。生成 1 张静态图像，[画幅比例]，[视觉风格]。
+
+——以下描述该镜头关键帧的画面内容，不分时间轴，只描述静态瞬间——
+
+摄像机位置：[视角说明，如"过肩角度"或"侧面中景"]
+景别：[景别说明]
+人物位置：[角色在画面中的位置、朝向]
+人物表情与姿态：[具体的面部表情和身体姿态]
+背景与道具：[场景中的关键背景元素和道具]
+光影：[光源方向、色温、对比度]
+色彩倾向：[如"暖调""冷调""高饱和""低饱和"]
+画面中发生的动作（如有）：[角色在该瞬间的微小动作，如"手刚抬起到一半"]
+
+——不要生成视频，不要加时间轴分段，保持静态构图——
+```
+
+### Storyboard Panel Review Checklist
+
+Use this checklist to review every generated storyboard panel before video generation.
+
+```markdown
+## 分镜板图审查
+
+### 逐镜头审查
+| 编号 | 镜头名 | 角色一致性 | 构图准确性 | 景别合理 | 光影一致 | 情绪到位 | 穿帮 | 结论 |
+|:----:|:------:|:----------:|:----------:|:--------:|:--------:|:--------:|:----:|:----:|
+| 01 | 镜头-01 | ✅/❌ | ✅/❌ | ✅/❌ | ✅/❌ | ✅/❌ | 无/有 | 通过/修改/废弃 |
+| ... | ... | ... | ... | ... | ... | ... | ... | ... |
+
+### 跨镜头审查
+- 相邻镜头景别是否有变化（避免连续3个中景）：
+- 对话场景是否有正反打/关系镜头/反应镜头：
+- 光影方向是否在所有镜头中统一（除非有光源变化叙事理由）：
+- 角色视线方向是否在对话正反打中正确匹配：
+- 穿帮：是否有道具/物体/文字在镜头之间位置跳变：
+- 是否需要补充过渡镜头或反应镜头：
+
+### 审查后操作
+- ✅ 通过的镜头编号：
+- 🔄 需要修改提示词重生成的镜头编号及修改方案：
+- ❌ 需要废弃并重写分镜的镜头编号及原因：
+```
+
+### Updated Seedance Prompt Template (with Panel Reference)
+
+Use this template after storyboard panels are approved. The key change: `@图片[板图编号]` is injected as the visual base, and the prompt body stops repeating static details already visible in the panel image.
+
+```prompt
+以 @图片1 中的[角色]为主角，场景参考 @图片2 的[场景用途]，以 @图片[板图编号]（本镜头分镜板图）的构图和角色位置为视觉基准，参考 @视频1 的[运镜/动作/节奏用途]。生成 [时长] 秒，[画幅]，[风格]。
+
+——静态信息已在分镜板图中展示，以下只描述画面中的变化和运动——
+
+0-3 秒：[只描述动态变化：角色从什么静止姿态开始做什么动作，摄像机如何运动]
+3-7 秒：[动作发展，情绪变化]
+7-12 秒：[镜头中的转折或情绪高潮]
+
+镜头语言：[运镜方式、节奏]
+角色动作与情绪：[与分镜板图一致的表情基础上，增加的动作/情绪变化]
+台词/声音：[对话、音效]
+结尾：动作自然收住，保留情绪余韵。
+```
+
+### Storyboard Generation-to-Video Reference Map Template
+
+```markdown
+| 镜头 | 分镜板图 @编号 | 视频提示词中引用的 @图片 | 审查结论 | 备注 |
+|:----:|:-------------:|:------------------------:|:--------:|:----:|
+| 镜头-01 | @板图1 | @图片1(角色)+@图片5(场景)+@板图1(构图) | ✅ 通过 | — |
+| 镜头-02 | @板图2 | @图片1(角色)+@图片5(场景)+@板图2(构图) | ✅ 通过 | — |
+| 镜头-03 | @板图3 | @图片1(角色)+@图片7(车辆)+@板图3(构图) | 🔄 重生成 | 角色位置与分镜描述不符 |
+| ... | ... | ... | ... | ... |
 ```
