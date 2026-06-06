@@ -241,15 +241,23 @@ Use one generation prompt for one coherent generation unit. For complex action, 
 
 注意：注入后不再描述"站在路边""黑色皮夹克""午后阳光"（已在 @板图2 中），只描述"从静止开始动"的变化。
 
+**MVP 节奏：不要一次性对所有镜头做第一遍（出图）。** 按照 Step 6 的 MVP 原则——先选 1-2 个关键镜头做完整的第一遍+第二遍，验证角色一致性、构图准确性和视频自然度，通过后再扩展到剩余镜头。这个循环是：
+
+```
+选 MVP 镜头 -> 第一遍出图 -> 审查 -> 第二遍出视频 -> 评分 -> 通过后扩展到全片
+                                                          ↓ 不通过
+                                                    调整提示词后重做
+```
+
 ## 6. Iteration And Assembly
 
-Use a loop:
+Follow the MVP-first principle. Do not generate all storyboard panels before any video — instead, complete both passes on one key scene first:
 
-1. Generate a short MVP scene.
-2. Score story hook, identity consistency, action clarity, camera feasibility, audio, and compliance.
-3. Keep usable portions; mark flaws.
-4. Rewrite only the failing segment.
-5. Scale from one scene to full episode only after style and references are stable.
+1. **Select MVP scene.** Pick the most technically demanding 1-2 shots (e.g., the core reversal).
+2. **Complete both passes on MVP.** First pass (Step 5.5.1) to generate panels for the MVP scene only -> review -> second pass (Step 5.5.3) to generate video for the MVP scene only -> review video output.
+3. **Score** story hook, identity consistency, action clarity, camera feasibility, audio, and compliance.
+4. **Keep usable portions; mark flaws.** If the MVP fails, rewrite the failing segment and redo Step 5.5 for that shot.
+5. **Scale to remaining shots.** Only after the MVP scene passes, generate storyboard panels for the remaining shots (first pass across all other shots), then generate their videos (second pass across all other shots).
 
 For action scenes, expect editing. Generate multiple takes, use match cuts, keep the best 60-80%, and replace broken motion with alternate angles or reaction shots.
 
