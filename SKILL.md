@@ -49,6 +49,7 @@ The final Markdown must include:
 - style bible with color, lighting, lens, rhythm, sound, and forbidden drift
 - director analysis: beat-by-beat "讲戏" using concrete actions, camera movement, light, emotion, and sound
 - storyboard table with scene duration, references, camera, action beats, dialogue, audio, and generation prompt
+- storyboard panel generation: per-shot static panel prompts, panel review checklist, panel-to-shot reference mapping
 - Seedance-style multimodal prompt pack using clear `@图片/@视频/@音频` roles
 - production checklist, asset workflow, rough-cut plan, audio plan, iteration plan, and quality/compliance review
 
@@ -85,6 +86,7 @@ The final Markdown must include:
 - Avoid real-person face reference material, copyrighted IP dependence, political sensitivity, sexualized minors, explicit sexual content, graphic violence, and unsafe imitation.
 - Before video generation, rough-cut the still storyboard images to check shot size, perspective, dialogue timing, and scene continuity.
 - Plan sound like performance: dialogue/voiceover sets timing, ambience and effects carry scenes without music, and music should mark genre, suspense, reveal, or climax.
+- **Generate static storyboard panels before video generation.** After writing per-shot video prompts, generate one static panel image per shot using a text-to-image model before running any video generation. Review these panels for composition, character placement, lighting, shot size, and expression. Use the approved panels as `@图片` references in the final video prompts. This catches composition and continuity problems at the image cost, not the video cost.
 
 ### Motion Comic Core Rules
 
@@ -93,7 +95,7 @@ The final Markdown must include:
 - All image prompts in a motion comic must share a unified style prefix. Build the prefix once from the style bible and prepend it to every panel prompt.
 - Every character reference image must be referenced in every panel where that character appears. Do not rely on the model "remembering" the character.
 - Limit 即梦 image prompt reference images to 3-4 per generation: 1 style reference + 1-2 character references + 1 scene reference.
-- Use only 4 camera motions: push-in (进入内心/强调), pull-out (释放/远去/结束), pan (场景过渡/环境展示), zoom (强调细节/反转). Assign by the panel's emotional function, not by visual variety.
+- Use only 4 camera motions: push-in (进入内心/强调), pull-out (释放/远去/结束), pan (场景过渡/环境展示), zoom (强调细节/反转). Assign by the panel‘s emotional function, not by visual variety.
 - Maintain color temperature consistency between adjacent panels. If panel N is warm indoor, panel N+1 should not jump to cold outdoor without a transition panel.
 - If a character has costume or state changes across the story, generate a new character reference image for each variant state and label it clearly.
 - Rough-cut still panels in 剪映 before generating all images: lay out placeholder images in timeline, check pacing with scratch voiceover, then replace with final generated images.
