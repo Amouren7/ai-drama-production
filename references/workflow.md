@@ -150,120 +150,66 @@ For each shot:
 2. State duration and aspect ratio.
 3. Describe time-coded action if longer than 10 seconds.
 4. Include camera movement, character action, emotion shift, dialogue, and audio.
-5. Keep prompts narrative and concrete.
-6. Write only changes not already shown by references.
+5. **Embed audio inline**: every dialogue line, sound effect, ambience, and music cue goes directly in the prompt at the correct time position using `[对白]` `[音效]` `[配乐]` markers.
+6. Keep prompts narrative and concrete.
+7. Write only changes not already shown by references.
 
 Use one generation prompt for one coherent generation unit. For complex action, generate multiple variations and plan edit points.
 
-### 5.5 Storyboard Panel Generation — One Prompt, Two Passes
+## 5.5 Mentally Simulate Before Generating
 
-**核心原则：同一条提示词，先用做出图，后以图为参考做视频。**
+**Critical step: Before sending any prompt to the video model, run a mental simulation of the final video.**
 
-写好的视频提示词不需要另写一套"生图版"。同一段文字跑两遍：
-1. **第一遍 -> 生图模型**：去掉时间轴分段和运镜描述，只保留开场关键帧 -> 出静态分镜板图
-2. **审查通过后**：在图生视频模型中，将这张图作为 @图片 参考注入 -> 同一条提示词出视频
+Do this:
+1. Read each prompt aloud in sequence, imagining what the video output would look like.
+2. **剧情逻辑检查**: Does each shot's action follow logically from the previous? If character A is sad about gas prices in shot 3, does their action in shot 4 (e.g., pulling out a wallet) make sense as a consequence?
+3. **场景连贯检查**: Would the lighting, character positions, and props be consistent across adjacent shots? Is a character's clothing the same? Is a mug that was full in shot 1 still full in shot 2?
+4. **动作-对白匹配检查**: When a character says "I'm charging my phone," are they actually holding a phone and a charger? Or are they doing something unrelated?
+5. **时间可行性检查**: Can the described action actually happen within the specified duration? (e.g., "stands up, walks 5 meters, pulls out phone, opens app" in 2 seconds is too much)
 
-这样做的价值：生图模型擅长精确构图但不懂运动，视频模型擅长运动但构图全靠猜。先用生图锁定构图、角色位置、光影，再用视频模型"让画面动起来"——两个模型各司其职。
-
-**5.5.1 第一遍：从视频提示词生分镜板图**
-
-不需要另写提示词。直接用写好的视频提示词，做两处裁剪：
-
-1. **移除** 时间分段（0-3秒、3-7秒）——生图模型不需要时间轴
-2. **移除** 运镜描述（"镜头快速后拉""推近至特写"）和声音——静态图不需要运动
-3. **保留** 角色位置、表情、服装、构图、景别、光影方向
-4. **添加** （如果需要）"生成 1 张静态图像"，并在角色参考后追加场景/道具参考图
-
-转换示例：
-
-**原始视频提示词：**
-```prompt
-以 @图片1 中的阿杰为主角。生成 4 秒，9:16 竖屏，写实电影风格。
-
-0-1秒：一个手机直播界面的特写画面，弹幕从底部向上滚动...
-1-3秒：镜头快速向后拉出，露出一个25岁中国男性站在市郊街道上...
-3-4秒：他清了清嗓子，嘴唇微动准备说话...
-
-全程一镜到底，手持摄影轻微自然晃动...
-```
-
-**生图版（同一段文字，只裁剪不重写）：**
-```prompt
-以 @图片1 中的阿杰为主角，场景参考 @图片5 的街道布局和光照。生成 1 张静态图像，9:16 竖屏，写实电影风格。
-
-一个25岁中国男性站在市郊街道上，身穿黑色机车皮夹克、墨镜，一手举着手机自拍杆，另一只手刚从后脑勺放下来，表情略带心虚，午后阳光从左上角照射，柏油路面和路边树影在背景中。嘴唇微张，头转向右侧。
-```
-
-> **规则**：提取 0-1秒 或开场秒的关键帧描述作为生图主体。不需要为每帧生图——一张开场关键帧就足够作为视频的构图参考。
-
-**5.5.2 审查**
-
-生成所有镜头的分镜板图后，逐张检查：
-
-- **角色一致性**：角色面容、服装是否和角色参考图一致
-- **构图准确性**：构图是否符合文字分镜意图
-- **景别切换**：相邻镜头的景别是否错开（避免连续三个中景）
-- **光影方向**：主光源方向是否跨镜头一致
-- **角色视线**：对话场景中视线方向是否正确匹配
-- **情绪表达**：表情是否传达了该镜头需要的情绪
-- **穿帮检查**：有没有不该出现的内容
-
-审查结果分三档：
-- **✅ 通过** -> 进入下一阶段
-- **🔄 重生成** -> 构图或角色不满足，修改生图提示词重试
-- **❌ 废弃分镜** -> 文字分镜本身视觉上不可行，退回 Step 5 重写
-
-完整审查清单模板见 references/templates.md -> "Storyboard Panel Review Checklist"。
-
-**5.5.3 第二遍：分镜板图注入 -> 出视频**
-
-审查通过的分镜板图作为该镜头的视觉参考，注入回**同一条**视频提示词：
-
-1. 在提示词的引用素材中添加："镜头板图参考 @板图N"
-2. 提示词正文中**不再重复**已在图中展示的静态信息（角色站在哪里、穿什么衣服、光影方向）
-3. 提示词正文**只描述**图中没有的：动作、运镜、时间变化、声音
-
-**注入前（第一次跑，做出图）：**
-```prompt
-以 @图片1 中的阿杰为主角。生成 1 张静态图像，9:16 竖屏。
-阿杰站在路边，身穿黑色皮夹克，墨镜，午后阳光...
-```
-
-**注入后（第二次跑，用同一段文字做视频）：**
-```prompt
-以 @图片1 中的阿杰为主角，以 @板图2（镜头分镜板图）的构图和角色位置为视觉基准。生成 4 秒，9:16 竖屏。
-
-0-1秒：阿杰从静止状态开始——他清了清嗓子，头转向右侧。
-1-4秒：他手臂指向画外方向，转身走向机车，跨腿——皮裤卡在车把上。
-
-全程自然手持感。
-```
-
-注意：注入后不再描述"站在路边""黑色皮夹克""午后阳光"（已在 @板图2 中），只描述"从静止开始动"的变化。
-
-**MVP 节奏：不要一次性对所有镜头做第一遍（出图）。** 按照 Step 6 的 MVP 原则——先选 1-2 个关键镜头做完整的第一遍+第二遍，验证角色一致性、构图准确性和视频自然度，通过后再扩展到剩余镜头。这个循环是：
-
-```
-选 MVP 镜头 -> 第一遍出图 -> 审查 -> 第二遍出视频 -> 评分 -> 通过后扩展到全片
-                                                          ↓ 不通过
-                                                    调整提示词后重做
-```
+If the simulation reveals a logic gap or inconsistency, **rewrite the prompt before generating**. Do not "fix it in post" — fix it in the prompt.
 
 ## 6. Iteration And Assembly
 
-Follow the MVP-first principle. Do not generate all storyboard panels before any video — instead, complete both passes on one key scene first:
+Follow the MVP-first principle. Do not generate all shots before reviewing:
 
 1. **Select MVP scene.** Pick the most technically demanding 1-2 shots (e.g., the core reversal).
-2. **Complete both passes on MVP.** First pass (Step 5.5.1) to generate panels for the MVP scene only -> review -> second pass (Step 5.5.3) to generate video for the MVP scene only -> review video output.
+2. **Generate MVP shots first.** Create the MVP shots, review the output.
 3. **Score** story hook, identity consistency, action clarity, camera feasibility, audio, and compliance.
-4. **Keep usable portions; mark flaws.** If the MVP fails, rewrite the failing segment and redo Step 5.5 for that shot.
-5. **Scale to remaining shots.** Only after the MVP scene passes, generate storyboard panels for the remaining shots (first pass across all other shots), then generate their videos (second pass across all other shots).
+4. **Keep usable portions; mark flaws.** If the MVP fails, rewrite the failing prompt and regenerate.
+5. **Scale to remaining shots.** Only after the MVP scene passes, generate the remaining shots.
 
 For action scenes, expect editing. Generate multiple takes, use match cuts, keep the best 60-80%, and replace broken motion with alternate angles or reaction shots.
 
+## 5.6 Audio Design — Inline in Prompts, Not Separate Notes
+
+**Critical rule: Every video prompt must embed its audio inline.** Do not write audio information as separate notes, tables, or "audio columns" outside the prompt. Seedance/即梦 multimodal generation reads audio cues from the prompt text itself. Format:
+
+```prompt
+0-3秒：[动作描述]
+     [对白：角色说的台词]
+     [音效：环境音/效果音描述]
+3-7秒：[动作发展]
+     [配乐：音乐描述]
+```
+
+For each shot, before writing the prompt:
+1. Decide the dialogue line and its approximate spoken duration.
+2. Decide the key sound effects and where they hit.
+3. Decide ambient sound and music.
+4. **Embed all of these inline** in the prompt at the correct time position.
+
+Create an Audio Material Reference Table (à la 素材对应表) listing every `@音频` asset needed:
+
+| 编号 | 类型 | 时长 | 用途 | 对应镜头 |
+|:----:|:----:|:----:|------|:--------:|
+| @音频1 | 环境音 | 5s | 停车场黄昏环境风声 | 全片 |
+| @音频2 | 音效 | 1s | 群消息提示音×5 | 镜头01 |
+| @音频3 | 对白 | 2s | 阿凯第一句台词 | 镜头01 |
+
 ## 7. Practical Production And Post
 
-Create a still-image rough cut before running the second (video) pass. Use the approved storyboard panels from Step 5.5 as the primary rough-cut material:
+Create a still-image rough cut before generating final videos — lay out the scene compositions in a timeline to review shot sequence and pacing:
 
 1. Place storyboard panels (generated in Step 5.5 first pass) on a timeline at their assigned shot durations.
 2. Check shot-size variety, character screen direction, POV clarity, and dialogue rhythm.

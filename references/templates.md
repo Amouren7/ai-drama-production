@@ -56,10 +56,16 @@ Use these as needed, not all at once:
 ```
 
 ## 5. 场景与道具设定
-| 场景/道具 | 剧情功能 | 氛围 | 视觉锚点 | 使用镜头 |
-|---|---|---|---|---|
+| 场景/道具 | 剧情功能 | 氛围 | 视觉锚点 | 使用镜头 | 对应参考图 |
+|---|---|---|---|---|---|
 
-### 场景宫格图提示词
+### 场景参考图提示词
+```prompt
+...
+```
+
+### 道具参考图提示词（每件道具一条，必须齐全）
+#### @图片N：道具名
 ```prompt
 ...
 ```
@@ -87,30 +93,26 @@ Use these as needed, not all at once:
 |---|---:|---|---|---|
 
 ## 9. 素材对应表
-| 编号 | 类型 | 用途 | 备注 |
-|---|---|---|---|
+| 编号 | 类型 | 用途 | 备注 | 参考图提示词位置 |
+|---|---|---|---|:---:|
+| @图片1 | 角色 | xxx | xxx | §4 |
+| @图片2 | 场景 | xxx | xxx | §5 |
+| @图片3 | 道具 | xxx | xxx | §5 |
 
-## 10. 分镜与视频提示词（One Prompt, Two Passes）
-### 10.1 同一条提示词的两种用法
-第一遍（生图）：去掉时间轴，生成 1 张静态图像 -> 分镜板图
-第二遍（生视频）：注入 @板图N 为参考 -> 原提示词出视频
+## 10. 分镜与视频提示词（单次生成，音频 inline）
+### 10.1 提示词格式
+每条提示词是一个完整的视频生成单位，画面+对白+音效+配乐在同一段文字中描述。用 `[对白]` `[音效]` `[配乐]` 在对应时间轴嵌入音频。
 
-### 10.2 分镜与 Seedance 提示词
-| 镜头 | 时长 | 视角 | 景别 | 引用素材 | 动作节拍 | 表情/心理 | 前后镜关系 | 运镜 | 音频 | 生成提示词 | @板图 |
+### 10.2 分镜与视频提示词
+| 镜头 | 时长 | 视角 | 景别 | 引用素材 | 动作节拍 | 表情/心理 | 前后镜关系 | 运镜 | 音频 | 生成提示词 |
 |---|---:|---|---|---|---|---|---|---|---|---|
 
-## 11. 分镜板图审查（视频生成前的视觉把关）
-### 分镜板图审查记录
-| 镜头 | @板图编号 | 审查结果 | 注入到视频提示词 |
-|---|---|---|---|
-| 镜头-01 | @板图1 | ✅/🔄/❌ | @图片1(角色)+@板图1(构图基准) |
-
-### 审查要点
-- 角色一致性：
-- 构图准确性：
-- 景别切换合理性：
-- 光影方向跨镜头一致性：
-- 穿帮检查：
+## 11. 剧情逻辑与连贯性审查
+### 成片模拟检查
+- 剧情逻辑链（镜头因果、动机合理、对白与画面匹配）
+- 场景连贯性（光照方向、角色位置、道具状态）
+- 物理合理性（动作时间是否够用，多人互动视线是否匹配）
+- 情绪弧线是否合理
 
 ## 12. 画面制作计划
 - 核心场景锚点：
@@ -145,6 +147,17 @@ Use these as needed, not all at once:
 - 声音设计：
 - 平台约束：
 - 合规：
+
+## 16. 封面设计与推广
+### 封面图提示词
+```prompt
+...
+```
+
+### 话题标签
+```
+#标签1 #标签2 #标签3
+```
 ```
 
 ## Character Reference Prompt Template
@@ -165,63 +178,41 @@ Create a [3x3/3x4/4x4] cinematic environment reference grid for an AI drama in [
 Create a high-quality cinematic hero reference image for the main recurring location: [location name]. The location will appear in about [percentage] of the film, so the layout must be clear and reusable from multiple camera angles. Include [key props], [spatial layout], [lighting source and color], [mood], [style]. No main characters unless scale is needed, no text, no watermark.
 ```
 
-## Seedance-Style Prompt Template -- Dual-Use Mode
+## Seedance-Style Prompt Template — Single-Pass with Audio Inline
 
-This template powers **both** the storyboard panel (first pass) and the final video (second pass). The same text, with two small adjustments per pass.
+⚠️ **关键规则：视频提示词中音频必须 inline 嵌入。** 不要将对白/音效/配乐放在提示词之外的"音频备注"中。每一句对白、每一个音效、每一段配乐都必须在提示词的对应时间轴位置写好，用 `[对白]` `[音效]` `[配乐]` 标记。这样才能在 Seedance/即梦中实现音画同步生成。
 
-### Complete Prompt (as written -- used for both passes)
+每条提示词是一个"单次生成"单位：在一个镜头中，画面变化 + 对白 + 音效 + 配乐都在同一条提示词里描述。不需要先出图再出视频，直接一条提示词生成视频。
 
 ```prompt
-以 @图片1 中的[角色]为主角，场景参考 @图片2 的[场景用途]，参考 @视频1 的[运镜/动作/节奏用途]。生成 [时长]，[画幅]，[风格]。
+以 @图片1 中的[角色]为主角，场景参考 @图片2 的[场景用途]，音频参考 @音频1 的[用途]。生成 [时长]，[画幅]，[风格]。
+
+——以下描述动态变化和音频——
 
 0-3 秒：[动作/情绪描述]
+     [音效：环境音/效果音]
 3-7 秒：[动作发展]
+     [对白：角色台词内容]
 7-12 秒：[转折或高潮]
+     [对白：台词] [音效：效果音]
 12-15 秒：[收束]
+     [配乐：音乐描述]
 
 镜头语言：...
-角色动作与情绪：...
 结尾：动作自然收住。
 ```
 
-### First Pass -> Static Storyboard Panel
+**引导提示（仅作参考，不需要单独出图）：**
+- 如果生图发现构图不对，可以修改提示词中的位置/角度描述后重新生成
+- 视频生成前建议用角色参考图 @图片 锁定形象，用场景参考图锁定环境
 
-Take the complete prompt and apply these changes **only**:
-
-1. 移除时间分段（0-3 秒...12-15 秒）
-2. 移除运镜描述和声音描述
-3. 保留开场关键帧的角色位置、表情、构图、光影
-4. 将 "生成 [时长]" 改为 "生成 1 张静态图像"
-5. 追加场景/道具参考图（"场景参考 @图片N"）
+## Audio Material Prompt Template
 
 ```prompt
-以 @图片1 中的[角色]为主角，场景参考 @图片2 的[场景用途]和 @图片3 的[道具参考]。生成 1 张静态图像，[画幅]，[风格]。
-
-——以下只描述静态构图——
-
-[角色]在画面[位置]，[表情/姿态]，[光照条件]，[背景/道具]，色彩偏[色调]。
-一条静态关键帧，不需要时间轴，不需要运动。
-```
-
-### Second Pass -> Video (with panel as reference)
-
-Take the complete prompt and add the approved panel as @图片 reference:
-
-1. 在引用素材中追加："镜头板图参考 @板图N"
-2. 提示词正文中不再描述已由图展示的静态信息
-3. 只描述动态变化
-
-```prompt
-以 @图片1 中的[角色]为主角，场景参考 @图片2，以 @板图N（本镜头分镜板图）的构图和角色位置为视觉基准。生成 [时长] 秒，[画幅]，[风格]。
-
-——静态信息已在板图中展示，以下只描述变化——
-
-0-3 秒：[只描述动态：角色从静止开始做什么动作，摄像机如何运动]
-3-7 秒：[动作发展]
-7-12 秒：[情绪或节奏变化]
-
-镜头语言：[镜头不在板图中，此处补充]
-结尾：动作自然收住。
+[Audio material] Generate [duration] seconds of [type: ambience/SFX/music] for [scene/shot purpose].
+Style: [description of sound quality, emotion, tempo]
+Key elements: [list of specific sounds to include]
+No dialogue, no vocals, clean audio, high quality, cinematic.
 ```
 
 ## Repair Prompt Template
@@ -232,13 +223,13 @@ Take the complete prompt and add the approved panel as @图片 reference:
 - 动作过密：
 - 运镜不清：
 - 情绪不足：
-- 声音缺失：
+- 音频缺失：
 
 重写策略：
 - 保留：
 - 删除：
 - 加强：
-- 降低节拍：
+- 添加音频 inline：
 
 新版提示词：
 ...
@@ -263,51 +254,81 @@ Take the complete prompt and add the approved panel as @图片 reference:
 Mysterious cinematic score for [scene purpose], [genre/style], gradually building tension, subtle electronic texture, flowing pulse, restrained percussion, elegant suspense, rising toward a reveal, no vocals, suitable for a short film scene.
 ```
 
-## One Prompt, Two Passes -- Quick-Start Reference
+## Audio-Inline Prompt Examples
 
-Not a separate template -- a transformation rule:
-
-| Pass | Model | What to change in the SAME prompt |
-|:----:|:-----:|------|
-| **1st** | Text-to-Image | Remove time ranges and camera moves; keep keyframe description; change "生成 X秒" to "生成 1 张静态图像" |
-| **2nd** | Text-to-Video | Add "以 @板图N 为视觉基准"; remove static details already visible in the panel; keep motion, camera, sound |
-
-**Rule of thumb:** If it would not change between frame 0 and frame 1 of a shot, it belongs in the storyboard panel and does not need to be repeated in the second-pass prompt.
-
-## Storyboard Panel Review Checklist
-
-Use this checklist after the first (image) pass, before running the second (video) pass.
-
-```markdown
-## 分镜板图审查
-
-### 逐镜头审查
-| 编号 | 镜头名 | 角色一致性 | 构图准确性 | 景别合理 | 光影一致 | 情绪到位 | 穿帮 | 结论 |
-|:----:|:------:|:----------:|:----------:|:--------:|:--------:|:--------:|:----:|:----:|
-| 01 | 镜头-01 | ✅/❌ | ✅/❌ | ✅/❌ | ✅/❌ | ✅/❌ | 无/有 | 通过/修改/废弃 |
-| ... | ... | ... | ... | ... | ... | ... | ... | ... |
-
-### 跨镜头审查
-- 相邻镜头景别是否有变化（避免连续3个中景）：
-- 对话场景是否有正反打/关系镜头/反应镜头：
-- 光影方向是否在所有镜头中统一（除非有光源变化叙事理由）：
-- 角色视线方向是否在对话正反打中正确匹配：
-- 穿帮：是否有道具/物体/文字在镜头之间位置跳变：
-- 是否需要补充过渡镜头或反应镜头：
-
-### 审查后操作
-- ✅ 通过的镜头编号：
-- 🔄 需要修改提示词重生成的镜头编号及修改方案：
-- ❌ 需要废弃并重写分镜的镜头编号及原因：
+### Good — audio inline in the prompt itself:
+```prompt
+0-2秒：阿凯低头看手机，拇指滑动屏幕。手机连续弹出消息。
+     [音效：群消息提示音×5，密集快速]
+2-3秒：阿凯抬头，嘴唇微动。
+     [对白：阿凯——"不是，谁把集合点发到墨西哥了？"
+      音效：背景远处引擎怠速声]
 ```
 
-### Panel-to-Video Reference Map Template
+### Bad — audio as a separate note:
+```prompt
+0-2秒：阿凯低头看手机...
+（音频备注：加群消息音效和对白）
+```
+
+## 剧情逻辑与环境连贯性自查清单
+
+在生成视频之前，先在脑中模拟一遍成片效果，逐项检查：
 
 ```markdown
-| 镜头 | 分镜板图 @编号 | 视频提示词中引用的 @图片 | 审查结论 | 备注 |
-|:----:|:-------------:|:------------------------:|:--------:|:----:|
-| 镜头-01 | @板图1 | @图片1(角色)+@图片5(场景)+@板图1(构图) | ✅ 通过 | -- |
-| 镜头-02 | @板图2 | @图片1(角色)+@图片5(场景)+@板图2(构图) | ✅ 通过 | -- |
-| 镜头-03 | @板图3 | @图片1(角色)+@图片7(车辆)+@板图3(构图) | 🔄 重生成 | 角色位置与分镜描述不符 |
-| ... | ... | ... | ... | ... |
+## 成片模拟检查
+
+### 1. 剧情逻辑链
+- [ ] 每个镜头是否由上一个镜头自然引导而来？
+- [ ] 角色的每个动作是否有合理动机？
+- [ ] 对白和画面动作是否匹配？（不能说"我加油"的同时在玩手机）
+- [ ] 因果关系链是否清晰？A导致B，B导致C
+- [ ] 观众能否不看字幕就理解发生了什么？
+
+### 2. 场景连贯性
+- [ ] 同一场景中的光照方向在所有镜头中是否一致？
+- [ ] 角色位置关系是否跨镜头保持稳定？（A在左B在右）
+- [ ] 道具状态是否连贯？（杯子在镜头1是满的，镜头2不能突然是空的）
+- [ ] 角色服装和外观是否在相邻镜头中一致？
+- [ ] 场景切换是否有明确的空间逻辑？
+
+### 3. 物理合理性
+- [ ] 角色动作在给定时间内是否能完成？
+- [ ] 摄像机运动是否物理可实现？
+- [ ] 多个角色互动时，视线方向是否正确？
+
+### 4. 情感弧线
+- [ ] 情绪曲线是否合理递进？
+- [ ] 反转/笑点/泪点是否有足够铺垫？
+
+### 发现问题后的操作
+- 逻辑不通 → 重写该段分镜，确保因果关系清晰
+- 动作不合理 → 延长镜头时长或拆分动作
+- 对白与画面不匹配 → 修改对白或修改动作描述
+- 场景跳变 → 添加过渡镜头或统一场景描述
+```
+
+## Cover / Thumbnail Design Prompt Template
+
+为每部短片设计一张封面图。封面是静态图，捕捉全片最具代表性的瞬间，上方或下方预留标题文字空间。
+
+```prompt
+Create a cinematic thumbnail for a comedy short film titled "[标题]", 9:16 vertical. [最核心的视觉描述：角色在做什么、表情如何、关键道具]. [场景氛围描述]. [画面构图说明，包括文字位置]. High quality, filmic, eye-catching for social media feed, no text watermark, leave [上方/下方] space for title text overlay.
+```
+
+**规则：**
+- 使用与视频一致的 `@图片` 角色/场景参考图，保持视觉一致性
+- 画面构图要预留标题文字空间（上方或下方留空/纯色/渐变区域）
+- 捕捉全片最具传播力的那一个瞬间（笑点/反转/名场面）
+- 封面上的标题文字后期添加（PS/剪映加字），不在生图中生成文字
+
+## Audio Material Reference Table Template
+
+```markdown
+| 编号 | 类型 | 时长 | 用途 | 对应镜头 | 生成提示词 |
+|:----:|:----:|:----:|------|:--------:|-----------|
+| @音频1 | 环境音 | 2s | 地下车库低频嗡鸣+排气扇 | 全片 | Generate 2s of underground parking garage ambience... |
+| @音频2 | 音效 | 1s | 消息提示音 | 镜头01 | Generate 1s of smartphone notification sound... |
+| @音频3 | 对白 | 3s | 阿凯开场台词 | 镜头01 | Record or TTS... |
+| @音频4 | 配乐 | 10s | 轻松吉他喜剧配乐 | 全片 | Generate 10s of lighthearted acoustic guitar... |
 ```
