@@ -44,6 +44,7 @@ The final Markdown must include:
 
 - project brief and creative direction
 - worldbuilding, theme, story structure, and episode/scene outline
+- multi-agent script iteration log with at least 3 rounds of discussion before final script approval
 - character bible with visual design and reference image prompts
 - scene/location bible with reference image prompts
 - style bible with color, lighting, lens, rhythm, sound, and forbidden drift
@@ -74,6 +75,9 @@ The final Markdown must include:
 ## Core Rules
 
 - Treat story as the source of value. Spend more effort on premise, conflict, reversals, emotion, and audience retention than on tool trivia.
+- **Mandatory multi-agent script development:** Before finalizing any script, run at least 3 rounds and at most 5 rounds of script discussion with at least two distinct agent viewpoints. Use roles such as screenwriter, director, audience representative, script doctor, prompt engineer, editor, or compliance reviewer. Do not skip this for short scripts.
+- Each script discussion round must record: previous-round problems, agent feedback, concrete revision decisions, current unresolved issues, and the next-round target. The final script must state how the last round resolved or intentionally overrode disagreements.
+- At minimum, one agent must challenge story logic and joke/emotional payoff, one agent must challenge visual/directorial feasibility, and one agent or role pass must represent the target audience's comprehension and retention.
 - Build visual consistency early. Create character and scene reference prompts before writing final video prompts.
 - Treat the first confirmed core location as a reusable production anchor; design later shots around it when consistency matters.
 - Write video prompts as narrative film direction, not keyword piles.

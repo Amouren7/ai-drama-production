@@ -54,6 +54,34 @@ Convert the premise into a structure:
 
 For longer work, start with a 30-60 second MVP scene to validate style and audience pull.
 
+## 2.5 Multi-Agent Script Development
+
+Before locking the script, run a structured discussion loop. This applies even to 15-25s shorts.
+
+Required roles:
+
+- **Screenwriter A:** proposes the strongest premise, character desire, escalation, and ending button.
+- **Screenwriter B or script doctor:** attacks weak logic, predictable beats, soft jokes, long dialogue, and missing reversals.
+- **Director:** checks whether each beat can be shown as visible action, with clear blocking, camera, sound, and edit points.
+- **Audience representative:** checks whether the first 3 seconds hook, the core conflict, and final payoff are understandable without explanation.
+
+Run at least 3 rounds and at most 5 rounds:
+
+1. **Round 1 — independent premise drafts.** At least two roles propose or compare story routes.
+2. **Round 2 — cross-critique and integration.** Each route gets at least 3 specific improvement notes, then combine the strongest elements.
+3. **Round 3 — final challenge and approval.** Agents challenge remaining issues, then approve a final script or the producer makes a documented decision.
+4. **Optional rounds 4-5 — repair only.** Use only when logic, pacing, compliance, or generation feasibility still fails.
+
+Each round must record:
+
+- previous-round problems
+- agent feedback
+- concrete revision decisions
+- unresolved issues
+- next-round target
+
+The final script package must include the iteration log before the polished script. Do not present a script as final if the three-round discussion is missing.
+
 ### Style
 
 Define a style bible:

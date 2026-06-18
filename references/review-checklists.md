@@ -21,6 +21,26 @@ Repair:
 - If scenes feel flat, add a choice, secret, countdown, contradiction, or status reversal.
 - If dialogue is long, cut to the most charged sentence.
 
+## Multi-Agent Script Iteration Review
+
+Score 1-10:
+
+- role coverage: at least two distinct agent viewpoints participated, including story/script and director/visual feasibility
+- round count: at least 3 discussion rounds were completed before final script approval, with no more than 5 rounds
+- critique specificity: each critique names concrete story, logic, pacing, joke, emotion, visual, or audience-comprehension issues
+- revision traceability: each round records previous problems, feedback, decisions, unresolved issues, and next target
+- audience lens: at least one pass checks first-3-second hook, comprehension without explanation, retention, and payoff clarity
+- director lens: at least one pass converts abstract beats into visible action, camera, blocking, sound, and edit feasibility
+- disagreement resolution: final decisions explain why one route was selected or why a concern was overridden
+- final script impact: the final draft is materially stronger than the first route, not just reformatted
+
+Repair:
+
+- If fewer than 3 rounds exist, run another discussion round before finalizing.
+- If all agents agree too easily, force a script doctor or audience representative to attack weak logic, unclear stakes, soft jokes, and overlong dialogue.
+- If feedback is vague, rewrite it as actionable notes tied to a beat, line, action, shot, or audience reaction.
+- If the final script ignores unresolved issues, document a producer decision or revise the script.
+
 ## Director Analysis Review
 
 Score 1-10:
@@ -174,6 +194,7 @@ Flag and repair:
 Before delivering:
 
 - no unfinished placeholders remain
+- script package includes a multi-agent iteration log with at least 3 rounds before final script approval
 - all reference numbers in prompts exist in the material map
 - each prompt has duration, references, camera/action, emotion, and sound
 - every character and scene has a visual anchor
