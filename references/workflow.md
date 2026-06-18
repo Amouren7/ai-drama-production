@@ -61,7 +61,7 @@ Define a style bible:
 - art direction: medium, era, palette, texture, realism level
 - camera grammar: handheld, locked-off, dolly, tracking, close-ups, one-take, montage
 - lighting: source, direction, color temperature, contrast
-- audio: dialogue density, ambience, music tempo, sound effects
+- sound: dialogue density, ambience, music tempo, sound effects
 - forbidden drift: what must not appear or change
 
 ## 3. Director Analysis: Turn Text Into Visible Action
@@ -132,6 +132,8 @@ Each storyboard row must answer:
 - subject/action: "who does what" or "what object is where"
 - expression/psychology: concrete face or body state
 - adjacent-shot relation: why this shot follows the previous one and how it leads to the next one
+- updated state data for rows after the first: character position, standing/sitting state, eyeline, face direction, gesture, emotion, prop state, and lighting continuity
+- join strategy for rows after the first: cut type, shot-size/angle change, transition insert if needed, dialogue breath gap, and match-action opportunity
 
 Avoid literary descriptions that cannot be drawn, such as "responds with affection" or "symbolizes fragile life." Rewrite as visible action.
 
@@ -142,17 +144,18 @@ Create a material map first:
 | @图片1 | protagonist identity | face/costume reference |
 | @图片2 | main location | layout and atmosphere |
 | @视频1 | camera/action reference | use motion rhythm only |
-| @音频1 | music/sound reference | use tempo/emotion |
 
 For each shot:
 
 1. State references and purpose.
 2. State duration and aspect ratio.
-3. Describe time-coded action if longer than 10 seconds.
-4. Include camera movement, character action, emotion shift, dialogue, and audio.
-5. **Embed audio inline**: every dialogue line, sound effect, ambience, and music cue goes directly in the prompt at the correct time position using `[对白]` `[音效]` `[配乐]` markers.
-6. Keep prompts narrative and concrete.
-7. Write only changes not already shown by references.
+3. For every shot after the first, state updated state data inherited from the previous shot.
+4. State the join strategy: intentional cut, new shot size/subject, camera angle change of about 30 degrees or more when applicable, transition insert, breath gap, or match-action cut.
+5. Describe time-coded action if longer than 10 seconds.
+6. Include camera movement, character action, emotion shift, dialogue, and sound cues.
+7. **Embed sound inline without audio references**: every dialogue line, sound effect, ambience, and music cue goes directly in the prompt at the correct time position using `[对白]` `[音效]` `[配乐]` markers. Do not create or cite `@音频` entries.
+8. Keep prompts narrative and concrete.
+9. Write only changes not already shown by references.
 
 Use one generation prompt for one coherent generation unit. For complex action, generate multiple variations and plan edit points.
 
@@ -169,21 +172,36 @@ Do this:
 
 If the simulation reveals a logic gap or inconsistency, **rewrite the prompt before generating**. Do not "fix it in post" — fix it in the prompt.
 
+## 5.6 Segment Continuity — Director Thinking For AI Joins
+
+AI clips are memoryless: the next generated clip has no reliable knowledge of the previous clip's final frame. Treat every join as a directed edit, not as a hidden technical splice.
+
+For each join:
+
+1. **Update data.** Record changed positions, posture, eyelines, face direction, emotion, prop state, costume state, and lighting direction.
+2. **Avoid same-shot continuation.** Do not rely on a previous tail frame as the next clip's first frame when the goal is a seamless same-camera continuation.
+3. **Cut with contrast.** Change shot size or subject: medium to insert, wide to close-up, person to prop, close-up to reaction.
+4. **Change angle.** When cutting the same subject, rotate the camera about 30 degrees or more; 45 or 90 degrees is safer.
+5. **Use transition inserts.** Use meaningful inserts such as hands, phones, doors, vehicle lights, mirrors, environmental details, or reactions to cover state changes.
+6. **Leave breath gaps.** Put silence, reaction, breath, or physical setup at clip starts/ends so dialogue does not feel chopped.
+7. **Match action.** Start a movement in one clip and finish it in another angle or on another subject.
+8. **Keep raw clips clean.** Generate raw clips without burned-in subtitles or baked-in background music; add these in editing.
+
 ## 6. Iteration And Assembly
 
 Follow the MVP-first principle. Do not generate all shots before reviewing:
 
 1. **Select MVP scene.** Pick the most technically demanding 1-2 shots (e.g., the core reversal).
 2. **Generate MVP shots first.** Create the MVP shots, review the output.
-3. **Score** story hook, identity consistency, action clarity, camera feasibility, audio, and compliance.
+3. **Score** story hook, identity consistency, action clarity, camera feasibility, sound design, and compliance.
 4. **Keep usable portions; mark flaws.** If the MVP fails, rewrite the failing prompt and regenerate.
 5. **Scale to remaining shots.** Only after the MVP scene passes, generate the remaining shots.
 
 For action scenes, expect editing. Generate multiple takes, use match cuts, keep the best 60-80%, and replace broken motion with alternate angles or reaction shots.
 
-## 5.6 Audio Design — Inline in Prompts, Not Separate Notes
+## 6.5 Sound Design — Inline in Prompts, Not Separate References
 
-**Critical rule: Every video prompt must embed its audio inline.** Do not write audio information as separate notes, tables, or "audio columns" outside the prompt. Seedance/即梦 multimodal generation reads audio cues from the prompt text itself. Format:
+**Critical rule: Every video prompt must embed dialogue, sound effects, ambience, and music inline.** Do not create audio material references, do not cite `@音频`, and do not write audio information as separate notes, tables, or "audio columns" outside the prompt. Seedance/即梦 multimodal generation reads sound cues from the prompt text itself. Format:
 
 ```prompt
 0-3秒：[动作描述]
@@ -198,20 +216,13 @@ For each shot, before writing the prompt:
 2. Decide the key sound effects and where they hit.
 3. Decide ambient sound and music.
 4. **Embed all of these inline** in the prompt at the correct time position.
-
-Create an Audio Material Reference Table (à la 素材对应表) listing every `@音频` asset needed:
-
-| 编号 | 类型 | 时长 | 用途 | 对应镜头 |
-|:----:|:----:|:----:|------|:--------:|
-| @音频1 | 环境音 | 5s | 停车场黄昏环境风声 | 全片 |
-| @音频2 | 音效 | 1s | 群消息提示音×5 | 镜头01 |
-| @音频3 | 对白 | 2s | 阿凯第一句台词 | 镜头01 |
+5. Keep all sound instructions inside the shot prompt; the material map remains visual-only.
 
 ## 7. Practical Production And Post
 
-Create a still-image rough cut before generating final videos — lay out the scene compositions in a timeline to review shot sequence and pacing:
+Create a still-image rough cut before generating final videos — lay out existing reference images, supplemental keyframes, or placeholder panels in a timeline to review shot sequence and pacing:
 
-1. Place storyboard panels (generated in Step 5.5 first pass) on a timeline at their assigned shot durations.
+1. Place available scene/character/prop references, generated keyframes, or simple placeholder panels on a timeline at their assigned shot durations.
 2. Check shot-size variety, character screen direction, POV clarity, and dialogue rhythm.
 3. Adjust missing reaction shots or inserts before spending video-generation budget.
 4. Use voice timing to decide whether shots need to be longer, shorter, or supplemented.
@@ -226,7 +237,7 @@ Use first/last frame generation for controlled motion, falls, reveals, entrances
 
 Do frame interpolation and upscaling before final edit export when source clips are low frame rate. Do not export a low-FPS rough edit to 30 FPS and then interpolate; interpolate the original generated clips first.
 
-Design audio in passes:
+Design sound in passes:
 
 - scratch voice: set rhythm and approximate duration
 - final performance: record or generate after picture timing is clear

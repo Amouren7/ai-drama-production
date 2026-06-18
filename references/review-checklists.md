@@ -97,6 +97,29 @@ Repair:
 - Replace negatives with positive instructions.
 - For 10s+ prompts, add time-coded segments.
 
+## Film Segment Continuity Review
+
+Score 1-10:
+
+- memoryless handoff: every new clip restates changed character, prop, eyeline, and scene state
+- updated state data: storyboard rows specify who is standing/sitting, screen position, face direction, gesture, emotion, prop state, and lighting continuity
+- intentional cut design: joins are treated as cuts, not forced same-shot continuations from a tail frame
+- shot-size contrast: adjacent shots avoid near-identical size and composition unless deliberately motivated
+- camera angle change: same-subject joins rotate about 30 degrees or more when possible
+- transition coverage: continuity gaps use inserts, props, reactions, environment details, or other story-relevant transition shots
+- breath gaps: dialogue and sound leave usable pauses around clip boundaries
+- match-action logic: partial actions can begin in one clip and finish in the next from another angle or subject
+- raw clip cleanliness: generated clips avoid burned-in subtitles and baked-in background music
+- editability: each join has a repair strategy if identity, pose, or action continuity drifts
+
+Repair:
+
+- If two clips jump, redesign the join as a cut to a new shot size, angle, subject, or transition insert.
+- If character positions drift, create an updated state reference image or add a precise state update before the next prompt.
+- If dialogue feels clipped, add 0.5-1s of silence, reaction, breath, or physical setup at the start/end of the neighboring clips.
+- If a same-subject cut feels jumpy, rotate the camera at least 30 degrees or cut to a prop/reaction shot.
+- If raw clips contain subtitles or music, regenerate without them when possible, or repair/remove them before final edit.
+
 ## Motion Comic Panel Consistency Review
 
 Score 1-10 (applicable only in motion comic mode):
@@ -155,6 +178,7 @@ Before delivering:
 - each prompt has duration, references, camera/action, emotion, and sound
 - every character and scene has a visual anchor
 - production plan includes image asset workflow, still rough cut, audio passes, iteration, and edit strategy
+- film-mode plans include segment continuity strategy: updated state data, intentional cut points, shot-size/angle changes, transition shots, breath gaps, and match-action opportunities
 - assumptions and defaults are clearly stated
 - [Motion comic] panel mapping covers every voiceover line
 - [Motion comic] camera motion assignment is present for every panel
