@@ -1,158 +1,262 @@
-# AI Drama Production
+# 🎬 AI Drama Production — AI 剧集制作技能
 
-> **[中文版文档](README.zh-CN.md)**
+> **从一句创意，到一套完整的 AI 短剧/漫剧制作方案——只需一个 Markdown。**
 
-A Claude Code skill for AI drama and motion comic production. Two modes, one workflow:
+<p align="center">
+  <a href="README.en.md">🌐 English Version</a> &nbsp;|&nbsp;
+  <a href="./SKILL.md">📖 技能清单</a> &nbsp;|&nbsp;
+  <a href="./references/workflow.md">🎬 电影模式工作流</a> &nbsp;|&nbsp;
+  <a href="./references/workflow-motion-comic.md">🎞️ 漫剧模式工作流</a>
+</p>
 
-- **🎬 Film mode** — continuous video generation pipeline for Seedance/即梦, targeting AI short films, trailers, and cinematic sequences
-- **🎞️ Motion comic mode** — voiceover-driven, panel-based still-image assembly for 即梦 + 剪映, targeting narrative-driven stories with realistic or sci-fi visual quality
-
----
-
-## Features
-
-- **Two production modes** — choose film or motion comic at intake; the rest of the workflow adapts
-- **Creative layer** — worldbuilding, character bible, scene bible, style bible for both modes
-- **Director analysis (讲戏)** — turn abstract emotion into visible action chains (film mode)
-- **Voiceover-to-panel mapping** — automatic timing estimation and panel assignment (motion comic)
-- **Batch image prompt generation** — style prefix auto-injection, character reference linking
-- **Camera motion assignment** — 4 motion types for motion comic, full camera grammar for film
-- **剪映 assembly guide** — per-panel duration, keyframe animation, transitions, multi-track layout
-- **Review checklists** — 7+ scoring gates with PASS/WARN/FAIL and repair strategies
-- **Pure Markdown output** — no backend, no database, no login required
+<p align="center">
+  <img src="https://img.shields.io/badge/平台-Claude%20Code-8A2BE2" alt="Claude Code">
+  <img src="https://img.shields.io/badge/许可-MIT-green" alt="MIT License">
+  <img src="https://img.shields.io/badge/AI%20短片-生产就绪-success" alt="AI Short Film Ready">
+  <img src="https://img.shields.io/badge/漫剧-生产就绪-success" alt="Motion Comic Ready">
+</p>
 
 ---
 
-## Modes Comparison
+## 🎯 一句话讲清楚
 
-| | Film Mode | Motion Comic Mode |
-|---|---|---|
-| **Best for** | AI short films, trailers, cinematic sequences | Narrative-driven stories, sci-fi/realistic motion comics |
-| **Generation type** | Continuous video (4-15s per shot) | Still images assembled with keyframe animation |
-| **Toolchain** | Seedance / 即梦 图生视频 | 即梦 出图 + 剪映 装配 |
-| **Core output** | Video prompt pack, storyboard table | Panel mapping, batch prompts, assembly guide |
-| **Key skill** | Director analysis (讲戏), shot continuity | Voiceover timing, panel pacing, consistency control |
-| **Production speed** | Slow: generate per-shot video | Fast: batch image gen + assembly |
+**AI Drama Production** 是一个 [Claude Code](https://docs.anthropic.com/en/docs/claude-code/skills) 技能（skill），它把你的一个粗糙创意，变成一份可以直接拿去生产的 AI 短剧或漫剧制作方案。
+
+它不生成视频——它**生成蓝图**：剧本、分镜、参考图 prompt、运镜指导、声音设计、连续性管理、装配指南。拿到它，你就可以直接上 Seedance、即梦、剪映干活了。
 
 ---
 
-## Installation
+## 🎬 + 🎞️ 双模式，一个框架
 
-### As a Claude Code skill
+| 模式 | 适合什么 | 产出什么 | 工具链 |
+|---|---|---|---|
+| **🎬 电影模式** | 电影感 AI 短片、预告片、AI 视频比赛作品 | 视频提示词包 + 分镜表 + 连续性方案 | Seedance / 即梦 图生视频 |
+| **🎞️ 漫剧模式** | 叙事驱动的内容、旁白为主的项目、需要快速迭代的场景 | 面板映射表 + 批量图生 Prompt + 剪映装配指南 | 即梦 出图 + 剪映 装配 |
+
+> **怎么选？** 想要连续运镜的电影感画面 → **电影模式**。想要更快出片、旁白驱动的有声漫剧 → **漫剧模式**。追求视觉冲击走电影模式，追求故事效率和资产一致性走漫剧模式。
+
+---
+
+## ✨ 为什么需要用这个技能？
+
+大多数 AI 视频项目死在**生成之前**——不是工具不行，是**方案不行**。
+
+### 这个技能帮你解决四个真实痛点：
+
+1. 🧠 **"有想法但不知从哪下手"** — 接入→四基石→生产管线，给你一个可复用的流程，不是一张白纸
+2. 🎭 **"角色每镜长得不一样"** — 参考图 prompt 在写视频 prompt **之前**就把角色长相、服装、场景布局、道具全部锁死。交叉引用检查确保每个 `@图片` 都被用到、每个画面上出现的物体都有参考图
+3. 🎬 **"镜头接不上"** — 连续性规则覆盖状态追踪、剪辑点设计、过渡镜头、对白呼吸间隙、匹配剪辑。AI 视频天生没记忆——这个技能给它装上记忆
+4. 📝 **"写 prompt 全靠抽卡"** — 模板强制叙事型电影方向写作（不是关键词堆砌）、按时间分段的 beat 密度、内嵌对白/音效/配乐、自动风格前缀注入
+
+### 这些规则不是拍脑袋想的
+
+这套 workflow 来自真实项目经验：即梦获奖短片"梦镜"的制作复盘、多部已发布 AI 短剧的生产后端、Seedance 2.0 多模态管道实践、以及多个"爆款"AI 视频的踩坑记录。每一条规则背后都至少是一个真实失败的教训。
+
+---
+
+## 👥 谁需要用？
+
+| 角色 | 为什么需要 |
+|---|---|
+| **AI 视频创作者** | 从"盲写 prompt"升级为系统化制片 |
+| **独立电影人** | 用 AI 快速原型化场景和节奏，再决定是否投入传统制作 |
+| **内容工作室** | 标准化团队的 AI 短剧/漫剧制作流程，每个人产出一致、可追溯 |
+| **漫剧作者** | 旁白节奏、面板映射、关键帧参数一次搞定 |
+| **AI 工具爱好者** | 理解 Seedance、即梦、剪映在真实管线里怎么配合 |
+
+不需要写代码。产出物是纯 Markdown——读它、按它操作、用它生成。
+
+---
+
+## 🚀 功能一览
+
+### 通用功能（两种模式都有）
+
+- **🏗️ 四基石** — 世界观、角色、场景、风格。先把这些定死，再写 prompt
+- **🖼️ 参考图优先设计** — 每个角色、场景、道具在写视频 prompt **之前**先有专属参考图 prompt
+- **✅ 交叉引用完整性检查** — 自动校验：prompt 里每个 `@图片` 在素材表里有对应，素材表里每个条目至少被一个 prompt 引用
+- **🔗 引用全覆盖** — 动作描述里每个视觉名词只要素材表里有对应的 `@` 条目，prompt 里就必须引用
+- **🧠 模拟播放门禁** — 出 prompt 之前，在脑子里先 "放一遍"：剧情逻辑→场景连贯性→动作合理性→对白与画面匹配
+- **🎨 封面/缩略图设计** — 专用封面 prompt，保留标题文字空间，使用同一套角色/场景参考图
+
+### 电影模式专属
+
+| 功能 | 说明 |
+|---|---|
+| **多 Agent 剧本开发** | 编剧/导演/观众/合规 四角色 3-5 轮对抗式讨论，每轮记录问题、反馈、修改决策 |
+| **导演讲戏（讲戏本）** | 逐 beat 拆解：**具体的物理动作**、运镜方向、光线变化、情绪转换、声音节奏。把"这场戏很悲伤"变成"角色 A 转身，3s 时光线打在她左眼，4.5s 叹气" |
+| **分镜表** | 每镜头：时长、视觉参考、运镜、动作 beat、对白/音效提示、生成 prompt |
+| **连续性方案** | 跨片段状态追踪、剪辑类型选择、视角旋转角度（≥30°）、过渡镜头、对白呼吸间隙（0.5s缓冲）、匹配剪辑 |
+| **Seedance 多模态提示词包** | `@图片/@视频` 引用 + 用途标签 + 时间分段（0-3s / 3-7s） |
+| **内嵌声音** | 每段视频 prompt 在对应时间段内直接写入 `[对白]`、`[音效]`、`[配乐]`。声音不是事后补的 |
+
+### 漫剧模式专属
+
+| 功能 | 说明 |
+|---|---|
+| **旁白时长估算** | 中文按 3-4 字/秒自动算时长，每句配 1-2 个面板，加 0.5s 过渡缓冲 |
+| **面板↔旁白映射** | 每句旁白→对应面板的精确映射表 |
+| **批量图生 Prompt** | 统一风格前缀自动注入，角色参考图自动关联 |
+| **4 种运镜，按情感功能分配** | 推（强调）→ 拉（释放/结束）→ 摇（过渡/展示）→ 缩（细节/反转），不是为变而变 |
+| **色温一致性** | 相邻面板不得从暖室内跳到冷室外，必须有过渡面板 |
+| **剪映装配指南** | 每面板时长、关键帧动画、多轨音频、时间线布局 |
+
+---
+
+## 📦 你拿到什么？（交付清单）
+
+### 电影模式产出
+
+```
+📄 制作圣经
+├── 📋 项目简报 & 创作方向
+├── 🌍 世界观、主题 & 故事结构
+├── 📝 多 Agent 剧本（3+ 轮对抗式开发）
+├── 👤 角色圣经（视觉设计 + 参考图 prompt）
+├── 🏠 场景/地点圣经（参考图 prompt）
+├── 🎨 风格圣经（色彩、布光、镜头语言、节奏、声音、禁止漂移）
+├── 🎬 导演讲戏（逐 beat 讲戏本）
+├── 📊 分镜表（每镜：时长、参考图、运镜、动作、对白/音效）
+├── 🔗 连续性方案（状态追踪、剪辑类型、过渡镜头、匹配剪辑）
+├── 🎥 视频提示词包（时间分段、内嵌对白/音效/配乐）
+├── 🖼️ 封面/缩略图设计
+└── ✅ 制作清单（素材→粗剪→声音→迭代→合规）
+```
+
+### 漫剧模式产出
+
+```
+📄 制作圣经
+├── 📋 项目简报 & 创作方向
+├── 🌍 世界观、主题 & 场景大纲
+├── 👤 角色圣经 + 场景圣经 + 风格圣经
+├── 🎙️ 旁白脚本（逐句时长估算）
+├── 📊 面板↔旁白映射表
+├── 🖼️ 批量即梦图生 Prompt（风格前缀 + 角色引用自动注入）
+├── 🎥 运镜分配（推/拉/摇/缩 按情感功能）
+├── ✂️ 剪映装配指南（时间线、时长、关键帧、音轨）
+├── 🔊 声音方案（TTS/录音、环境音、音效、配乐）
+└── ✅ 审查关卡（7+ 评分检查点）
+```
+
+---
+
+## ⚡ 快速开始
 
 ```bash
-# Clone the repo into your Claude Code skills directory
+# 1. 安装技能
 git clone https://github.com/Amouren7/ai-drama-production.git \
   ~/.claude/skills/ai-drama-production
+
+# 2. 在 Claude Code 中调用
+/ai-drama-production 我想做一个赛博朋克题材的AI短片
 ```
 
-Or copy the `ai-drama-production` directory into `~/.claude/skills/`.
+**建议提前准备：**
+- 故事概念（两三句话也行）
+- 如有参考图更佳（角色设计、场景参考）
+- 目标平台和大致时长
 
-### Standalone usage
-
-The Markdown output from this skill is fully standalone. Once generated, you can use it without Claude Code — just follow the prompts, assembly guides, and workflow instructions directly.
+剩下的事情技能帮你搞定——模式选择、创意方向、全套制作方案。
 
 ---
 
-## Quick Start
+## 🔄 工作流全景
 
-1. In Claude Code, invoke the skill by describing your project:
-   ```
-   /ai-drama-production 我想做一个赛博朋克题材的AI短片
-   ```
-2. The skill will ask what mode you want and a few essentials about your project.
-3. Follow the generated production guide from concept to final export.
+### 电影模式
+```
+💡 接入 → 🏗️ 四基石（世界观 → 角色 → 故事 → 风格）
+              → 🎬 导演讲戏（讲戏本）
+              → 📊 分镜 + Seedance 提示词生成
+              → 🖼️ 静态图粗剪 → 🔄 迭代
+              → 🔊 声音 → ✅ 审查 → 📦 最终导出
+```
 
-### What to prepare
-
-- A story premise (even 2-3 sentences is enough)
-- Reference images if available (character designs, scene references)
-- Target platform and approximate length
+### 漫剧模式
+```
+💡 接入 → 🏗️ 四基石（与电影模式共享）
+              → 🎙️ 旁白脚本 + 时长拆解
+              → 📊 面板映射
+              → 🖼️ 批量图生 Prompt 生成
+              → 🎥 运镜分配
+              → ✂️ 剪映装配指南
+              → 🔊 声音方案 → ✅ 审查 → 📦 导出
+```
 
 ---
 
-## Workflow Overview
-
-### Film Mode
-
-```
-Intake → Four Foundations (World/Character/Story/Style)
-      → Director Analysis (讲戏)
-      → Storyboard + Seedance Prompt Generation
-      → Rough Cut → Iteration → Sound → Final
-```
-
-Full workflow: `references/workflow.md`
-
-### Motion Comic Mode
-
-```
-Intake → Four Foundations (shared)
-      → Voiceover Script + Timing Breakdown
-      → Panel Mapping
-      → Batch Image Prompt Generation
-      → Camera Motion Assignment
-      → 剪映 Assembly Guide
-      → Sound Plan → Review → Export
-```
-
-Full workflow: `references/workflow-motion-comic.md`
-
----
-
-## File Structure
+## 📂 项目文件结构
 
 ```
 ai-drama-production/
-├── SKILL.md                          # Skill manifest, entry point, core rules
+├── SKILL.md                          # 技能清单、入口、核心规则
 ├── agents/
-│   └── openai.yaml                   # Agent configuration
+│   └── openai.yaml                   # Agent 配置
 ├── references/
-│   ├── workflow.md                   # Film mode workflow
-│   ├── workflow-motion-comic.md      # Motion comic mode workflow
-│   ├── templates.md                  # Film mode templates
-│   ├── templates-motion-comic.md     # Motion comic templates
-│   ├── production-practice.md        # Production lessons from real projects
-│   └── review-checklists.md          # Review gates and repair strategies
-├── README.md
+│   ├── workflow.md                   # 电影模式完整工作流
+│   ├── workflow-motion-comic.md      # 漫剧模式完整工作流
+│   ├── templates.md                  # 电影模式模板
+│   ├── templates-motion-comic.md     # 漫剧模式模板
+│   ├── production-practice.md        # 来自真实项目的制作经验
+│   └── review-checklists.md          # 7+ 评分关卡 + 修复策略
+├── README.md                       # 默认中文
+├── README.en.md                    # English version
 └── LICENSE
 ```
 
 ---
 
-## Toolchain Requirements
+## 🔧 工具链要求
 
-### Film Mode
+| 工具 | 电影模式 | 漫剧模式 |
+|---|---|---|
+| **图片/视频生成** | Seedance 2.0 或 即梦 | 即梦（或其他图生图工具） |
+| **剪辑** | 剪映、Premiere Pro 或其他 NLE | 剪映（关键帧动画、多轨音频） |
+| **配音** | 真人录音或 TTS | 剪映内置 TTS、第三方 TTS、或真人录音 |
+| **Claude Code** | ✅ 运行技能必需 | ✅ 运行技能必需 |
 
-- **Image/video generation:** Seedance 2.0 or 即梦
-- **Editing:** 剪映, Premiere Pro, or any non-linear editor
-
-### Motion Comic Mode
-
-- **Image generation:** 即梦 (or compatible image generation tools)
-- **Assembly:** 剪映 (keyframe animation, multi-track audio)
-- **Voiceover:** 剪映 built-in TTS, third-party TTS, or human recording
+> **独立使用说明：** 生成的 Markdown 完全可以脱离 Claude Code 独立使用。按文档里的提示词、装配指南和工作流说明操作即可，无需再依赖本技能。
 
 ---
 
-## Design Principles
+## 🧠 核心设计原则
 
-- **Story first.** Spend more effort on premise, conflict, and emotion than on tool trivia.
-- **Consistency by design.** Lock character and scene references before generating prompts.
-- **Rough cut before final.** Still-image rough cuts catch timing and composition problems cheaply.
-- **Sound is storytelling.** Voiceover, ambience, effects, and music each serve a distinct narrative function.
-- **Output is production-ready.** Every generated document is a complete guide from assets to assembly.
-
----
-
-## License
-
-MIT
+| 原则 | 为什么重要 |
+|---|---|
+| **故事优先** | 前提、冲突和情感决定观众留存——不是工具细节 |
+| **在设计时就锁死一致性** | **在写 prompt 之前**先固化参考图，不是之后 |
+| **先粗剪再最终版** | 静态图粗剪以极低成本发现节奏和构图问题 |
+| **声音就是叙事** | 配音、环境音、音效、音乐各司其职，缺一不可 |
+| **产出物可直接生产** | 每份文档从素材到装配都是完整的操作指南 |
+| **审接头** | 相邻镜头的连续性和剪辑质量比单镜头好看更决定成片品质 |
 
 ---
 
-## Related
+## 🤝 参与贡献
 
-- [Claude Code Skills](https://docs.anthropic.com/en/docs/claude-code/skills)
-- [Seedance](https://seedance.com)
-- [即梦](https://jimeng.jianying.com)
+这个技能是活的——AI 视频工具在进化，规则也在进化。
+
+- **发现有缺口？** 提 Issue 或 PR
+- **有制作复盘想分享？** 加到 `references/production-practice.md`
+- **不同意某条规则？** 提出修改建议和你的理由——这里的每一条规则背后都有一个真实失败教训
+
+---
+
+## 📄 许可
+
+MIT — 随意用、随意改、随意建。
+
+---
+
+## 🔗 相关资源
+
+- [Claude Code Skills 文档](https://docs.anthropic.com/en/docs/claude-code/skills)
+- [Seedance](https://seedance.com) — AI 视频生成平台
+- [即梦](https://jimeng.jianying.com) — AI 图片/视频生成（剪映出品）
+- [Claude Code](https://claude.ai/code) — AI 编程助手
+
+---
+
+<p align="center">
+  为 AI 电影人和漫剧创作者而造 ❤️
+</p>
