@@ -24,14 +24,15 @@
 
 It doesn't generate videos — it **generates the blueprint**: script, storyboard, reference image prompts, camera direction, sound design, continuity plan, and assembly guide. Everything you need to go straight to tooling like Seedance, 即梦, and 剪映.
 
-### Two Modes, One Framework
+### Three Modes, One Framework
 
 | Mode | Best For | Output | Toolchain |
 |---|---|---|---|
 | **🎬 Film Mode** | Cinematic short films, trailers, AI video contests | Video prompt pack + storyboard + continuity plan | Seedance / 即梦 图生视频 |
+| **📋 Copy-Paste Production Mode** | Users who want to provide the idea and review choices while the skill handles prompts, bridges, and repairs | Ready-to-copy keyframe prompts + video prompts + bridge shots + safety inserts + repair prompts | Image/video generation + editing |
 | **🎞️ Motion Comic Mode** | Narrative-driven stories, voiceover-heavy content, rapid iteration | Panel mapping + batch prompts + 剪映 assembly guide | 即梦 出图 + 剪映 装配 |
 
-> **Picking a mode:** Want cinematic camera movement and continuous video? → **Film mode.** Want a faster, voiceover-driven pipeline with consistent stills? → **Motion comic mode.** Default to film for spectacle, motion comic for story-driven efficiency.
+> **Picking a mode:** Want cinematic camera movement and continuous video? → **Film mode.** Want the lowest manual workload and mostly copy/paste prompts? → **Copy-Paste Production Mode.** Want a faster, voiceover-driven pipeline with consistent stills? → **Motion Comic Mode.**
 
 ---
 
@@ -45,7 +46,7 @@ Most AI video projects fail *before* generation — not because the tooling is b
 
 2. 🎭 **"My characters look different in every shot"** — Reference image prompts lock character identity, costume, scene layout, and props *before* you generate a single video. Cross-reference checks ensure every `@图片` is actually used and every visual noun is covered.
 
-3. 🎬 **"The shots don't cut together"** — Film continuity rules handle state tracking, cut type design, transition shots, dialogue breath gaps, and match-action cuts. AI clips are memoryless — this skill gives them memory.
+3. 🎬 **"The shots don't cut together"** — `Join Contract` tables check every adjacent shot pair: prior end state, next start state, risk level, hard-cut permission, bridge shot, sound bridge, and fallback edit. AI clips are memoryless — this skill gives them memory.
 
 4. 📝 **"My prompt engineering is inconsistent"** — Templates enforce narrative film direction (not keyword piles), time-coded beat density, inline dialogue/SFX/music, and automatic style prefix injection.
 
@@ -88,8 +89,21 @@ No coding required. The output is pure Markdown — read it, follow it, generate
 | **导演讲戏 (Director Analysis)** | Beat-by-beat breakdown: *concrete actions*, camera movement, light, emotion, sound. Turns "this scene is sad" into "character A turns away, light hits her left eye at 3s, exhale at 4.5s". |
 | **Storyboard Table** | Per-shot: duration, visual references, camera, action beats, dialogue/sound cues, generation prompt |
 | **Continuity Plan** | State tracking across clips, cut type selection, shot-size angle rotation (≥30°), transition shots, dialogue breath gaps (0.5s buffer), match-action opportunities |
+| **Join Contract** | Every shot pair gets prior end state, next start state, state delta, risk level, hard-cut permission, bridge prompt, safety inserts, sound bridge, and fallback edit |
+| **High-Risk Bridge Generation** | Location changes, rescue/carry actions, lying-to-sitting/standing jumps, body interaction, and prop-state changes cannot hard cut; bridge or insert prompts are generated automatically |
 | **Seedance Multimodal Prompt Pack** | `@图片/@视频` references with explicit purpose labels, time-coded segments (0-3s / 3-7s / etc.) |
 | **Inline Sound Embedding** | Every video prompt contains `[对白]`, `[音效]`, `[配乐]` markers embedded in the matching time segment. Sound is not an afterthought. |
+
+### Copy-Paste Production Mode Exclusive
+
+| Feature | What It Does |
+|---|---|
+| **Low-input intake** | Asks only for genre, protagonist relationship, first-episode hook, ending question, and platform; the skill fills sensible defaults |
+| **Keyframe prompt pack** | Generates `IMAGE_START`, `IMAGE_END`, and optional `IMAGE_MID` prompts for risky motion |
+| **Video prompt pack** | Generates `VIDEO_MAIN` prompts focused on motion, camera, timing, and direction |
+| **Bridge shot pack** | Generates `VIDEO_BRIDGE` prompts for location jumps, posture jumps, missing causality, and difficult transitions |
+| **Safety insert library** | Generates `VIDEO_INSERT` prompts for hands, eyes, props, doors, lights, phones, tools, feet, reactions, and environment plates |
+| **Repair prompts** | Prepares `VIDEO_REPAIR` prompts so failed generations can be retried without inventing a new workflow |
 
 ### Motion Comic Mode Exclusive
 
@@ -120,8 +134,9 @@ After running the skill, you receive a single comprehensive Markdown document co
 ├── 🎨 Style Bible (color, lighting, lens, rhythm, sound, forbidden drift)
 ├── 🎬 Director Analysis (beat-by-beat 讲戏)
 ├── 📊 Storyboard Table (per-shot: duration, refs, camera, action, dialogue)
-├── 🔗 Continuity Plan (state tracking, cut types, transition shots, matching)
+├── 🔗 Continuity Plan + Join Contracts (state tracking, risk levels, bridge shots, matching)
 ├── 🎥 Video Prompt Pack (time-coded, inline audio/SFX/music)
+├── 📋 Copy-Paste Prompt Pack (IMAGE_START / IMAGE_END / VIDEO_MAIN / VIDEO_BRIDGE / VIDEO_INSERT / VIDEO_REPAIR)
 ├── 🖼️ Cover/Thumbnail Designs
 └── ✅ Production Checklist (assets → rough cut → audio → iteration → compliance)
 ```
@@ -170,8 +185,9 @@ The skill walks you through the rest — mode selection, creative direction, and
 ```
 💡 Intake → 🏗️ Four Foundations (World → Character → Story → Style)
               → 🎬 Director Analysis (讲戏)
-              → 📊 Storyboard + Seedance Prompt Generation
-              → 🖼️ Still-Image Rough Cut → 🔄 Iteration
+              → 📊 Storyboard + Join Contracts + High-Risk Bridges
+              → 🖼️ Start/End Keyframe Rough Cut → 🎥 Video Prompts
+              → 🧩 Safety Inserts / Repair Prompts → 🔄 Iteration
               → 🔊 Sound Pass → ✅ Review → 📦 Final Export
 ```
 
@@ -229,6 +245,7 @@ ai-drama-production/
 | **Story first** | Premise, conflict, and emotion drive audience retention — not tool trivia |
 | **Consistency by design** | Lock references *before* generating prompts, not after |
 | **Rough cut before final** | Still-image rough cuts catch timing/composition problems cheaply |
+| **Audit joins before generation** | Every adjacent shot pair gets a Join Contract; high-risk joins get bridges before main video generation |
 | **Sound is storytelling** | Voiceover, ambience, effects, and music each serve a distinct narrative function |
 | **Output is production-ready** | Every document is a complete guide from assets to assembly |
 | **Audit the joints** | Adjacent-shot continuity and cut quality determine perceived quality more than any individual shot |
