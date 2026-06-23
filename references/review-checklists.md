@@ -171,26 +171,6 @@ Repair:
 - Weak ending -> end on face/reveal/decision, not neutral environment unless the object is the cliffhanger.
 - Unusable main clip -> keep the best 40-70%, replace broken middle with insert or regenerate a shorter bridge.
 
-## Motion Comic Panel Consistency Review
-
-Score 1-10 (applicable only in motion comic mode):
-
-- style prefix consistency: every panel prompt shares the same style prefix string
-- character face consistency: character face does not visibly change across panels referencing the same character image
-- costume/prop consistency: clothing, gear, and signature props remain identifiable across panels
-- color temperature logic: adjacent panels do not have conflicting color temperatures
-- camera angle variety: panels vary composition (wide/medium/close-up) — not every panel is the same shot size
-- voiceover split quality: no single panel is overloaded with text; splits feel natural
-- motion variety: adjacent panels do not all use the same motion type (push-in/pull-out/pan/zoom)
-- panel duration sanity: no panel is under 1.5s (too fast to read) or over 8s (too long to hold without content switch)
-
-Repair:
-
-- If character drifts, check that the exact same reference image is cited and the identity anchor description is present.
-- If panels feel repetitive, insert a reaction panel, detail insert, or angle change between two similar compositions.
-- If pacing feels wrong, watch with scratch voiceover and adjust durations in 0.5s increments.
-- If three+ consecutive panels use the same motion, change the middle panel to a still or different motion type.
-
 ## Postproduction Review
 
 Score 1-10:
@@ -232,6 +212,3 @@ Before delivering:
 - production plan includes image asset workflow, still rough cut, audio passes, iteration, and edit strategy
 - film-mode plans include segment continuity strategy: updated state data, intentional cut points, shot-size/angle changes, transition shots, breath gaps, and match-action opportunities
 - assumptions and defaults are clearly stated
-- [Motion comic] panel mapping covers every voiceover line
-- [Motion comic] camera motion assignment is present for every panel
-- [Motion comic] 剪映 assembly guide includes timeline layout, transitions, and keyframe settings

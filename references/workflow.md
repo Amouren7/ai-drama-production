@@ -16,9 +16,9 @@ Minimum viable intake:
 - visual style: live-action cinematic, anime, clay, ink, cyberpunk, wuxia, retro, commercial, etc.
 - target output: trailer, episode, storyboard prompt pack, or complete production bible
 
-### Copy-Paste Production Defaults
+### Film Mode Low-Input Defaults
 
-If the user wants to minimize manual work, use copy-paste production mode. Ask at most five essentials, then fill the rest:
+Film mode is designed for low manual workload. Ask at most five essentials, then fill the rest:
 
 - genre/tone
 - protagonist and relationship seed
@@ -26,7 +26,7 @@ If the user wants to minimize manual work, use copy-paste production mode. Ask a
 - ending question or cliffhanger
 - target platform
 
-Default to 60-90s, vertical 9:16, Chinese dialogue, short-drama pacing, 8-14 main shots plus bridge/insert insurance shots. The user should only need to review story direction, choose reference images or takes, and approve repairs.
+Default to 60-90s, vertical 9:16, Chinese dialogue, short-drama pacing, 8-14 main shots plus bridge/insert insurance shots. The user should only need to review story direction, choose reference images or takes, and approve repairs. Anime-style still images with simple motion also use this film-mode workflow with gentler camera moves and simpler action beats.
 
 ## 2. Set The Four Foundations
 
@@ -133,7 +133,7 @@ Generate one image per main character:
 - plain background
 - consistent style, costume, palette, and signature prop
 
-For major AI drama or motion comic characters, create a **visual development sheet** before final prompts:
+For major AI drama characters, create a **visual development sheet** before final prompts:
 
 - story role: dramatic function, desire, wound, contradiction, arc
 - commercial visual positioning: genre tier, realism/stylization level, beauty/texture direction
@@ -232,7 +232,7 @@ Use one generation prompt for one coherent generation unit. For complex action, 
 
 ## 5.1 Copy-Paste Prompt Packaging
 
-In copy-paste production mode, output prompts in task-labeled blocks so the user can paste them directly into image/video tools:
+In film mode, output prompts in task-labeled blocks so the user can paste them directly into image/video tools:
 
 - `IMAGE_START`: still image for the first frame of a shot
 - `IMAGE_END`: still image for the last frame of a shot
@@ -311,7 +311,7 @@ For every high-risk or forbidden-hard-cut join, generate at least one of these b
 - **Reaction bridge:** hides continuity with face response, breath, shock, pain, decision.
 - **Light/sound bridge:** flashlight wipe, door slam, power flicker, engine sound, alarm, glitch pulse.
 
-Do not leave bridge shots as optional suggestions in copy-paste production mode. Add them to the shot list with prompt ids and durations.
+Do not leave bridge shots as optional suggestions. Add them to the shot list with prompt ids and durations.
 
 ## 6. Iteration And Assembly
 
@@ -353,7 +353,7 @@ Create a still-image rough cut before generating final videos — lay out existi
 3. Adjust missing reaction shots or inserts before spending video-generation budget.
 4. Use voice timing to decide whether shots need to be longer, shorter, or supplemented.
 
-In copy-paste production mode, the still rough cut has two passes:
+In film mode, the still rough cut has two passes:
 
 1. **Anchor pass:** generate or select start/end frames only; assemble them in order to catch broken geography, posture jumps, and missing bridge actions.
 2. **Motion pass:** generate video only for approved anchors; after each batch, extract candidate cut points and review joins before generating the next batch.

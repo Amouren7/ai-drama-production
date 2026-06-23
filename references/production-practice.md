@@ -69,75 +69,49 @@ Before final video generation:
 5. Use effects for subjective states and transitions: glitch, pulse, rewind, flashback, impact.
 6. Add music selectively. For suspense/reveal, ask for mystery, progression, pulse, restraint, and climax; then cut the usable section rather than forcing the whole generated track.
 
-## Motion Comic Production Lessons
+## Still-Image And Anime Light-Motion Lessons
 
-These lessons come from producing realistic and sci-fi motion comics with 即梦 + 剪映.
+Use these when a project uses anime-style stills or lightly animated images instead of fully continuous live-action motion. This is still film mode: the same shot list, Join Contract, bridge-shot, and copy-paste prompt rules apply.
 
-### Voiceover-Driven Panel Timing
+### Timing
 
-The biggest difference between film and motion comic is timing. Motion comic timing is entirely voiceover-driven. A single voiceover line determines the panel duration, and the panel should hold long enough for the viewer to absorb both the image and the narration. Key rule: **read your voiceover aloud while watching the panel. If you finish reading before the panel ends, the hold feels natural. If the panel cuts before you finish reading, it will feel rushed.**
+Static or lightly animated images need more screen time than full-motion clips because the viewer needs time to read the composition. Add 0.5-1.0 seconds of reading time beyond the dialogue duration, especially for emotional close-ups or complex scene reveals.
 
-One common mistake is making panels too short. Unlike video where motion fills attention, a static panel needs more time for the eye to explore. Add 0.5-1.0 seconds of "reading time" per panel beyond the voiceover duration.
+### Consistency In Independent Images
 
-### Character Consistency In Independent Generations
+Each still/keyframe is independently generated, so character consistency is a major risk. Use a three-layer approach:
 
-Unlike video where a model has "inertia" across frames, each motion comic panel is independently generated. This makes character consistency the single biggest technical risk.
+- **Reference image:** cite the same character reference whenever the character appears.
+- **Style prefix:** keep one style prefix for the whole project or scene batch.
+- **Description anchor:** repeat 2-3 identity anchors such as age, hairstyle, scar, costume, or signature prop.
 
-The practical fix is a three-layer approach:
+If identity still drifts, regenerate with a better reference image rather than endlessly rewording the prompt.
 
-- **Layer 1 — Reference image**: Every panel prompt must cite the same character reference image. This is non-negotiable.
-- **Layer 2 — Style prefix**: Every panel prompt must start with the exact same style prefix string. Do not rewrite it per panel.
-- **Layer 3 — Description anchor**: Every panel prompt must include the same 2-3 character identity anchors (e.g., "亚洲男性，28岁，短发，左眉尾旧伤疤").
+### Still Rough Cut Before Motion
 
-If a character still drifts after applying all three layers, regenerate with a different reference image (try a closer-matching base) rather than endlessly rewording the prompt.
+Before generating video motion:
 
-### Style Consistency Across Panels
+1. Put start/end frames or placeholder images in 剪映.
+2. Lay them out with estimated durations.
+3. Add scratch dialogue or voiceover.
+4. Watch the rough cut and fix missing bridges, weak reactions, or confusing geography.
 
-Style drift between panels is subtle but destructive. A viewer may not notice it consciously, but they will feel that the panels "don't belong together."
-
-Prevention checklist for each batch of prompts:
-
-- All prompts start with the same style prefix.
-- All prompts use the same color temperature logic (all cool-tone or all warm-tone unless intentionally shifting).
-- All prompts specify consistent lighting direction (e.g., "主光源从左上45度照射" — then every panel respects this).
-- Scene reference images are cited consistently.
-
-### Rough Cut Before Full Image Generation
-
-This is the single highest-ROI step in motion comic production. Before generating all 30+ panel images:
-
-1. Use placeholder images (scene references or simple sketches) in 剪映.
-2. Lay them out at estimated durations.
-3. Add scratch voiceover (即使是手机录一段都可以).
-4. Watch the rough cut. Adjust pacing.
-
-This catches 80% of timing and composition problems before you spend time and credits on final image generation. It costs almost nothing and saves hours of rework.
+This catches most timing and composition problems before spending video-generation credits.
 
 ### 剪映 Keyframe Efficiency
 
-剪映's keyframe animation for still images is the magic that makes motion comic not feel like a slideshow. Key efficiency tips:
+Simple keyframe animation can be enough for anime stills and quiet scenes:
 
-- Apply the same animation to a group of panels rather than setting each one individually. If all panels in a scene use push-in, set up the animation once and reuse.
-- Use "自定义动画" presets (剪映 has built-in push-in/pull-out/pan animations that are good enough for most panels).
-- Keyframe speed curves matter more than the motion itself. Always enable ease-in/ease-out unless you want an abrupt stop.
-- Do not animate every panel. Some panels — especially wide establishing shots and emotional close-ups — work better completely still.
+- Apply the same motion preset to a group of related shots.
+- Use push-in, pull-out, pan, or zoom only when it supports the emotion or information.
+- Enable ease-in/ease-out unless an abrupt stop is intentional.
+- Do not animate every frame; some establishing shots and emotional close-ups work better nearly still.
 
-### Sound In Motion Comic
+### Batch Strategy
 
-Motion comic sound is simpler than film sound but more deliberate. The hierarchy:
+Generate by scene batch:
 
-1. **Voiceover (最重要的)**: Crystal clear, properly timed, appropriate emotion. Bad voiceover kills a motion comic faster than bad images.
-2. **Ambience**: Every scene needs a background atmosphere layer. A completely silent panel feels dead, not dramatic.
-3. **Key SFX**: One well-placed sound effect (a door closing, a breath, a machine powering up) is worth more than continuous background music.
-4. **Music**: The last layer, not the first. Add music only where the emotion needs it. Many motion comics are more powerful with just voiceover + ambience.
-
-### Batch Generation Strategy
-
-Do not generate all panel images at once. Batch by scene:
-
-- Generate all panels for Scene 1 first.
-- Check consistency and style.
-- If Scene 1 passes, proceed to Scene 2 with the same reference setup.
-- If Scene 1 has drift, fix the style prefix/character references before continuing.
-
-This prevents waste: if your approach has a fundamental consistency problem, you catch it after 5-8 panels instead of 40.
+- Generate the first scene's keyframes first.
+- Check identity, style, color temperature, and lighting direction.
+- If the first batch passes, continue with the same references and style lock.
+- If it drifts, fix references before scaling to the rest of the episode.
