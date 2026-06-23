@@ -46,6 +46,7 @@ The final Markdown must include:
 - worldbuilding, theme, story structure, and episode/scene outline
 - multi-agent script iteration log with at least 3 rounds of discussion before final script approval
 - character bible with visual design and reference image prompts
+- visual development bible for major characters: commercial positioning, face/hair/costume/body/material/color-card/local-detail anchors, and optional advanced character board prompts
 - scene/location bible with reference image prompts
 - style bible with color, lighting, lens, rhythm, sound, and forbidden drift
 - director analysis: beat-by-beat "讲戏" using concrete actions, camera movement, light, emotion, and sound
@@ -79,6 +80,8 @@ The final Markdown must include:
 - Each script discussion round must record: previous-round problems, agent feedback, concrete revision decisions, current unresolved issues, and the next-round target. The final script must state how the last round resolved or intentionally overrode disagreements.
 - At minimum, one agent must challenge story logic and joke/emotional payoff, one agent must challenge visual/directorial feasibility, and one agent or role pass must represent the target audience's comprehension and retention.
 - Build visual consistency early. Create character and scene reference prompts before writing final video prompts.
+- For important AI drama or motion comic characters, separate **story role** from **visual development**. Story role covers desire, wound, arc, and scene function; visual development covers commercial positioning, face, hair, costume layers, body proportion, skin/material texture, accessories, color palette, and local detail panels.
+- Use advanced character boards when identity consistency matters: include face close-up, front/side/back orthographic turnaround, full-body scale view, local detail panels such as hands/feet/hair/waist/tattoo/accessory, and a small color-card area. Keep pose, costume, hairstyle, lighting, and proportions consistent across all panels.
 - Treat the first confirmed core location as a reusable production anchor; design later shots around it when consistency matters.
 - Write video prompts as narrative film direction, not keyword piles.
 - Describe what changes in the shot. Do not repeat static details already visible in reference images.
@@ -161,4 +164,5 @@ The workflow is distilled from six Feishu Wiki sources about AIGC video setting 
 - Use short 10-15 second scenes as testable units, often with one reversal or audience-retention hook.
 - Let generation results feed back into the next script iteration; do not force a fully frozen long script too early.
 - Use AI for structure, but manually audit storyboard shot size, viewpoint, expression, and adjacent-shot continuity.
+- For supplied reference images, use a visual extraction pass when helpful: line-art cleanup to clarify structure, flat color extraction to lock palette, then reverse-prompt analysis to capture reusable visual logic. Use this for style/character consistency, not as a substitute for story development.
 - Combine tools pragmatically: text-to-image drafts, high-quality image iteration, Photoshop/layering/inpainting, first/last frames, image upscaling, frame interpolation, still-image rough cuts, voice/audio passes, and final editing all matter.

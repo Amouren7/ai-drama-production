@@ -121,11 +121,42 @@ Generate one image per main character:
 - plain background
 - consistent style, costume, palette, and signature prop
 
+For major AI drama or motion comic characters, create a **visual development sheet** before final prompts:
+
+- story role: dramatic function, desire, wound, contradiction, arc
+- commercial visual positioning: genre tier, realism/stylization level, beauty/texture direction
+- identity profile: age, gender, region/nationality if relevant, height, body type, one-line identity
+- face: facial structure, eyes, brows, nose, lips, expression set, skin tone, skin texture
+- hair: hairstyle, color, hair volume, strand/detail quality
+- costume: style, layers, silhouette, top/bottom/shoes, material, color blocking, wear state
+- body and posture: proportion, stance, body language, physical signature
+- premium anchors: accessories, tattoos/scars, props, color cards, fabric/metal/leather/skin material notes
+
+Use an **advanced character board** when consistency is high-stakes. The board may include:
+
+- left face close-up with skin/hair/facial detail
+- center orthographic front/side/back full-body turnaround with identical pose and lighting
+- right full-body scale view with height marker when useful
+- bottom local detail panels for hands, feet, hair, waist, tattoos, accessories, weapons, or signature props
+- small color-card blocks for the dominant palette
+
+Keep the board controlled: neutral/light background, no dynamic pose changes, no costume or hairstyle variants in the same board, no extra characters, no logos/watermarks, and only necessary measurement labels.
+
 For variants, mark clearly:
 
 - New: first appearance
 - Reuse: no design change
 - Variant: same identity with new costume/injury/age/state
+
+### Reference Image Extraction Pass
+
+When the user provides a strong reference image but the prompt language is weak, extract it before writing production prompts:
+
+1. **Line-art cleanup:** convert the image into clean black line art on a white background, repairing structure, patterns, ornaments, and missing details.
+2. **Flat color extraction:** analyze the color construction and produce a flat color draft with clear palette relationships.
+3. **Reverse-prompt analysis:** deconstruct the image into subject, composition, style, materials, palette, lighting, lens, and quality controls, then write a reusable prompt that can recreate the visual logic across tools.
+
+Use this pass for visual consistency, character design, props, costumes, and scene style references. Do not let it override script logic, shot continuity, or safety/compliance rules.
 
 ### Scene Reference Prompt
 

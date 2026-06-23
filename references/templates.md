@@ -99,12 +99,12 @@ Use these as needed, not all at once:
 | @图片2 | 场景 | xxx | xxx | §5 |
 | @图片3 | 道具 | xxx | xxx | §5 |
 
-## 10. 分镜与视频提示词（单次生成，音频 inline）
+## 10. 分镜与视频提示词（单次生成，声音 inline）
 ### 10.1 提示词格式
-每条提示词是一个完整的视频生成单位，画面+对白+音效+配乐在同一段文字中描述。用 `[对白]` `[音效]` `[配乐]` 在对应时间轴嵌入音频。
+每条提示词是一个完整的视频生成单位，画面+对白+音效+配乐在同一段文字中描述。用 `[对白]` `[音效]` `[配乐]` 在对应时间轴嵌入声音；不建立、不引用 `@音频`。
 
 ### 10.2 分镜与视频提示词
-| 镜头 | 时长 | 视角 | 景别 | 引用素材 | 动作节拍 | 表情/心理 | 前后镜关系 | 运镜 | 音频 | 生成提示词 |
+| 镜头 | 时长 | 视角 | 景别 | 引用视觉素材 | 动作节拍 | 表情/心理 | 前后镜关系 | 运镜 | 声音/对白处理 | 生成提示词 |
 |---|---:|---|---|---|---|---|---|---|---|---|
 
 ## 11. 剧情逻辑与连贯性审查
@@ -166,6 +166,56 @@ Use these as needed, not all at once:
 Create a cinematic character design sheet for [character name], [age range], [role]. The image is split into two parts: left half is a detailed face close-up portrait; right half is a full-body turnaround showing front view, side view, and back view. Plain light background, consistent [visual style], [costume], [signature prop], [color palette], clear facial features, distinctive silhouette, production design quality, no text, no watermark.
 ```
 
+## Visual Development Fields Template
+
+```markdown
+### [Character Name] Visual Development
+- Story role:
+- Commercial visual positioning:
+- Gender / age / region:
+- Height / body type / posture:
+- One-line identity:
+- Personality tags:
+- Face: facial structure, eyes, brows, nose, lips, expression set
+- Skin: tone, texture, realism level, imperfections
+- Hair: style, color, volume, strand detail
+- Costume: style, silhouette, layers, top/bottom/shoes, material, color blocking
+- Accessories / signature props:
+- Local detail anchors: hands, feet, waist, tattoo/scar, hair, jewelry, weapon/tool
+- Palette: 3-5 dominant colors
+- Forbidden drift: costume changes, hairstyle changes, plastic skin, extra characters, logo/watermark, distorted hands, conflicting style words
+```
+
+## Advanced Character Board Prompt Template
+
+```prompt
+Create an advanced cinematic character development board for [character name], [age range], [story role], in [visual style].
+
+Layout in one image:
+A area: left-side face close-up, showing clear facial structure, eyes, brows, lips, skin texture, hairline, and expression.
+B area: center orthographic full-body turnaround of the same character: front view, side view, and back view, identical standing pose, identical costume, identical hairstyle, identical lighting, consistent proportions.
+C area: right-side full-body scale view of the same character standing upright; include one simple vertical height marker only if needed.
+D area: bottom local detail panels showing [hands/feet/hair/waist/tattoo/accessory/signature prop], each as a clean close-up.
+E area: small color-card blocks showing the dominant palette, graphic blocks only.
+
+Lighting: soft studio three-point lighting, clean shadows, consistent color temperature. Render quality: high-resolution production design sheet, detailed but not noisy, natural material texture, no wide-angle distortion.
+Constraints: no dynamic pose changes, no alternate costume, no alternate hairstyle, no extra people, no logo, no watermark, no cluttered labels, no stylized cartoon drift, no plastic skin, no distorted hands, no floating props.
+```
+
+## Reference Image Extraction Prompt Templates
+
+```prompt
+Line-art extraction: Convert the uploaded reference image into clean black line art on a white background. Preserve and repair the subject's structure, patterns, costume ornaments, symbols, and missing details. Lines are clear, readable, and structurally complete.
+```
+
+```prompt
+Flat color extraction: Based on the uploaded reference image, analyze its color construction and redraw it as a flat color draft. Keep the main color blocks, palette relationships, costume/prop color separation, and visual hierarchy clear.
+```
+
+```prompt
+Reverse visual prompt: Deconstruct the uploaded reference image into reusable generation logic. Analyze subject, silhouette, composition, camera angle, style, materials, texture, palette, lighting, lens, mood, and quality controls. Output one concise professional Chinese prompt that can recreate this visual effect across image generation tools.
+```
+
 ## Scene Grid Prompt Template
 
 ```prompt
@@ -178,16 +228,16 @@ Create a [3x3/3x4/4x4] cinematic environment reference grid for an AI drama in [
 Create a high-quality cinematic hero reference image for the main recurring location: [location name]. The location will appear in about [percentage] of the film, so the layout must be clear and reusable from multiple camera angles. Include [key props], [spatial layout], [lighting source and color], [mood], [style]. No main characters unless scale is needed, no text, no watermark.
 ```
 
-## Seedance-Style Prompt Template — Single-Pass with Audio Inline
+## Seedance-Style Prompt Template — Single-Pass with Sound Inline
 
-⚠️ **关键规则：视频提示词中音频必须 inline 嵌入。** 不要将对白/音效/配乐放在提示词之外的"音频备注"中。每一句对白、每一个音效、每一段配乐都必须在提示词的对应时间轴位置写好，用 `[对白]` `[音效]` `[配乐]` 标记。这样才能在 Seedance/即梦中实现音画同步生成。
+⚠️ **关键规则：视频提示词中声音必须 inline 嵌入。** 不要建立或引用 `@音频`，不要将对白/音效/配乐放在提示词之外的"音频备注"中。每一句对白、每一个音效、每一段配乐都必须在提示词的对应时间轴位置写好，用 `[对白]` `[音效]` `[配乐]` 标记。这样才能在 Seedance/即梦中实现音画同步生成。
 
 每条提示词是一个"单次生成"单位：在一个镜头中，画面变化 + 对白 + 音效 + 配乐都在同一条提示词里描述。不需要先出图再出视频，直接一条提示词生成视频。
 
 ```prompt
-以 @图片1 中的[角色]为主角，场景参考 @图片2 的[场景用途]，音频参考 @音频1 的[用途]。生成 [时长]，[画幅]，[风格]。
+以 @图片1 中的[角色]为主角，场景参考 @图片2 的[场景用途]。生成 [时长]，[画幅]，[风格]。
 
-——以下描述动态变化和音频——
+——以下描述动态变化和声音——
 
 0-3 秒：[动作/情绪描述]
      [音效：环境音/效果音]
@@ -206,14 +256,9 @@ Create a high-quality cinematic hero reference image for the main recurring loca
 - 如果生图发现构图不对，可以修改提示词中的位置/角度描述后重新生成
 - 视频生成前建议用角色参考图 @图片 锁定形象，用场景参考图锁定环境
 
-## Audio Material Prompt Template
+## Sound Inline Rule
 
-```prompt
-[Audio material] Generate [duration] seconds of [type: ambience/SFX/music] for [scene/shot purpose].
-Style: [description of sound quality, emotion, tempo]
-Key elements: [list of specific sounds to include]
-No dialogue, no vocals, clean audio, high quality, cinematic.
-```
+Film-mode video prompts do not use separate sound material prompts or sound reference tables. Put dialogue, sound effects, ambience, and music cues directly into the time-coded shot prompt with `[对白]` `[音效]` `[配乐]`.
 
 ## Repair Prompt Template
 
@@ -223,13 +268,13 @@ No dialogue, no vocals, clean audio, high quality, cinematic.
 - 动作过密：
 - 运镜不清：
 - 情绪不足：
-- 音频缺失：
+- 声音缺失：
 
 重写策略：
 - 保留：
 - 删除：
 - 加强：
-- 添加音频 inline：
+- 添加声音 inline：
 
 新版提示词：
 ...
@@ -254,9 +299,9 @@ No dialogue, no vocals, clean audio, high quality, cinematic.
 Mysterious cinematic score for [scene purpose], [genre/style], gradually building tension, subtle electronic texture, flowing pulse, restrained percussion, elegant suspense, rising toward a reveal, no vocals, suitable for a short film scene.
 ```
 
-## Audio-Inline Prompt Examples
+## Sound-Inline Prompt Examples
 
-### Good — audio inline in the prompt itself:
+### Good — sound inline in the prompt itself:
 ```prompt
 0-2秒：阿凯低头看手机，拇指滑动屏幕。手机连续弹出消息。
      [音效：群消息提示音×5，密集快速]
@@ -265,7 +310,7 @@ Mysterious cinematic score for [scene purpose], [genre/style], gradually buildin
       音效：背景远处引擎怠速声]
 ```
 
-### Bad — audio as a separate note:
+### Bad — sound as a separate note:
 ```prompt
 0-2秒：阿凯低头看手机...
 （音频备注：加群消息音效和对白）
@@ -321,14 +366,3 @@ Create a cinematic thumbnail for a comedy short film titled "[标题]", 9:16 ver
 - 画面构图要预留标题文字空间（上方或下方留空/纯色/渐变区域）
 - 捕捉全片最具传播力的那一个瞬间（笑点/反转/名场面）
 - 封面上的标题文字后期添加（PS/剪映加字），不在生图中生成文字
-
-## Audio Material Reference Table Template
-
-```markdown
-| 编号 | 类型 | 时长 | 用途 | 对应镜头 | 生成提示词 |
-|:----:|:----:|:----:|------|:--------:|-----------|
-| @音频1 | 环境音 | 2s | 地下车库低频嗡鸣+排气扇 | 全片 | Generate 2s of underground parking garage ambience... |
-| @音频2 | 音效 | 1s | 消息提示音 | 镜头01 | Generate 1s of smartphone notification sound... |
-| @音频3 | 对白 | 3s | 阿凯开场台词 | 镜头01 | Record or TTS... |
-| @音频4 | 配乐 | 10s | 轻松吉他喜剧配乐 | 全片 | Generate 10s of lighthearted acoustic guitar... |
-```
