@@ -16,6 +16,18 @@ Minimum viable intake:
 - visual style: live-action cinematic, anime, clay, ink, cyberpunk, wuxia, retro, commercial, etc.
 - target output: trailer, episode, storyboard prompt pack, or complete production bible
 
+### Copy-Paste Production Defaults
+
+If the user wants to minimize manual work, use copy-paste production mode. Ask at most five essentials, then fill the rest:
+
+- genre/tone
+- protagonist and relationship seed
+- first-episode hook
+- ending question or cliffhanger
+- target platform
+
+Default to 60-90s, vertical 9:16, Chinese dialogue, short-drama pacing, 8-14 main shots plus bridge/insert insurance shots. The user should only need to review story direction, choose reference images or takes, and approve repairs.
+
 ## 2. Set The Four Foundations
 
 ### World
@@ -218,6 +230,22 @@ For each shot:
 
 Use one generation prompt for one coherent generation unit. For complex action, generate multiple variations and plan edit points.
 
+## 5.1 Copy-Paste Prompt Packaging
+
+In copy-paste production mode, output prompts in task-labeled blocks so the user can paste them directly into image/video tools:
+
+- `IMAGE_START`: still image for the first frame of a shot
+- `IMAGE_END`: still image for the last frame of a shot
+- `IMAGE_MID`: optional middle keyframe when a 5-10s action has a crucial state change
+- `VIDEO_MAIN`: video prompt for the shot, focused on motion from start to end
+- `VIDEO_BRIDGE`: video prompt whose only job is to cover a join
+- `VIDEO_INSERT`: short cutaway prompt for hands, eyes, prop, door, light, phone, tool, feet, reaction, or environment
+- `VIDEO_REPAIR`: fallback prompt when the generated clip breaks identity, action, or continuity
+
+For image-to-video, the image anchors carry composition, subject, lighting, and style. The video prompt should focus on subject action, camera motion, environmental motion, timing, and direction. Do not bury the motion under repeated static description.
+
+Each prompt block must include: references, duration, aspect ratio, task purpose, copy-paste prompt, expected usable cut range, known failure modes, and repair prompt.
+
 ## 5.5 Mentally Simulate Before Generating
 
 **Critical step: Before sending any prompt to the video model, run a mental simulation of the final video.**
@@ -245,6 +273,45 @@ For each join:
 6. **Leave breath gaps.** Put silence, reaction, breath, or physical setup at clip starts/ends so dialogue does not feel chopped.
 7. **Match action.** Start a movement in one clip and finish it in another angle or on another subject.
 8. **Keep raw clips clean.** Generate raw clips without burned-in subtitles or baked-in background music; add these in editing.
+
+### Join Contract Gate
+
+Before writing final video prompts, create a Join Contract for every adjacent shot pair.
+
+| Field | Required decision |
+|---|---|
+| Previous end state | exact pose, screen side, eyeline, prop, lighting, emotion |
+| Next start state | exact pose, screen side, eyeline, prop, lighting, emotion |
+| State delta | what changes between the two shots |
+| Risk level | low / medium / high / forbidden-hard-cut |
+| Hard cut allowed? | yes only if the state delta is small or intentionally hidden |
+| Bridge required? | yes for high-risk and forbidden-hard-cut joins |
+| Bridge prompt id | concrete `VIDEO_BRIDGE` or `VIDEO_INSERT` id |
+| First/last-frame fit | good / risky / do not use |
+| Safety inserts | available cutaways if the join fails |
+| Sound bridge | ambience, breath, foley, dialogue overlap, music hit |
+| Fallback edit | what to cut to if generation fails |
+
+Risk scoring:
+
+- **Low:** same location, same posture, small gaze/hand/emotion change.
+- **Medium:** same location with moderate posture or prop change; use a reaction or insert if the cut feels sharp.
+- **High:** location change, large posture change, carry/rescue, two-body interaction, entry/exit, prop state change, or missing action causality. Generate a bridge.
+- **Forbidden-hard-cut:** "suddenly elsewhere", lying-to-standing without action, carried-to-seated without placement, impact aftermath, transformation, vehicle travel, costume/body-state change. Split into multiple bridge shots.
+
+First/last-frame rule: use it only when the start and end frames share similar subject, scene, lighting, and style, or when a longer 10s transition can plausibly bridge the difference. If location and lighting both change, create intermediate frames or bridge shots instead.
+
+### Bridge Shot Auto-Generation
+
+For every high-risk or forbidden-hard-cut join, generate at least one of these bridge types:
+
+- **Action bridge:** completes missing physical causality, e.g. lifting, setting down, opening a door, plugging a cable.
+- **Spatial bridge:** shows travel or crossing, e.g. exiting a factory, vehicle lights, entering a workshop.
+- **Prop bridge:** cuts through an object state, e.g. phone screen, key turns, cable connects, tool sparks.
+- **Reaction bridge:** hides continuity with face response, breath, shock, pain, decision.
+- **Light/sound bridge:** flashlight wipe, door slam, power flicker, engine sound, alarm, glitch pulse.
+
+Do not leave bridge shots as optional suggestions in copy-paste production mode. Add them to the shot list with prompt ids and durations.
 
 ## 6. Iteration And Assembly
 
@@ -285,6 +352,20 @@ Create a still-image rough cut before generating final videos — lay out existi
 2. Check shot-size variety, character screen direction, POV clarity, and dialogue rhythm.
 3. Adjust missing reaction shots or inserts before spending video-generation budget.
 4. Use voice timing to decide whether shots need to be longer, shorter, or supplemented.
+
+In copy-paste production mode, the still rough cut has two passes:
+
+1. **Anchor pass:** generate or select start/end frames only; assemble them in order to catch broken geography, posture jumps, and missing bridge actions.
+2. **Motion pass:** generate video only for approved anchors; after each batch, extract candidate cut points and review joins before generating the next batch.
+
+Always create an edit insurance package before final assembly:
+
+- reaction close-ups for main characters
+- hand and prop inserts for every important object action
+- environment plates for each location
+- door/light/phone/tool/vehicle inserts for transitions
+- short 1-2s silent breath gaps for dialogue joins
+- alternate takes for high-risk body interaction shots
 
 Use layered video generation when multiple subjects must move:
 

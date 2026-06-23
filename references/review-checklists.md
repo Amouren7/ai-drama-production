@@ -131,6 +131,9 @@ Score 1-10:
 - match-action logic: partial actions can begin in one clip and finish in the next from another angle or subject
 - raw clip cleanliness: generated clips avoid burned-in subtitles and baked-in background music
 - editability: each join has a repair strategy if identity, pose, or action continuity drifts
+- Join Contract completeness: every adjacent shot pair has previous end state, next start state, state delta, risk level, hard-cut permission, bridge requirement, safety inserts, sound bridge, and fallback edit
+- high-risk transition handling: every location change, posture jump, carry/rescue, two-body interaction, prop state change, or missing causal action has a generated bridge or insert prompt
+- copy-paste prompt readiness: start-frame, end-frame, video, bridge, insert, and repair prompts are labeled and ready to paste without the user inventing missing details
 
 Repair:
 
@@ -139,6 +142,34 @@ Repair:
 - If dialogue feels clipped, add 0.5-1s of silence, reaction, breath, or physical setup at the start/end of the neighboring clips.
 - If a same-subject cut feels jumpy, rotate the camera at least 30 degrees or cut to a prop/reaction shot.
 - If raw clips contain subtitles or music, regenerate without them when possible, or repair/remove them before final edit.
+- If a Join Contract is missing, do not finalize. Add it before writing or delivering video prompts.
+- If a high-risk join says "hard cut allowed", change it to a bridge shot, insert shot, match-action cut, or explicit time/space transition.
+- If the user would need to think up a missing bridge prompt, the skill failed. Generate the bridge prompt directly.
+
+## AI Clip Join Breakage Review
+
+Use this gate after still rough cut and again after generated clips are assembled.
+
+Score 1-10:
+
+- spatial continuity: viewers understand how the character moved from location A to B
+- posture continuity: lying/sitting/standing/carried states change on screen or are hidden by a motivated insert
+- action causality: every physical result has a visible cause
+- prop continuity: key objects preserve state, position, and ownership
+- eyeline/screen direction: characters look and move in coherent directions
+- bridge coverage: high-risk joins have bridge shots or cutaways already generated
+- sound masking: ambience, foley, breath, music hits, or dialogue overlap smooth necessary cuts
+- edit insurance: enough inserts/reactions/environment plates exist to repair failed AI motion
+- final button: the last image supports the cliffhanger instead of leaking energy into a neutral insert
+
+Repair:
+
+- Location jump -> add spatial bridge: exit, vehicle/light, door, arrival, room tone change.
+- Posture jump -> add action bridge: lift, catch, sit down, lay down, stand, plug, release.
+- Prop jump -> add insert: hand, object close-up, screen, cable, tool, lock, switch.
+- Emotion jump -> add reaction: breath, eye close-up, silent beat, face turn.
+- Weak ending -> end on face/reveal/decision, not neutral environment unless the object is the cliffhanger.
+- Unusable main clip -> keep the best 40-70%, replace broken middle with insert or regenerate a shorter bridge.
 
 ## Motion Comic Panel Consistency Review
 
