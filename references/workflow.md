@@ -9,6 +9,13 @@ Ask for missing information in compact batches. If the user is uncertain, propos
 - generation unit: each Seedance-style prompt is 5-15 seconds
 - review style: iterate one short scene first before scaling
 
+### Choose Output Depth
+
+Use the lightest output that still solves the user's request:
+
+- **Quick prompt pack:** for prompt-only requests, small test scenes, character/scene reference packs, or short AI漫剧 segments. Keep the script debate compact and output only assumptions, production locks, references, storyboard rows, video prompts, risky joins, and review checks.
+- **Full production bible:** for complete episodes, series planning, commercial handoff, or end-to-end production documents. Use the full workflow and all review gates.
+
 Minimum viable intake:
 
 - story seed: "who wants what, why now, what blocks them"
@@ -66,9 +73,9 @@ Convert the premise into a structure:
 
 For longer work, start with a 30-60 second MVP scene to validate style and audience pull.
 
-## 2.5 Multi-Agent Script Development
+## 2.5 Script Development
 
-Before locking the script, run a structured discussion loop. This applies even to 15-25s shorts.
+Before locking a full production bible script, run a structured discussion loop. For quick prompt packs, compress this into a three-pass note that checks story logic, visual feasibility, and audience comprehension without expanding into a long transcript.
 
 Required roles:
 
@@ -77,7 +84,7 @@ Required roles:
 - **Director:** checks whether each beat can be shown as visible action, with clear blocking, camera, sound, and edit points.
 - **Audience representative:** checks whether the first 3 seconds hook, the core conflict, and final payoff are understandable without explanation.
 
-Run at least 3 rounds and at most 5 rounds:
+For full production bibles, run at least 3 rounds and at most 5 rounds:
 
 1. **Round 1 — independent premise drafts.** At least two roles propose or compare story routes.
 2. **Round 2 — cross-critique and integration.** Each route gets at least 3 specific improvement notes, then combine the strongest elements.
@@ -92,11 +99,11 @@ Each round must record:
 - unresolved issues
 - next-round target
 
-The final script package must include the iteration log before the polished script. Do not present a script as final if the three-round discussion is missing.
+The final full production bible script package must include the iteration log before the polished script. Quick prompt packs should include a compact decision note instead of a long debate log.
 
 ### Style
 
-Define a style bible, then compress it into a reusable **global style lock** for video prompts:
+Define a style bible, then compress it into reusable **production locks** for video prompts:
 
 - art direction: medium, era, palette, texture, realism level
 - camera grammar: handheld, locked-off, dolly, tracking, close-ups, one-take, montage
@@ -104,16 +111,19 @@ Define a style bible, then compress it into a reusable **global style lock** for
 - sound: dialogue density, ambience, music tempo, sound effects
 - forbidden drift: what must not appear or change
 
-The global style lock is written once and inherited by every `VIDEO_MAIN`. Keep it compact and practical:
+Production locks are written once and inherited by every `VIDEO_MAIN`. Keep them compact and practical:
 
+- **Character lock:** identity, costume, hairstyle, body proportion, signature prop.
+- **Scene lock:** recurring location, spatial layout, lighting source, key set dressing.
 - **Style core:** genre, era, realism/stylization level, emotional flavor.
 - **Visual baseline:** lens/camera feel, shot texture, motion intensity, rendering target.
 - **Color and lighting:** palette, contrast, light source, color temperature, atmosphere.
 - **Motion rules:** how fast the camera and subjects may move; what movement is forbidden.
+- **Continuity lock:** screen direction, prop states, posture/position data that must carry across joins.
 - **Sound mood:** ambience, foley density, music behavior.
 - **Forbidden drift:** style, identity, costume, location, subtitles, logos, or action types that must not appear.
 
-Do not scatter unrelated style phrases into every shot. If a shot needs a variation, state it as a local exception to the global style lock.
+Do not scatter unrelated style phrases into every shot. If a shot needs a variation, state it as a local exception to the production locks.
 
 ## 3. Director Analysis: Turn Text Into Visible Action
 
@@ -175,13 +185,13 @@ For variants, mark clearly:
 
 ### Reference Image Extraction Pass
 
-When the user provides a strong reference image but the prompt language is weak, extract it before writing production prompts:
+Use this only as an advanced repair or migration path when the user provides a strong reference image but the prompt language is weak, ambiguous, or unstable:
 
 1. **Line-art cleanup:** convert the image into clean black line art on a white background, repairing structure, patterns, ornaments, and missing details.
 2. **Flat color extraction:** analyze the color construction and produce a flat color draft with clear palette relationships.
 3. **Reverse-prompt analysis:** deconstruct the image into subject, composition, style, materials, palette, lighting, lens, and quality controls, then write a reusable prompt that can recreate the visual logic across tools.
 
-Use this pass for visual consistency, character design, props, costumes, and scene style references. Do not let it override script logic, shot continuity, or safety/compliance rules.
+Use this pass for visual consistency, character design, props, costumes, and scene style references. Do not make it part of the default workflow, and do not let it override script logic, shot continuity, or safety/compliance rules.
 
 ### Scene Reference Prompt
 
@@ -212,7 +222,7 @@ Before video prompts, audit the storyboard as a three-layer production document 
 Each scene or shot group should separate:
 
 1. **Fixed assets:** which character, expression, costume, location, prop, and recurring visual nodes are locked.
-2. **Style and texture:** which parts of the global style lock apply, plus local camera/lens/light/mood notes.
+2. **Style and texture:** which parts of the production locks apply, plus local camera/lens/light/mood notes.
 3. **Screen action:** what the audience sees happen, when it happens, how the camera moves, and where the edit can cut.
 
 This structure prevents video prompts from becoming either vague story prose or overloaded keyword piles.
@@ -255,7 +265,7 @@ Use one generation prompt for one coherent generation unit. For complex action, 
 
 Each `VIDEO_MAIN` should read like director instructions to the actor, camera, and sound team:
 
-- **Inherited style lock:** cite the global style lock rather than rewriting the whole style bible.
+- **Inherited locks:** cite the production locks rather than rewriting the whole style bible.
 - **Task:** one sentence saying the only job of this segment.
 - **Start state:** where everyone and every key prop begins.
 - **Time beats:** `0-1.5s`, `1.5-3s`, etc. Each beat describes a visible change.

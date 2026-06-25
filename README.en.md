@@ -30,6 +30,8 @@ It does not generate the video itself. It generates the **production blueprint**
 | Capability | Best For | Output |
 |---|---|---|
 | **Film Mode** | Cinematic AI shorts, drama episodes, trailers, contests, anime image-to-video, still-image light motion | Storyboard, Join Contracts, one video prompt per segment, bridge shots, safety inserts, repair prompts |
+| **Quick Prompt Pack** | Short tests, character/scene references, storyboard prompts, or compact AI comic-drama segments | Compact output: assumptions, production locks, references, storyboard rows, `VIDEO_MAIN`, risky bridges, and review checks |
+| **Full Production Bible** | Complete episodes, series plans, commercial handoff, or end-to-end production documents | Full output: script development, foundations, references, style, storyboard, editing, sound, and repair plans |
 | **Copy-Paste Prompt Pack** | Users who want to provide ideas and review choices while the skill handles prompting and repairs | Default to one `VIDEO_MAIN` per segment; add `VIDEO_BRIDGE` / `VIDEO_INSERT` / `VIDEO_REPAIR` only where needed |
 | **Anime Light-Motion Variant** | Existing anime images that only need push-ins, pans, light expression/environment motion, or editing keyframes | Still uses film mode, with gentler camera movement, shorter action beats, and stronger reference locking |
 
@@ -55,11 +57,11 @@ This skill solves four real problems:
 | Feature | What It Does |
 |---|---|
 | **Low-input defaults** | Asks at most for genre, protagonist relationship, first hook, ending question, and target platform |
-| **Multi-agent script development** | 3-5 rounds of critique from writer, director, audience, and compliance perspectives |
+| **Layered script development** | Quick prompt packs use a compact three-pass check; full production bibles expand to 3-5 multi-agent rounds |
 | **Director analysis** | Converts abstract emotion into concrete action, camera, light, sound, and edit points |
 | **Two-stage character references** | Generate a clean white-background turnaround first, then a full character design board with portrait, turnaround, expressions, details, outfits, props, and mood stills |
 | **Reference-first design** | Character, scene, and prop prompts come before video prompts |
-| **Global style lock** | Lock style core, visual baseline, color/lighting, camera rules, and forbidden drift before shot prompts |
+| **Production locks** | Lock character, scene, style, camera, continuity, sound mood, and forbidden drift before shot prompts |
 | **Time-coded shot prompts** | `VIDEO_MAIN` uses fixed assets, style/texture, and screen action layers, with visible action written by time range |
 | **Join Contract** | Every adjacent shot pair has a continuity contract; risky hard cuts are blocked |
 | **Automatic bridge generation** | Location changes, carry/rescue actions, posture jumps, body interaction, and prop-state changes get `VIDEO_BRIDGE` or `VIDEO_INSERT` prompts |
@@ -76,10 +78,10 @@ This skill solves four real problems:
 📄 Production Bible
 ├── 📋 Project Brief & Creative Direction
 ├── 🌍 Worldbuilding, Theme & Story Structure
-├── 📝 Multi-Agent Script Iteration Log (3+ rounds)
+├── 📝 Script Development Log (compact check / full 3-5 round iteration)
 ├── 👤 Character Bible (visual design + clean turnaround + full design board prompts)
 ├── 🏠 Scene / Location / Prop Bible
-├── 🎨 Style Bible + Global Style Lock
+├── 🎨 Style Bible + Production Locks
 ├── 🎬 Director Analysis
 ├── 📊 Three-Layer Storyboard Table
 ├── 🔗 Continuity Plan + Join Contracts
@@ -117,7 +119,7 @@ Bring a premise, target platform, duration, and reference images if you have the
 ```text
 💡 Intake
   → 🏗️ Four Foundations (World / Character / Story / Style)
-  → 📝 Multi-Agent Script Development
+  → 📝 Layered Script Development (compact check / full multi-agent)
   → 👤 Character Turnaround Lock + Full Design Board
   → 🎬 Director Analysis
   → 📊 Storyboard + Join Contracts + High-Risk Bridges
@@ -170,7 +172,7 @@ ai-drama-production/
 |---|---|
 | **Story first** | Premise, conflict, and emotion drive retention |
 | **Lock the character before atmosphere** | Lead characters need a clean turnaround before cinematic design boards, variants, props, and mood scenes |
-| **Lock style before shots** | A global style lock keeps era, color, camera, motion, and forbidden drift consistent across prompts |
+| **Lock production constraints before shots** | Production locks keep character, scene, style, camera, continuity, sound, and forbidden drift consistent across prompts |
 | **Time-code before prompting** | Time ranges constrain each segment to visible, feasible actions and reduce overloaded prompts |
 | **Lock references before video prompts** | Character, scene, and prop consistency must be designed up front |
 | **Rough cut before video generation** | Still-image rough cuts catch broken timing and composition cheaply |

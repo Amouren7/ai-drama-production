@@ -84,12 +84,15 @@ Use these as needed, not all at once:
 - 声音设计：
 - 禁止项：
 
-### 6.1 全片风格锁（所有 `VIDEO_MAIN` 继承）
+### 6.1 生产锁（所有 `VIDEO_MAIN` 继承）
+- 角色锁：
+- 场景锁：
 - 风格核心：
 - 视觉基调：
 - 色彩与光影：
 - 镜头规则：
 - 动作强度：
+- 连续性锁：
 - 声音氛围：
 - 禁止漂移：
 
@@ -117,9 +120,9 @@ Use these as needed, not all at once:
 ### 10.1 提示词格式
 每条 `VIDEO_MAIN` 是一个完整的视频生成单位，画面+对白+音效+配乐在同一段文字中描述。用 `[对白]` `[音效]` `[配乐]` 在对应时间轴嵌入声音；不建立、不引用 `@音频`。默认不拆成多个图片任务。
 
-每条视频提示词先继承 §6.1 的全片风格锁，再写本镜头独有内容。分镜写成三层：
+每条视频提示词先继承 §6.1 的生产锁，再写本镜头独有内容。分镜写成三层：
 - 固定资产：角色、表情、服装、场景、道具、引用素材。
-- 风格质感：继承的全片风格锁，以及本镜头局部镜头、光线、影调变化。
+- 风格质感：继承的生产锁，以及本镜头局部镜头、光线、影调变化。
 - 画面动作：景别、构图、运镜、时间轴动作、声音、结尾可剪点。
 
 ### 10.2 分镜与视频提示词
@@ -140,8 +143,8 @@ Use these as needed, not all at once:
 
 #### `VIDEO_MAIN_[镜头号]`（默认只需要复制这一条）
 ```prompt
-继承全片风格锁：[引用 §6.1 的风格核心/视觉基调/色彩光影/镜头规则，若本镜头有局部变化，在这里写清楚]。
-固定资产：[列出 @图片/@视频 及用途，例如：以 @图片1 中的男主为主角，场景参考 @图片2 的废弃工厂，道具参考 @图片3 的手电]。
+继承生产锁：[引用 §6.1 的角色锁/场景锁/风格核心/色彩光影/镜头规则/连续性锁；若本镜头有局部变化，在这里写清楚]。
+固定资产：[列出本镜头可见且不超过平台限制的 @图片/@视频 及用途，例如：以 @图片1 中的男主为主角，场景参考 @图片2 的废弃工厂，道具参考 @图片3 的手电。若素材过多，使用本镜头专属参考包，优先角色、核心服装、场景、关键道具、动作参考]。
 时长：[5s/8s/10s]，比例：9:16。
 镜头任务：生成一个完整可剪辑片段，只完成 [本段唯一任务]，不跳到下一镜头。
 承接状态：[上一镜头留下的姿态/位置/情绪/道具状态；第一镜头写“无”]。
@@ -165,7 +168,7 @@ Use these as needed, not all at once:
 #### `VIDEO_BRIDGE_[From-To]`
 ```prompt
 用途：覆盖从镜头 [From] 到镜头 [To] 的高风险连接，不能承载新剧情信息，只解决空间/动作/状态因果。
-使用参考：[相关角色、场景、道具、前镜结束帧、后镜开始帧]。
+使用参考：[相关角色、场景、道具、前镜结束状态、后镜开始状态；若已有帧图则引用前镜结束帧/后镜开始帧]。
 时长：[1-3s 或 5s]，比例：9:16。
 动作：[一个清楚的桥接动作：推门、抱起、放下、走出、车灯亮、手插线、工具落下、反应呼吸等]。
 声音桥：[延续的喘息/脚步/门响/电流/音乐重音]。
@@ -349,6 +352,8 @@ Constraints: no random face changes, no unmarked alternate costume, no unmarked 
 
 ## Reference Image Extraction Prompt Templates
 
+Use these only for advanced repair, migration, or clarification when a supplied image is important but hard to reproduce. Do not run this pass by default.
+
 ```prompt
 Line-art extraction: Convert the uploaded reference image into clean black line art on a white background. Preserve and repair the subject's structure, patterns, costume ornaments, symbols, and missing details. Lines are clear, readable, and structurally complete.
 ```
@@ -380,8 +385,8 @@ Create a high-quality cinematic hero reference image for the main recurring loca
 每条提示词是一个"单次生成"单位：在一个镜头中，画面变化 + 对白 + 音效 + 配乐都在同一条提示词里描述。不需要先出图再出视频，直接一条提示词生成视频。只有失败修复或用户明确要求时，才额外输出可选关键帧。
 
 ```prompt
-继承全片风格锁：[风格核心 / 视觉基调 / 色彩光影 / 镜头规则 / 禁止漂移]。
-固定资产：以 @图片1 中的[角色]为主角，场景参考 @图片2 的[场景用途]，道具参考 @图片3 的[道具用途]。
+继承生产锁：[角色锁 / 场景锁 / 风格核心 / 视觉基调 / 色彩光影 / 镜头规则 / 连续性锁 / 禁止漂移]。
+固定资产：以本镜头可见参考为准，例如 @图片1 中的[角色]、@图片2 的[场景用途]、@图片3 的[道具用途]。若素材超过平台限制，建立本镜头专属参考包，优先角色、核心服装、场景、关键道具、动作参考。
 生成 [时长]，[画幅]。本镜头只完成：[一个清楚的镜头任务]。
 承接状态：[上一镜头结束后的角色位置、姿态、视线、道具状态；第一镜头写“无”]。
 

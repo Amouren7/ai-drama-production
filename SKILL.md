@@ -1,21 +1,26 @@
 ---
 name: ai-drama-production
-description: "Guide users from zero to a complete AI drama or AI short series production plan. Use when the user wants to create an AI drama, AI short film, Seedance/Jimeng video or image workflow, script-to-storyboard pipeline, character and scene reference prompts, shot prompts, production bible, copy-paste prompt pack, or a final Markdown document covering plot, worldbuilding, characters, visual style, image prompts, scene breakdowns, video prompts, assembly guides, and review checklists."
+description: "Use when the user wants to plan or produce an AI drama, AI short film, AI漫剧, Seedance/Jimeng workflow, character or scene reference prompts, storyboard prompts, video prompt packs, continuity repair plans, or a production bible."
 ---
 
 # AI Drama Production
 
 ## Overview
 
-Use this skill to turn a user's rough idea into a complete AI drama production Markdown. Film mode is the default and includes copy-paste production outputs.
+Use this skill to turn a user's rough idea into an AI drama production Markdown. Film mode is the default; choose the lightest output mode that satisfies the request.
 
 - **🎬 Film mode** — the only production mode. It covers live-action AI shorts, cinematic sequences, anime-style image-to-video, simple still-image motion, trailers, and short episodes. The user provides the idea and reviews outputs; the skill produces one ready-to-copy video prompt per segment by default, plus optional bridge, insert, or repair prompts only when a cut is risky or a generated clip fails.
 
 Always produce a Markdown deliverable unless the user asks for another format.
 
+## Output Modes
+
+- **Quick prompt pack:** use when the user asks for prompts, a short test scene, character/scene references, or a small AI漫剧 segment. Keep the script iteration compact, output only the sections needed, and still include style lock, reference coverage, time-coded `VIDEO_MAIN`, risky-join repair, and review checks.
+- **Full production bible:** use when the user asks for a complete film/episode/series plan, production bible, commercial workflow, or end-to-end document. Include the complete output contract below.
+
 ## Quick Start
 
-1. **Use film mode by default.**
+1. **Use film mode by default, then choose quick prompt pack or full production bible.**
    - Continuous AI video, anime-style image-to-video, simple still-image motion, and short-drama episodes all use the same film-mode workflow.
    - If the user wants anime images to move slightly, treat it as film mode with gentler camera motion and shorter action beats.
    - Copy-paste output is part of film mode, not a separate mode.
@@ -35,16 +40,16 @@ Always produce a Markdown deliverable unless the user asks for another format.
 
 ### Film Mode
 
-The final Markdown must include:
+For a full production bible, the final Markdown must include:
 
 - project brief and creative direction
 - worldbuilding, theme, story structure, and episode/scene outline
-- multi-agent script iteration log with at least 3 rounds of discussion before final script approval
+- multi-agent script iteration log with at least 3 compact rounds of discussion before final script approval
 - character bible with visual design and reference image prompts
 - visual development bible for major characters: commercial positioning, face/hair/costume/body/material/color-card/local-detail anchors, plus a staged character reference plan
 - **character reference package for every lead character**: clean turnaround sheet first, then full character design board when identity consistency matters
 - scene/location bible with reference image prompts
-- **global style lock** before shot prompts: style core, visual baseline, color/lighting, camera grammar, motion rules, sound mood, and forbidden drift
+- **production locks** before shot prompts: character, scene, style, camera, continuity, sound mood, and forbidden drift
 - director analysis: beat-by-beat "讲戏" using concrete actions, camera movement, light, emotion, and sound
 - storyboard table with a three-layer shot structure: fixed assets, style/texture inheritance, and time-coded screen action
 - continuity plan for generated video segments, including updated state data, cut points, shot-size/angle changes, transition shots, dialogue breath gaps, and match-action opportunities
@@ -55,7 +60,6 @@ The final Markdown must include:
 - cover/thumbnail design prompt for each video, with title text placement described in the composition
 - production checklist, asset workflow, rough-cut plan, audio plan, iteration plan, and quality/compliance review
 - low-input intake assumptions: genre, protagonist, first-episode hook, ending question, platform, aspect ratio, and defaults chosen by the skill
-- production locks: character lock, scene lock, cinematography lock, mood lock, continuity lock, and forbidden drift
 - risk-scored shot list with every transition classified as low, medium, high, or forbidden-hard-cut
 - generated bridge or insert prompts for every high-risk or forbidden-hard-cut transition; do not leave repair work for the user to invent
 - safety insert library: hands, eyes, props, doors, lights, phones, tools, feet, reaction faces, and environment plates that can cover broken joins
@@ -63,10 +67,12 @@ The final Markdown must include:
 - user review gates with simple choices: approve, regenerate, choose A/B/C, or request repair
 - post-generation repair loop: after the user supplies clips, review cuts, identify broken joins, and output replacement bridge/insert prompts plus an edit decision list
 
+For a quick prompt pack, include only the relevant subset: brief assumptions, production locks, required reference prompts, storyboard rows, `VIDEO_MAIN` prompts, risky `VIDEO_BRIDGE`/`VIDEO_INSERT`/`VIDEO_REPAIR` prompts, and review checks.
+
 ## Core Rules
 
 - Treat story as the source of value. Spend more effort on premise, conflict, reversals, emotion, and audience retention than on tool trivia.
-- **Mandatory multi-agent script development:** Before finalizing any script, run at least 3 rounds and at most 5 rounds of script discussion with at least two distinct agent viewpoints. Use roles such as screenwriter, director, audience representative, script doctor, prompt engineer, editor, or compliance reviewer. Do not skip this for short scripts.
+- **Script development:** Before finalizing a full production bible script, run at least 3 rounds and at most 5 rounds of script discussion with at least two distinct agent viewpoints. For quick prompt packs, compress this into a short three-pass note: story logic, visual/directorial feasibility, and audience comprehension.
 - Each script discussion round must record: previous-round problems, agent feedback, concrete revision decisions, current unresolved issues, and the next-round target. The final script must state how the last round resolved or intentionally overrode disagreements.
 - At minimum, one agent must challenge story logic and joke/emotional payoff, one agent must challenge visual/directorial feasibility, and one agent or role pass must represent the target audience's comprehension and retention.
 - Build visual consistency early. Create character and scene reference prompts before writing final video prompts.
@@ -79,28 +85,26 @@ The final Markdown must include:
 - For generated character reference boards, prefer professional concept-art sheet composition over poster composition: clear panel hierarchy, neutral backgrounds for turnaround views, cinematic panels only for mood stills, and no crowded decorative typography.
 - Treat the first confirmed core location as a reusable production anchor; design later shots around it when consistency matters.
 - Write video prompts as narrative film direction, not keyword piles.
-- Before writing any `VIDEO_MAIN`, write a **global style lock** once for the project or scene batch. It must define: style core, visual baseline, color and lighting, camera grammar, motion intensity, sound mood, and forbidden drift. Every shot prompt inherits this lock instead of restating random style words.
+- Before writing any `VIDEO_MAIN`, write **production locks** once for the project or scene batch: character lock, scene lock, style lock, camera/motion lock, continuity lock, sound mood, and forbidden drift. Every shot prompt inherits these locks instead of restating random style words.
 - Build each storyboard row in three layers before generating prompts:
   1. **Fixed assets:** characters, expressions, costumes, props, and locations that must stay locked.
-  2. **Style and texture:** the inherited global style lock plus any shot-specific lens, lighting, color, or movement flavor.
+  2. **Style and texture:** the inherited production locks plus any shot-specific lens, lighting, color, or movement flavor.
   3. **Screen action:** shot size, composition, camera movement, visible action, state change, dialogue/sound, and timing.
 - For every `VIDEO_MAIN`, use time-coded action beats whenever the segment is longer than 5 seconds or contains more than one motion beat. Each time range must say what changes on screen, not repeat static descriptions.
 - Do not make video prompts dense action dumps. A normal 5-second prompt should contain 1-2 action beats; a 10-15 second prompt can contain several beats only if each beat is physically possible and has a clear edit point.
 - Describe what changes in the shot. Do not repeat static details already visible in reference images.
 - Make every storyboard row image-actionable: who/what, where, camera viewpoint, shot size, expression, and the relationship to the previous/next shot.
 - Every storyboard row must be generation-actionable: it needs one complete video prompt, expected failure modes, and a repair strategy. Do not ask the user to invent missing bridge shots.
-- Keep each continuous shot within beat density: about 1 action beat per 2.5 seconds. For 5 seconds, 1-2 beats is usually enough.
-- For 10-15 second generations, use time ranges such as `0-3s`, `3-7s`, `7-12s`, `12-15s`.
+- Keep each continuous shot within beat density: about 1 action beat per 2.5 seconds. For 5 seconds, 1-2 beats is usually enough; for 10-15 seconds, use ranges such as `0-3s`, `3-7s`, `7-12s`, `12-15s`.
 - Reserve the first and last 0.5 seconds for setup and natural settling; avoid key action or dialogue there.
 - Label every `@` reference by purpose, such as "以 @图片1 中的女主为主角" or "参考 @视频1 的运镜节奏".
 - **Complete reference coverage: every item in the 场景与道具设定 table must have a corresponding reference image prompt.** If a prop or scene is important enough to list, it needs a `@图片` entry in the 素材对应表 with a dedicated reference prompt. Without a reference image, the AI model cannot consistently render that prop across shots.
-- **Every video prompt must cite ALL relevant visual references.** The prompt header must explicitly reference the character `@图片`(s) appearing in the shot, the scene `@图片`, the key prop `@图片`(s), and any visual/motion `@视频` reference. A prompt that says "阿强翻钱包" without citing `@图片6(钱包)` will not generate a consistent wallet. Rule: every visual noun in the action description that has a corresponding `@` entry must be cited.
+- **Every video prompt must cite the relevant visible references within platform limits.** The prompt header must explicitly reference visible character `@图片`(s), scene `@图片`, key prop `@图片`(s), and any visual/motion `@视频` reference used by that shot. If references exceed model limits, create a shot-specific reference bundle and prioritize visible characters, core costume, location, key props, and motion reference.
 - **Cross-reference completeness check before delivery:** verify that every `@图片` / `@视频` referenced in any video prompt actually exists in the 素材对应表, and vice versa — every visual entry in the 素材对应表 is actually used by at least one prompt.
 - Respect platform limits when writing per-shot prompts: visual references must stay within model limits; do not use `@音频` references in this workflow, and keep dialogue/SFX/music as inline text cues inside the prompt.
 - Avoid negative wording in prompts. Replace "不要切镜" with "全程一镜到底", and "不要说话" with "角色保持沉默".
 - Avoid real-person face reference material, copyrighted IP dependence, political sensitivity, sexualized minors, explicit sexual content, graphic violence, and unsafe imitation.
-- Before video generation, rough-cut the still storyboard images to check shot size, perspective, dialogue timing, and scene continuity.
-- Before video generation, optionally rough-cut storyboard stills or placeholders when pacing is uncertain. Do not force a separate keyframe generation pass for every shot.
+- Before video generation, do a lightweight rough cut using available references, thumbnails, storyboard stills, or placeholders to check shot size, perspective, dialogue timing, and scene continuity. Do not force a separate keyframe generation pass for every shot.
 - Plan sound like performance: dialogue/voiceover sets timing, ambience and effects carry scenes without music, and music should mark genre, suspense, reveal, or climax.
 - **Embed dialogue/SFX/ambience/music inline in every video prompt.** Sound is not a separate material reference, column, or afterthought — every video prompt must contain its dialogue lines, sound effects, ambient audio, and music cues embedded directly in the matching time-coded prompt segments. Use `[对白：台词内容]` for dialogue, `[音效：描述]` for sound effects and ambience, and `[配乐：描述]` for music. Do not add `@音频` entries to the 素材对应表 and do not cite audio references in prompt headers.
 - **Dialogue timing drives shot duration, not the other way around.** Before writing any video prompt, map each line of dialogue to its approximate spoken duration. If a line is ~2 seconds long, the shot containing it must be at least 2.5 seconds (including 0.5s buffer). Split long lines across multiple shots or shorten the line.
@@ -150,5 +154,5 @@ The workflow is distilled from six Feishu Wiki sources about AIGC video setting 
 - Use short 10-15 second scenes as testable units, often with one reversal or audience-retention hook.
 - Let generation results feed back into the next script iteration; do not force a fully frozen long script too early.
 - Use AI for structure, but manually audit storyboard shot size, viewpoint, expression, and adjacent-shot continuity.
-- For supplied reference images, use a visual extraction pass when helpful: line-art cleanup to clarify structure, flat color extraction to lock palette, then reverse-prompt analysis to capture reusable visual logic. Use this for style/character consistency, not as a substitute for story development.
+- Use the visual extraction pass only as advanced repair or migration tooling when supplied references are ambiguous, unstable, or hard to reproduce: line-art cleanup, flat color extraction, then reverse-prompt analysis. Do not make it part of every default run.
 - Combine tools pragmatically: text-to-image drafts, high-quality image iteration, Photoshop/layering/inpainting, optional first/last frames for difficult repairs, image upscaling, frame interpolation, still-image rough cuts, voice/audio passes, and final editing all matter.
