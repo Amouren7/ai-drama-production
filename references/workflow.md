@@ -126,12 +126,12 @@ Create prompts for reference images before final video prompts.
 
 ### Character Reference Prompt
 
-Generate one image per main character:
+Generate character references in stages for every main character:
 
-- left side: close-up face portrait
-- right side: full-body front, side, and back turnaround
-- plain background
-- consistent style, costume, palette, and signature prop
+1. **Clean turnaround lock:** one simple sheet on a white or light neutral background. It should include full-body front, side, and back views, plus optional half-body front/side/back views when face and costume need extra clarity. The goal is not atmosphere; the goal is stable identity, body proportion, hairstyle, costume, shoes, silhouette, and signature props.
+2. **Full character design board:** one richer concept sheet after the clean turnaround is accepted. It may include a large hero portrait, orthographic turnaround, expression strip, costume/detail panels, work/daily/story-state looks, accessories, color palette, style keywords, and mood stills.
+
+The clean turnaround is the identity anchor for later stills and video prompts. The full board is the creative bible for expressions, variants, props, and story context.
 
 For major AI drama characters, create a **visual development sheet** before final prompts:
 
@@ -144,15 +144,17 @@ For major AI drama characters, create a **visual development sheet** before fina
 - body and posture: proportion, stance, body language, physical signature
 - premium anchors: accessories, tattoos/scars, props, color cards, fabric/metal/leather/skin material notes
 
-Use an **advanced character board** when consistency is high-stakes. The board may include:
+Use an **advanced character board** when consistency is high-stakes. The board should include:
 
-- left face close-up with skin/hair/facial detail
+- left hero portrait or face close-up with skin/hair/facial detail
 - center orthographic front/side/back full-body turnaround with identical pose and lighting
-- right full-body scale view with height marker when useful
-- bottom local detail panels for hands, feet, hair, waist, tattoos, accessories, weapons, or signature props
-- small color-card blocks for the dominant palette
+- expression strip with 4-6 controlled emotions using the same face
+- outfit/style looks when story needs variants, clearly labeled as work mode, daily look, disguise, injury state, or race/combat mode
+- mood stills that show the character in reusable story environments
+- local detail panels for eyes, hair, neckline, hands, waist, tattoos/scars, accessories, weapons, tools, or signature props
+- small color-card blocks for the dominant palette and style keywords
 
-Keep the board controlled: neutral/light background, no dynamic pose changes, no costume or hairstyle variants in the same board, no extra characters, no logos/watermarks, and only necessary measurement labels.
+Keep the board controlled: neutral/light background for turnaround panels, cinematic backgrounds only in mood-still panels, no unmarked costume or hairstyle drift, no extra characters, no logos/watermarks, and only necessary measurement labels. If a variant is included, state what remains locked and what changes.
 
 For variants, mark clearly:
 

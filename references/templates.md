@@ -50,7 +50,12 @@ Use these as needed, not all at once:
 |---|---|---|---|---|---|
 
 ### 角色参考图提示词
-#### @图片1：角色名
+#### @图片1：角色名-三视图锁定
+```prompt
+...
+```
+
+#### @图片2：角色名-完整角色设定板
 ```prompt
 ...
 ```
@@ -254,8 +259,46 @@ Use these as needed, not all at once:
 
 ## Character Reference Prompt Template
 
+Use the two-stage template for lead characters. Generate Stage 1 first and use the approved result as the identity anchor for Stage 2, keyframes, and video prompts.
+
+### Stage 1: Clean Turnaround Lock
+
 ```prompt
-Create a cinematic character design sheet for [character name], [age range], [role]. The image is split into two parts: left half is a detailed face close-up portrait; right half is a full-body turnaround showing front view, side view, and back view. Plain light background, consistent [visual style], [costume], [signature prop], [color palette], clear facial features, distinctive silhouette, production design quality, no text, no watermark.
+Create a clean full-body character turnaround sheet for [character name], [age range], [role].
+
+Layout: white or light neutral studio background, professional production reference sheet, no story background. Show the same character in consistent identity and costume:
+1. full-body front view,
+2. full-body side view,
+3. full-body back view,
+4. optional half-body front / side / back close views if face, hair, neckline, or costume details need clarity.
+
+Character anchors: [face shape], [eyes/brows/nose/lips], [skin texture], [hair style/color/length], [height/body proportion/posture], [base costume], [shoes], [signature prop/accessory], [color palette].
+
+Requirements: identical face identity, identical hairstyle, identical base costume, identical body proportions across all views; natural realistic anatomy; clear silhouette; fabric/material details readable; feet and hands complete; production design quality.
+
+Constraints: no alternate outfit, no alternate hairstyle, no extra people, no cinematic background, no logos, no watermark, no poster typography, no distorted hands, no wide-angle distortion, no oversexualized styling.
+```
+
+### Stage 2: Full Character Design Board
+
+```prompt
+Create a cinematic live-action character design board for [character name], [age range], [story role], based on the approved clean turnaround identity. This is a professional character reference sheet for AI drama production, not a single portrait poster.
+
+Layout in one image:
+A. left hero portrait / half-body portrait showing the face, hair, core costume, emotion, and story aura;
+B. center orthographic turnaround: front view, side view, back view, and optional 45-degree view, same identity, same proportions, same core costume;
+C. expression strip: [neutral/calm], [focused], [thinking], [determined], [soft/emotional], all with the same face;
+D. local detail panels: [eyes], [hair], [neckline/collar], [hands], [waist/belt], [shoes], [signature prop/accessory/tool];
+E. outfit/style looks if needed: [work mode], [daily look], [story-state or action mode], each clearly derived from the same base identity;
+F. mood stills: 3-6 cinematic panels showing the character in [key recurring locations/situations];
+G. accessories and props: [list];
+H. small color palette blocks and style keywords.
+
+Visual style: [cinematic realistic / anime / stylized], premium production bible, clean grid layout, controlled lighting, readable materials, consistent face identity, consistent body proportion, high-resolution concept art sheet.
+
+Requirements: the turnaround and expression panels must prioritize consistency over beauty-shot atmosphere; mood stills may be cinematic; all variants must be labeled and derived from the base design.
+
+Constraints: no random face changes, no unmarked costume drift, no extra people, no crowded text, no broken hands, no warped feet, no watermark, no logo, no cheap poster layout.
 ```
 
 ## Visual Development Fields Template
@@ -281,17 +324,19 @@ Create a cinematic character design sheet for [character name], [age range], [ro
 ## Advanced Character Board Prompt Template
 
 ```prompt
-Create an advanced cinematic character development board for [character name], [age range], [story role], in [visual style].
+Create an advanced cinematic character development board for [character name], [age range], [story role], in [visual style]. Use this after the clean turnaround lock has been approved.
 
 Layout in one image:
-A area: left-side face close-up, showing clear facial structure, eyes, brows, lips, skin texture, hairline, and expression.
-B area: center orthographic full-body turnaround of the same character: front view, side view, and back view, identical standing pose, identical costume, identical hairstyle, identical lighting, consistent proportions.
-C area: right-side full-body scale view of the same character standing upright; include one simple vertical height marker only if needed.
-D area: bottom local detail panels showing [hands/feet/hair/waist/tattoo/accessory/signature prop], each as a clean close-up.
-E area: small color-card blocks showing the dominant palette, graphic blocks only.
+A area: left-side hero portrait / face close-up, showing clear facial structure, eyes, brows, lips, skin texture, hairline, and controlled expression.
+B area: center orthographic full-body turnaround of the same character: front view, side view, back view, and optional 45-degree view, identical standing pose, identical base costume, identical hairstyle, identical lighting, consistent proportions.
+C area: expression strip showing [neutral], [focused], [thinking], [determined], [soft/emotional], all with the same face.
+D area: outfit/style looks if needed, clearly labeled as [work mode], [daily look], [action/story state], while preserving the same identity anchors.
+E area: mood still panels showing the character in [key story environments], cinematic but still identity-consistent.
+F area: local detail panels showing [eyes/hair/neckline/hands/waist/tattoo/accessory/signature prop], each as a clean close-up.
+G area: small color-card blocks showing the dominant palette and compact style keywords.
 
 Lighting: soft studio three-point lighting, clean shadows, consistent color temperature. Render quality: high-resolution production design sheet, detailed but not noisy, natural material texture, no wide-angle distortion.
-Constraints: no dynamic pose changes, no alternate costume, no alternate hairstyle, no extra people, no logo, no watermark, no cluttered labels, no stylized cartoon drift, no plastic skin, no distorted hands, no floating props.
+Constraints: no random face changes, no unmarked alternate costume, no unmarked alternate hairstyle, no extra people, no logo, no watermark, no cluttered labels, no stylized cartoon drift, no plastic skin, no distorted hands, no floating props.
 ```
 
 ## Reference Image Extraction Prompt Templates

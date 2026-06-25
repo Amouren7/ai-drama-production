@@ -41,7 +41,8 @@ The final Markdown must include:
 - worldbuilding, theme, story structure, and episode/scene outline
 - multi-agent script iteration log with at least 3 rounds of discussion before final script approval
 - character bible with visual design and reference image prompts
-- visual development bible for major characters: commercial positioning, face/hair/costume/body/material/color-card/local-detail anchors, and optional advanced character board prompts
+- visual development bible for major characters: commercial positioning, face/hair/costume/body/material/color-card/local-detail anchors, plus a staged character reference plan
+- **character reference package for every lead character**: clean turnaround sheet first, then full character design board when identity consistency matters
 - scene/location bible with reference image prompts
 - style bible with color, lighting, lens, rhythm, sound, and forbidden drift
 - director analysis: beat-by-beat "讲戏" using concrete actions, camera movement, light, emotion, and sound
@@ -70,7 +71,12 @@ The final Markdown must include:
 - At minimum, one agent must challenge story logic and joke/emotional payoff, one agent must challenge visual/directorial feasibility, and one agent or role pass must represent the target audience's comprehension and retention.
 - Build visual consistency early. Create character and scene reference prompts before writing final video prompts.
 - For important AI drama characters, separate **story role** from **visual development**. Story role covers desire, wound, arc, and scene function; visual development covers commercial positioning, face, hair, costume layers, body proportion, skin/material texture, accessories, color palette, and local detail panels.
-- Use advanced character boards when identity consistency matters: include face close-up, front/side/back orthographic turnaround, full-body scale view, local detail panels such as hands/feet/hair/waist/tattoo/accessory, and a small color-card area. Keep pose, costume, hairstyle, lighting, and proportions consistent across all panels.
+- For lead characters, use a **two-stage character reference workflow** when identity consistency matters:
+  1. **Clean turnaround lock:** first generate a simple white/neutral-background sheet with front, side, and back full-body views, plus optional half-body face views. This locks face, body proportion, hair, costume, shoes, and silhouette before adding story atmosphere.
+  2. **Full character design board:** after the clean sheet is acceptable, generate a richer board with hero portrait, orthographic turnaround, expressions, costume/detail panels, work/daily/story-state looks, mood stills, accessories, color palette, and style keywords.
+- Do not treat a single beautiful portrait as a complete character reference. If the character will appear in multiple shots, the output must include reference prompts that reveal face, body, costume, and key props from multiple angles.
+- Use advanced character boards when identity consistency matters: include face close-up, front/side/back orthographic turnaround, expression strip, outfit/style looks, mood stills, local detail panels such as eyes/hair/hands/waist/accessory/signature prop, and a small color-card area. Keep identity, core costume, hairstyle, lighting logic, and proportions consistent across all panels; variants must be labeled as variants rather than silently changing the base design.
+- For generated character reference boards, prefer professional concept-art sheet composition over poster composition: clear panel hierarchy, neutral backgrounds for turnaround views, cinematic panels only for mood stills, and no crowded decorative typography.
 - Treat the first confirmed core location as a reusable production anchor; design later shots around it when consistency matters.
 - Write video prompts as narrative film direction, not keyword piles.
 - Describe what changes in the shot. Do not repeat static details already visible in reference images.
