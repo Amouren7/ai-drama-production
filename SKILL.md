@@ -44,9 +44,9 @@ The final Markdown must include:
 - visual development bible for major characters: commercial positioning, face/hair/costume/body/material/color-card/local-detail anchors, plus a staged character reference plan
 - **character reference package for every lead character**: clean turnaround sheet first, then full character design board when identity consistency matters
 - scene/location bible with reference image prompts
-- style bible with color, lighting, lens, rhythm, sound, and forbidden drift
+- **global style lock** before shot prompts: style core, visual baseline, color/lighting, camera grammar, motion rules, sound mood, and forbidden drift
 - director analysis: beat-by-beat "讲戏" using concrete actions, camera movement, light, emotion, and sound
-- storyboard table with scene duration, visual references, camera, action beats, dialogue/sound cues, and generation prompt
+- storyboard table with a three-layer shot structure: fixed assets, style/texture inheritance, and time-coded screen action
 - continuity plan for generated video segments, including updated state data, cut points, shot-size/angle changes, transition shots, dialogue breath gaps, and match-action opportunities
 - **Join Contract table for every adjacent shot pair**: previous end state, next start state, state delta, risk level, hard-cut permission, bridge-shot requirement, optional keyframe suitability, safety inserts, sound bridge, and fallback edit
 - **copy-paste prompt pack**: one `VIDEO_MAIN` prompt per segment by default, with optional `VIDEO_BRIDGE`, `VIDEO_INSERT`, and `VIDEO_REPAIR` prompts for risky joins or failed generations
@@ -79,6 +79,13 @@ The final Markdown must include:
 - For generated character reference boards, prefer professional concept-art sheet composition over poster composition: clear panel hierarchy, neutral backgrounds for turnaround views, cinematic panels only for mood stills, and no crowded decorative typography.
 - Treat the first confirmed core location as a reusable production anchor; design later shots around it when consistency matters.
 - Write video prompts as narrative film direction, not keyword piles.
+- Before writing any `VIDEO_MAIN`, write a **global style lock** once for the project or scene batch. It must define: style core, visual baseline, color and lighting, camera grammar, motion intensity, sound mood, and forbidden drift. Every shot prompt inherits this lock instead of restating random style words.
+- Build each storyboard row in three layers before generating prompts:
+  1. **Fixed assets:** characters, expressions, costumes, props, and locations that must stay locked.
+  2. **Style and texture:** the inherited global style lock plus any shot-specific lens, lighting, color, or movement flavor.
+  3. **Screen action:** shot size, composition, camera movement, visible action, state change, dialogue/sound, and timing.
+- For every `VIDEO_MAIN`, use time-coded action beats whenever the segment is longer than 5 seconds or contains more than one motion beat. Each time range must say what changes on screen, not repeat static descriptions.
+- Do not make video prompts dense action dumps. A normal 5-second prompt should contain 1-2 action beats; a 10-15 second prompt can contain several beats only if each beat is physically possible and has a clear edit point.
 - Describe what changes in the shot. Do not repeat static details already visible in reference images.
 - Make every storyboard row image-actionable: who/what, where, camera viewpoint, shot size, expression, and the relationship to the previous/next shot.
 - Every storyboard row must be generation-actionable: it needs one complete video prompt, expected failure modes, and a repair strategy. Do not ask the user to invent missing bridge shots.

@@ -96,13 +96,24 @@ The final script package must include the iteration log before the polished scri
 
 ### Style
 
-Define a style bible:
+Define a style bible, then compress it into a reusable **global style lock** for video prompts:
 
 - art direction: medium, era, palette, texture, realism level
 - camera grammar: handheld, locked-off, dolly, tracking, close-ups, one-take, montage
 - lighting: source, direction, color temperature, contrast
 - sound: dialogue density, ambience, music tempo, sound effects
 - forbidden drift: what must not appear or change
+
+The global style lock is written once and inherited by every `VIDEO_MAIN`. Keep it compact and practical:
+
+- **Style core:** genre, era, realism/stylization level, emotional flavor.
+- **Visual baseline:** lens/camera feel, shot texture, motion intensity, rendering target.
+- **Color and lighting:** palette, contrast, light source, color temperature, atmosphere.
+- **Motion rules:** how fast the camera and subjects may move; what movement is forbidden.
+- **Sound mood:** ambience, foley density, music behavior.
+- **Forbidden drift:** style, identity, costume, location, subtitles, logos, or action types that must not appear.
+
+Do not scatter unrelated style phrases into every shot. If a shot needs a variation, state it as a local exception to the global style lock.
 
 ## 3. Director Analysis: Turn Text Into Visible Action
 
@@ -196,7 +207,15 @@ Choose tactics by problem:
 
 ## 5. Storyboard And Video Prompting
 
-Before video prompts, audit the storyboard as image instructions.
+Before video prompts, audit the storyboard as a three-layer production document rather than a loose plot summary.
+
+Each scene or shot group should separate:
+
+1. **Fixed assets:** which character, expression, costume, location, prop, and recurring visual nodes are locked.
+2. **Style and texture:** which parts of the global style lock apply, plus local camera/lens/light/mood notes.
+3. **Screen action:** what the audience sees happen, when it happens, how the camera moves, and where the edit can cut.
+
+This structure prevents video prompts from becoming either vague story prose or overloaded keyword piles.
 
 Each storyboard row must answer:
 
@@ -224,13 +243,28 @@ For each shot:
 2. State duration and aspect ratio.
 3. For every shot after the first, state updated state data inherited from the previous shot.
 4. State the join strategy: intentional cut, new shot size/subject, camera angle change of about 30 degrees or more when applicable, transition insert, breath gap, or match-action cut.
-5. Describe time-coded action if longer than 10 seconds.
+5. Describe time-coded action if longer than 5 seconds or if the shot has more than one visible motion beat.
 6. Include camera movement, character action, emotion shift, dialogue, and sound cues.
 7. **Embed sound inline without audio references**: every dialogue line, sound effect, ambience, and music cue goes directly in the prompt at the correct time position using `[对白]` `[音效]` `[配乐]` markers. Do not create or cite `@音频` entries.
 8. Keep prompts narrative and concrete.
 9. Write only changes not already shown by references.
 
-Use one generation prompt for one coherent generation unit. For complex action, generate multiple variations and plan edit points.
+Use one generation prompt for one coherent generation unit. For complex action, split the action into smaller prompts, generate multiple variations, and plan edit points.
+
+### Time-Coded Video Prompt Discipline
+
+Each `VIDEO_MAIN` should read like director instructions to the actor, camera, and sound team:
+
+- **Inherited style lock:** cite the global style lock rather than rewriting the whole style bible.
+- **Task:** one sentence saying the only job of this segment.
+- **Start state:** where everyone and every key prop begins.
+- **Time beats:** `0-1.5s`, `1.5-3s`, etc. Each beat describes a visible change.
+- **Camera:** shot size, angle, movement, and whether the camera may cut.
+- **Sound inline:** dialogue, foley, ambience, and music at the beat where they happen.
+- **End state/edit point:** what final posture, prop state, or reaction the editor can cut on.
+- **Do-not-drift list:** only the most important identity, costume, location, prop, and subtitle constraints.
+
+Avoid writing a dense 10-second action scene as one prompt if it contains more than 4 physical actions, a location change, or more than two interacting bodies. Split it or add bridge/insert prompts.
 
 ## 5.1 Single-Prompt Copy-Paste Packaging
 

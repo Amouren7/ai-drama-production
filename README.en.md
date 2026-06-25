@@ -59,9 +59,11 @@ This skill solves four real problems:
 | **Director analysis** | Converts abstract emotion into concrete action, camera, light, sound, and edit points |
 | **Two-stage character references** | Generate a clean white-background turnaround first, then a full character design board with portrait, turnaround, expressions, details, outfits, props, and mood stills |
 | **Reference-first design** | Character, scene, and prop prompts come before video prompts |
+| **Global style lock** | Lock style core, visual baseline, color/lighting, camera rules, and forbidden drift before shot prompts |
+| **Time-coded shot prompts** | `VIDEO_MAIN` uses fixed assets, style/texture, and screen action layers, with visible action written by time range |
 | **Join Contract** | Every adjacent shot pair has a continuity contract; risky hard cuts are blocked |
 | **Automatic bridge generation** | Location changes, carry/rescue actions, posture jumps, body interaction, and prop-state changes get `VIDEO_BRIDGE` or `VIDEO_INSERT` prompts |
-| **Copy-paste prompt pack** | Each shot receives ready-to-use keyframe, video, bridge, insert, and repair prompts |
+| **Copy-paste prompt pack** | Each normal segment gets one ready-to-use `VIDEO_MAIN`; bridge, insert, and repair prompts are added only where needed |
 | **Inline sound** | Video prompts embed `[对白]`, `[音效]`, and `[配乐]`; no `@音频` references |
 | **Lightweight rough cut first** | Existing references, thumbnails, or placeholders audit timing, composition, location, and dialogue duration without forcing extra keyframe generation |
 | **Post-generation repair loop** | After clips are generated, the skill reviews broken joins and outputs replacement bridge/insert prompts plus edit decisions |
@@ -77,9 +79,9 @@ This skill solves four real problems:
 ├── 📝 Multi-Agent Script Iteration Log (3+ rounds)
 ├── 👤 Character Bible (visual design + clean turnaround + full design board prompts)
 ├── 🏠 Scene / Location / Prop Bible
-├── 🎨 Style Bible (color, lighting, lens, rhythm, sound, forbidden drift)
+├── 🎨 Style Bible + Global Style Lock
 ├── 🎬 Director Analysis
-├── 📊 Storyboard Table
+├── 📊 Three-Layer Storyboard Table
 ├── 🔗 Continuity Plan + Join Contracts
 ├── 🖼️ Lightweight Rough-Cut Plan
 ├── 📋 Copy-Paste Prompt Pack
@@ -168,6 +170,8 @@ ai-drama-production/
 |---|---|
 | **Story first** | Premise, conflict, and emotion drive retention |
 | **Lock the character before atmosphere** | Lead characters need a clean turnaround before cinematic design boards, variants, props, and mood scenes |
+| **Lock style before shots** | A global style lock keeps era, color, camera, motion, and forbidden drift consistent across prompts |
+| **Time-code before prompting** | Time ranges constrain each segment to visible, feasible actions and reduce overloaded prompts |
 | **Lock references before video prompts** | Character, scene, and prop consistency must be designed up front |
 | **Rough cut before video generation** | Still-image rough cuts catch broken timing and composition cheaply |
 | **Audit joins before generation** | AI clips are memoryless; adjacent shots must be designed explicitly |
