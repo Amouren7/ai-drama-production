@@ -21,7 +21,7 @@
 
 **AI Drama Production** is a [Claude Code](https://docs.anthropic.com/en/docs/claude-code/skills) skill that turns a rough creative idea into a complete AI drama, AI short film, trailer, anime image-to-video, or light still-image motion production plan.
 
-It does not generate the video itself. It generates the **production blueprint**: script, storyboard, reference image prompts, start/end keyframe prompts, video prompts, bridge shots, safety inserts, repair prompts, sound design, continuity planning, and editing guidance. The user can focus on the idea and review; the skill handles prompts, settings, continuity, and repair plans.
+It does not generate the video itself. It generates the **production blueprint**: script, storyboard, reference image prompts, one video prompt per segment, bridge shots, safety inserts, repair prompts, sound design, continuity planning, and editing guidance. The user can focus on the idea and review; the skill handles prompts, settings, continuity, and repair plans.
 
 ---
 
@@ -29,8 +29,8 @@ It does not generate the video itself. It generates the **production blueprint**
 
 | Capability | Best For | Output |
 |---|---|---|
-| **Film Mode** | Cinematic AI shorts, drama episodes, trailers, contests, anime image-to-video, still-image light motion | Storyboard, Join Contracts, keyframes, video prompts, bridge shots, safety inserts, repair prompts |
-| **Copy-Paste Prompt Pack** | Users who want to provide ideas and review choices while the skill handles prompting and repairs | `IMAGE_START` / `IMAGE_END` / `IMAGE_MID` / `VIDEO_MAIN` / `VIDEO_BRIDGE` / `VIDEO_INSERT` / `VIDEO_REPAIR` |
+| **Film Mode** | Cinematic AI shorts, drama episodes, trailers, contests, anime image-to-video, still-image light motion | Storyboard, Join Contracts, one video prompt per segment, bridge shots, safety inserts, repair prompts |
+| **Copy-Paste Prompt Pack** | Users who want to provide ideas and review choices while the skill handles prompting and repairs | Default to one `VIDEO_MAIN` per segment; add `VIDEO_BRIDGE` / `VIDEO_INSERT` / `VIDEO_REPAIR` only where needed |
 | **Anime Light-Motion Variant** | Existing anime images that only need push-ins, pans, light expression/environment motion, or editing keyframes | Still uses film mode, with gentler camera movement, shorter action beats, and stronger reference locking |
 
 > Voiceover-driven stills, anime light motion, and static-image animation all use the film pipeline with reduced motion complexity.
@@ -63,7 +63,7 @@ This skill solves four real problems:
 | **Automatic bridge generation** | Location changes, carry/rescue actions, posture jumps, body interaction, and prop-state changes get `VIDEO_BRIDGE` or `VIDEO_INSERT` prompts |
 | **Copy-paste prompt pack** | Each shot receives ready-to-use keyframe, video, bridge, insert, and repair prompts |
 | **Inline sound** | Video prompts embed `[对白]`, `[音效]`, and `[配乐]`; no `@音频` references |
-| **Still rough cut first** | Start/end frames are assembled before video generation to audit timing, composition, posture, location, and dialogue duration |
+| **Lightweight rough cut first** | Existing references, thumbnails, or placeholders audit timing, composition, location, and dialogue duration without forcing extra keyframe generation |
 | **Post-generation repair loop** | After clips are generated, the skill reviews broken joins and outputs replacement bridge/insert prompts plus edit decisions |
 
 ---
@@ -81,11 +81,11 @@ This skill solves four real problems:
 ├── 🎬 Director Analysis
 ├── 📊 Storyboard Table
 ├── 🔗 Continuity Plan + Join Contracts
-├── 🖼️ Start/End Keyframe Rough-Cut Plan
+├── 🖼️ Lightweight Rough-Cut Plan
 ├── 📋 Copy-Paste Prompt Pack
-│   ├── IMAGE_START / IMAGE_END / IMAGE_MID
-│   ├── VIDEO_MAIN / VIDEO_BRIDGE
-│   └── VIDEO_INSERT / VIDEO_REPAIR
+│   ├── VIDEO_MAIN (one default prompt per normal segment)
+│   ├── VIDEO_BRIDGE / VIDEO_INSERT (only for risky joins)
+│   └── VIDEO_REPAIR (after failed generations)
 ├── 🧩 Safety Insert Library
 ├── 🖼️ Cover / Thumbnail Design
 └── ✅ Review Gates & Repair Plan
@@ -119,8 +119,8 @@ Bring a premise, target platform, duration, and reference images if you have the
   → 👤 Character Turnaround Lock + Full Design Board
   → 🎬 Director Analysis
   → 📊 Storyboard + Join Contracts + High-Risk Bridges
-  → 🖼️ Start/End Keyframe Rough Cut
-  → 📋 Copy-Paste Prompt Pack
+  → 🖼️ Lightweight Rough-Cut Check
+  → 📋 Single-Prompt Segment Pack
   → 🎥 Video Generation Batches
   → 🧩 Safety Inserts / Repair Prompts
   → 🔊 Sound & Editing
@@ -153,7 +153,7 @@ ai-drama-production/
 | Tool | Use |
 |---|---|
 | **Seedance / 即梦 / other image-to-video tools** | Generate main shots, bridge shots, and inserts |
-| **Image generation or image editing tools** | Create characters, scenes, props, and start/end keyframes |
+| **Image generation or image editing tools** | Create characters, scenes, props, and optional repair keyframes when needed |
 | **剪映 / Premiere Pro / any NLE** | Still rough cut, assembly, subtitles, sound, repair edits |
 | **TTS or human recording** | Scratch voice for timing, final voice after picture timing is stable |
 | **Claude Code** | Run the skill and generate the full Markdown plan |

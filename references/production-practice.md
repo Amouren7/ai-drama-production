@@ -31,7 +31,7 @@ Do not prescribe one fixed tool stack. Instead choose by job:
 | Bad hands/props/edges | inpainting/local redraw/Photoshop generative fill |
 | Perspective impossible for AI | manual compositing and local repair |
 | Text must not deform | still motion / 2.5D parallax / post-composited text |
-| Controlled transition/fall/reveal | first-frame and last-frame generation |
+| Controlled transition/fall/reveal | shorter single prompt first; optional keyframe-controlled repair only if needed |
 | Multiple moving characters | green-screen/transparent layer generation plus compositing |
 | Low FPS or soft clips | interpolate and upscale original clips before final edit |
 | Music cue | generate many variants, cut usable segments, loop/duck/fade in edit |
@@ -49,16 +49,16 @@ For every storyboard row, ask:
 7. Is there an insert, reaction shot, or close-up where emotion or information needs emphasis?
 8. Is the instruction doing too much for one AI video generation?
 
-## Still Rough-Cut Protocol
+## Lightweight Rough-Cut Protocol
 
-Before final video generation:
+Before final video generation, use this as a planning check, not a mandatory asset-generation pass:
 
-1. Put all still frames/storyboard images into an editing timeline.
+1. Put available references, storyboard stills, thumbnails, or placeholders into an editing timeline.
 2. Add scratch dialogue or temporary voice.
 3. Adjust each still's duration to match speech and readable action.
 4. Check shot-size rhythm: establishing -> relation -> close-up -> insert -> reaction.
 5. Add missing reaction, insert, and transition frames.
-6. Only then generate moving clips for shots that survive the still edit.
+6. Then generate moving clips with one `VIDEO_MAIN` prompt per segment; add bridge/insert prompts only where the rough cut reveals a risky join.
 
 ## Audio Pass Protocol
 
@@ -87,16 +87,16 @@ Each still/keyframe is independently generated, so character consistency is a ma
 
 If identity still drifts, regenerate with a better reference image rather than endlessly rewording the prompt.
 
-### Still Rough Cut Before Motion
+### Lightweight Rough Cut Before Motion
 
 Before generating video motion:
 
-1. Put start/end frames or placeholder images in 剪映.
+1. Put available stills, rough thumbnails, or placeholder images in 剪映.
 2. Lay them out with estimated durations.
 3. Add scratch dialogue or voiceover.
 4. Watch the rough cut and fix missing bridges, weak reactions, or confusing geography.
 
-This catches most timing and composition problems before spending video-generation credits.
+This catches timing and composition problems before spending video-generation credits without forcing extra keyframe generation for every segment.
 
 ### 剪映 Keyframe Efficiency
 

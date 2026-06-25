@@ -26,7 +26,7 @@ Film mode is designed for low manual workload. Ask at most five essentials, then
 - ending question or cliffhanger
 - target platform
 
-Default to 60-90s, vertical 9:16, Chinese dialogue, short-drama pacing, 8-14 main shots plus bridge/insert insurance shots. The user should only need to review story direction, choose reference images or takes, and approve repairs. Anime-style still images with simple motion also use this film-mode workflow with gentler camera moves and simpler action beats.
+Default to 60-90s, vertical 9:16, Chinese dialogue, short-drama pacing, and 8-14 main segments. The default production output is one complete video prompt per segment. Add bridge, insert, or repair prompts only for risky joins, failed clips, or explicitly requested precision. Anime-style still images with simple motion also use this film-mode workflow with gentler camera moves and simpler action beats.
 
 ## 2. Set The Four Foundations
 
@@ -232,21 +232,26 @@ For each shot:
 
 Use one generation prompt for one coherent generation unit. For complex action, generate multiple variations and plan edit points.
 
-## 5.1 Copy-Paste Prompt Packaging
+## 5.1 Single-Prompt Copy-Paste Packaging
 
-In film mode, output prompts in task-labeled blocks so the user can paste them directly into image/video tools:
+In film mode, keep the user's workload low: output one task-labeled `VIDEO_MAIN` block per segment as the default paste target. Do not require the user to generate start frames, end frames, and then video for every shot.
 
-- `IMAGE_START`: still image for the first frame of a shot
-- `IMAGE_END`: still image for the last frame of a shot
-- `IMAGE_MID`: optional middle keyframe when a 5-10s action has a crucial state change
-- `VIDEO_MAIN`: video prompt for the shot, focused on motion from start to end
-- `VIDEO_BRIDGE`: video prompt whose only job is to cover a join
-- `VIDEO_INSERT`: short cutaway prompt for hands, eyes, prop, door, light, phone, tool, feet, reaction, or environment
-- `VIDEO_REPAIR`: fallback prompt when the generated clip breaks identity, action, or continuity
+- `VIDEO_MAIN`: the complete video prompt for a normal segment. It includes references, duration, camera, action, state continuity, dialogue, sound effects, ambience, and music cues.
+- `VIDEO_BRIDGE`: optional prompt whose only job is to cover a high-risk join.
+- `VIDEO_INSERT`: optional short cutaway prompt for hands, eyes, prop, door, light, phone, tool, feet, reaction, or environment.
+- `VIDEO_REPAIR`: optional fallback prompt when the generated clip breaks identity, action, or continuity.
 
-For image-to-video, the image anchors carry composition, subject, lighting, and style. The video prompt should focus on subject action, camera motion, environmental motion, timing, and direction. Do not bury the motion under repeated static description.
+Each `VIDEO_MAIN` prompt is a single coherent generation unit. It should be paste-ready, not a checklist that asks the user to assemble missing information. The prompt can mention the intended first beat and final beat in text, but it should not require separate image keyframe assets.
 
-Each prompt block must include: references, duration, aspect ratio, task purpose, copy-paste prompt, expected usable cut range, known failure modes, and repair prompt.
+Each prompt block must include: references, duration, aspect ratio, task purpose, copy-paste prompt, expected usable cut range, known failure modes, and repair strategy.
+
+Use optional keyframes only under these conditions:
+
+- a specific motion repeatedly fails in single-prompt generation
+- a keyframe-capable model is available and the user explicitly wants that workflow
+- a controlled transformation, fall, reveal, or posture change cannot be solved with a shorter segment or bridge prompt
+
+When optional keyframes are used, label them as `OPTIONAL_KEYFRAME` or `OPTIONAL_KEYFRAME_REPAIR` and keep them out of the default prompt list.
 
 ## 5.5 Mentally Simulate Before Generating
 
@@ -288,8 +293,8 @@ Before writing final video prompts, create a Join Contract for every adjacent sh
 | Risk level | low / medium / high / forbidden-hard-cut |
 | Hard cut allowed? | yes only if the state delta is small or intentionally hidden |
 | Bridge required? | yes for high-risk and forbidden-hard-cut joins |
-| Bridge prompt id | concrete `VIDEO_BRIDGE` or `VIDEO_INSERT` id |
-| First/last-frame fit | good / risky / do not use |
+| Bridge prompt id | concrete `VIDEO_BRIDGE` or `VIDEO_INSERT` id when needed |
+| Optional keyframe fit | none / useful / repair-only |
 | Safety inserts | available cutaways if the join fails |
 | Sound bridge | ambience, breath, foley, dialogue overlap, music hit |
 | Fallback edit | what to cut to if generation fails |
@@ -301,7 +306,7 @@ Risk scoring:
 - **High:** location change, large posture change, carry/rescue, two-body interaction, entry/exit, prop state change, or missing action causality. Generate a bridge.
 - **Forbidden-hard-cut:** "suddenly elsewhere", lying-to-standing without action, carried-to-seated without placement, impact aftermath, transformation, vehicle travel, costume/body-state change. Split into multiple bridge shots.
 
-First/last-frame rule: use it only when the start and end frames share similar subject, scene, lighting, and style, or when a longer 10s transition can plausibly bridge the difference. If location and lighting both change, create intermediate frames or bridge shots instead.
+Optional keyframe rule: use first/last frames only as repair tooling, not as the default way to generate every segment. If location and lighting both change, prefer a new `VIDEO_MAIN` segment plus bridge or insert prompts.
 
 ### Bridge Shot Auto-Generation
 
@@ -355,10 +360,7 @@ Create a still-image rough cut before generating final videos — lay out existi
 3. Adjust missing reaction shots or inserts before spending video-generation budget.
 4. Use voice timing to decide whether shots need to be longer, shorter, or supplemented.
 
-In film mode, the still rough cut has two passes:
-
-1. **Anchor pass:** generate or select start/end frames only; assemble them in order to catch broken geography, posture jumps, and missing bridge actions.
-2. **Motion pass:** generate video only for approved anchors; after each batch, extract candidate cut points and review joins before generating the next batch.
+In film mode, the default rough cut is lightweight: assemble the planned segment list, existing references, thumbnails, or placeholders to check story order, shot size, and dialogue timing. Do not require a full keyframe anchor pass unless the user asks for it or a difficult shot has already failed.
 
 Always create an edit insurance package before final assembly:
 
@@ -375,7 +377,7 @@ Use layered video generation when multiple subjects must move:
 - create green-screen or transparent-background character motions when possible
 - composite in editing software, then add shadows, blur, camera movement, and sound to unify
 
-Use first/last frame generation for controlled motion, falls, reveals, entrances, transformations, and camera-position changes. Expect multiple attempts; mark probability-sensitive shots in the plan.
+Use first/last frame generation only as an optional repair path for controlled motion, falls, reveals, entrances, transformations, and camera-position changes. Try a simpler `VIDEO_MAIN` prompt or a short bridge prompt first.
 
 Do frame interpolation and upscaling before final edit export when source clips are low frame rate. Do not export a low-FPS rough edit to 30 FPS and then interpolate; interpolate the original generated clips first.
 

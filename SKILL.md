@@ -9,7 +9,7 @@ description: "Guide users from zero to a complete AI drama or AI short series pr
 
 Use this skill to turn a user's rough idea into a complete AI drama production Markdown. Film mode is the default and includes copy-paste production outputs.
 
-- **🎬 Film mode** — the only production mode. It covers live-action AI shorts, cinematic sequences, anime-style image-to-video, simple still-image motion, trailers, and short episodes. The user provides the idea and reviews outputs; the skill produces ready-to-copy reference prompts, keyframe prompts, video prompts, bridge shots, safety inserts, repair prompts, and edit plans.
+- **🎬 Film mode** — the only production mode. It covers live-action AI shorts, cinematic sequences, anime-style image-to-video, simple still-image motion, trailers, and short episodes. The user provides the idea and reviews outputs; the skill produces one ready-to-copy video prompt per segment by default, plus optional bridge, insert, or repair prompts only when a cut is risky or a generated clip fails.
 
 Always produce a Markdown deliverable unless the user asks for another format.
 
@@ -48,8 +48,8 @@ The final Markdown must include:
 - director analysis: beat-by-beat "讲戏" using concrete actions, camera movement, light, emotion, and sound
 - storyboard table with scene duration, visual references, camera, action beats, dialogue/sound cues, and generation prompt
 - continuity plan for generated video segments, including updated state data, cut points, shot-size/angle changes, transition shots, dialogue breath gaps, and match-action opportunities
-- **Join Contract table for every adjacent shot pair**: previous end state, next start state, state delta, risk level, hard-cut permission, bridge-shot requirement, first/last-frame suitability, safety inserts, sound bridge, and fallback edit
-- **copy-paste prompt pack**: start-frame image prompts, end-frame image prompts, optional middle keyframe prompts, video generation prompts, bridge-shot prompts, repair prompts, and safety-insert prompts
+- **Join Contract table for every adjacent shot pair**: previous end state, next start state, state delta, risk level, hard-cut permission, bridge-shot requirement, optional keyframe suitability, safety inserts, sound bridge, and fallback edit
+- **copy-paste prompt pack**: one `VIDEO_MAIN` prompt per segment by default, with optional `VIDEO_BRIDGE`, `VIDEO_INSERT`, and `VIDEO_REPAIR` prompts for risky joins or failed generations
 - scene-by-scene video prompts with dialogue/SFX/ambience/music inline in each prompt using `[对白]` `[音效]` `[配乐]` markers
 - Seedance-style multimodal prompt pack using clear visual reference roles such as `@图片/@视频`; **do not create or cite `@音频` references in video prompts.** Dialogue, SFX, ambience, and music must be written only inside the matching time-coded prompt segments.
 - cover/thumbnail design prompt for each video, with title text placement described in the composition
@@ -57,9 +57,9 @@ The final Markdown must include:
 - low-input intake assumptions: genre, protagonist, first-episode hook, ending question, platform, aspect ratio, and defaults chosen by the skill
 - production locks: character lock, scene lock, cinematography lock, mood lock, continuity lock, and forbidden drift
 - risk-scored shot list with every transition classified as low, medium, high, or forbidden-hard-cut
-- generated bridge shots for every high-risk or forbidden-hard-cut transition; do not leave them as suggestions
+- generated bridge or insert prompts for every high-risk or forbidden-hard-cut transition; do not leave repair work for the user to invent
 - safety insert library: hands, eyes, props, doors, lights, phones, tools, feet, reaction faces, and environment plates that can cover broken joins
-- copy-paste blocks labeled by generation task: `IMAGE_START`, `IMAGE_END`, `IMAGE_MID`, `VIDEO_MAIN`, `VIDEO_BRIDGE`, `VIDEO_INSERT`, `VIDEO_REPAIR`
+- copy-paste blocks labeled by generation task: `VIDEO_MAIN` for every normal segment, plus `VIDEO_BRIDGE`, `VIDEO_INSERT`, and `VIDEO_REPAIR` only where needed. Do not require separate image keyframe blocks in the default workflow.
 - user review gates with simple choices: approve, regenerate, choose A/B/C, or request repair
 - post-generation repair loop: after the user supplies clips, review cuts, identify broken joins, and output replacement bridge/insert prompts plus an edit decision list
 
@@ -81,7 +81,7 @@ The final Markdown must include:
 - Write video prompts as narrative film direction, not keyword piles.
 - Describe what changes in the shot. Do not repeat static details already visible in reference images.
 - Make every storyboard row image-actionable: who/what, where, camera viewpoint, shot size, expression, and the relationship to the previous/next shot.
-- Every storyboard row must be generation-actionable: it needs start/end frame image prompts, video prompt, failure mode, and repair prompt. Do not ask the user to invent missing bridge shots.
+- Every storyboard row must be generation-actionable: it needs one complete video prompt, expected failure modes, and a repair strategy. Do not ask the user to invent missing bridge shots.
 - Keep each continuous shot within beat density: about 1 action beat per 2.5 seconds. For 5 seconds, 1-2 beats is usually enough.
 - For 10-15 second generations, use time ranges such as `0-3s`, `3-7s`, `7-12s`, `12-15s`.
 - Reserve the first and last 0.5 seconds for setup and natural settling; avoid key action or dialogue there.
@@ -93,7 +93,7 @@ The final Markdown must include:
 - Avoid negative wording in prompts. Replace "不要切镜" with "全程一镜到底", and "不要说话" with "角色保持沉默".
 - Avoid real-person face reference material, copyrighted IP dependence, political sensitivity, sexualized minors, explicit sexual content, graphic violence, and unsafe imitation.
 - Before video generation, rough-cut the still storyboard images to check shot size, perspective, dialogue timing, and scene continuity.
-- Before video generation, produce a still-frame rough-cut checklist and a prompt batch that lets the user generate only the start/end frames first. Video prompts come after those anchors are approved or assumed.
+- Before video generation, optionally rough-cut storyboard stills or placeholders when pacing is uncertain. Do not force a separate keyframe generation pass for every shot.
 - Plan sound like performance: dialogue/voiceover sets timing, ambience and effects carry scenes without music, and music should mark genre, suspense, reveal, or climax.
 - **Embed dialogue/SFX/ambience/music inline in every video prompt.** Sound is not a separate material reference, column, or afterthought — every video prompt must contain its dialogue lines, sound effects, ambient audio, and music cues embedded directly in the matching time-coded prompt segments. Use `[对白：台词内容]` for dialogue, `[音效：描述]` for sound effects and ambience, and `[配乐：描述]` for music. Do not add `@音频` entries to the 素材对应表 and do not cite audio references in prompt headers.
 - **Dialogue timing drives shot duration, not the other way around.** Before writing any video prompt, map each line of dialogue to its approximate spoken duration. If a line is ~2 seconds long, the shot containing it must be at least 2.5 seconds (including 0.5s buffer). Split long lines across multiple shots or shorten the line.
@@ -117,10 +117,10 @@ Use these whenever a film-mode story needs multiple generated clips, or when a s
 - Use match-action cuts: let clip A start a motion and clip B finish it from another angle or on another subject. Examples: hand reaches for key -> key close-up turns; rider raises visor -> reaction close-up; foot steps down -> wheel/ground insert.
 - Do not generate burned-in subtitles or baked-in background music in raw video clips. Add subtitles, music, and final mix in editing so joins remain repairable.
 - For every storyboard row after the first, include a **join strategy**: cut type, state update, whether a transition shot is needed, and how dialogue/sound bridges the cut.
-- For every adjacent shot pair, include a **Join Contract**. Required fields: `from shot`, `to shot`, `previous end state`, `next start state`, `state delta`, `risk level`, `hard cut allowed?`, `bridge shot required?`, `bridge prompt id`, `first/last-frame fit`, `safety inserts`, `sound bridge`, `fallback edit`.
+- For every adjacent shot pair, include a **Join Contract**. Required fields: `from shot`, `to shot`, `previous end state`, `next start state`, `state delta`, `risk level`, `hard cut allowed?`, `bridge shot required?`, `bridge prompt id`, `optional keyframe fit`, `safety inserts`, `sound bridge`, `fallback edit`.
 - **Risk rule:** if location changes, character posture changes heavily (lying/sitting/standing/carried), a prop state changes, a character enters/exits, two bodies interact, or action causality is missing, mark the join high-risk. High-risk joins cannot be hard-cut without a generated bridge shot or insert.
-- **Forbidden-hard-cut cases:** rescue/carry actions, combat impacts, falls, vehicle/location travel, transformation, costume/state change, and "suddenly arrives elsewhere." These must be split into bridge shots and/or first-last-frame transitions.
-- First/last-frame generation is for small-to-medium state changes with similar subject, scene, and style. If the first and last frames differ strongly in location, lighting, or subject arrangement, split into multiple bridge shots rather than forcing one transition.
+- **Forbidden-hard-cut cases:** rescue/carry actions, combat impacts, falls, vehicle/location travel, transformation, costume/state change, and "suddenly arrives elsewhere." These must be split into bridge shots, insert shots, or simpler segment prompts.
+- Keyframe-controlled generation is optional repair tooling only. Use it when a specific difficult motion cannot be solved by a single prompt or bridge prompt; do not make it the normal production path.
 - Always generate an edit insurance package for film mode: at least 1 reaction shot per speaking character, 1 hand/prop insert for every key object action, 1 environment insert for every location, and 1 light/door/phone/tool insert for every scene transition.
 
 ## Reference Loading
@@ -144,4 +144,4 @@ The workflow is distilled from six Feishu Wiki sources about AIGC video setting 
 - Let generation results feed back into the next script iteration; do not force a fully frozen long script too early.
 - Use AI for structure, but manually audit storyboard shot size, viewpoint, expression, and adjacent-shot continuity.
 - For supplied reference images, use a visual extraction pass when helpful: line-art cleanup to clarify structure, flat color extraction to lock palette, then reverse-prompt analysis to capture reusable visual logic. Use this for style/character consistency, not as a substitute for story development.
-- Combine tools pragmatically: text-to-image drafts, high-quality image iteration, Photoshop/layering/inpainting, first/last frames, image upscaling, frame interpolation, still-image rough cuts, voice/audio passes, and final editing all matter.
+- Combine tools pragmatically: text-to-image drafts, high-quality image iteration, Photoshop/layering/inpainting, optional first/last frames for difficult repairs, image upscaling, frame interpolation, still-image rough cuts, voice/audio passes, and final editing all matter.

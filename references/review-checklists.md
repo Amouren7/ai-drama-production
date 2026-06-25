@@ -108,7 +108,8 @@ Score 1-10:
 - audio design: at least ambience, dialogue, music, or sound effects are specified
 - continuity: prior and next shots can connect
 - platform limits: per-shot references stay within allowed counts
-- first/last frame suitability: controlled falls, reveals, transitions, and position changes are assigned to first/last-frame workflows when useful
+- single-prompt usability: normal segments can be generated from one paste-ready prompt without a required extra keyframe pass
+- optional keyframe restraint: keyframe-controlled workflows are used only for difficult repairs or explicit user requests
 
 Repair:
 
@@ -133,11 +134,11 @@ Score 1-10:
 - editability: each join has a repair strategy if identity, pose, or action continuity drifts
 - Join Contract completeness: every adjacent shot pair has previous end state, next start state, state delta, risk level, hard-cut permission, bridge requirement, safety inserts, sound bridge, and fallback edit
 - high-risk transition handling: every location change, posture jump, carry/rescue, two-body interaction, prop state change, or missing causal action has a generated bridge or insert prompt
-- copy-paste prompt readiness: start-frame, end-frame, video, bridge, insert, and repair prompts are labeled and ready to paste without the user inventing missing details
+- copy-paste prompt readiness: every normal segment has one `VIDEO_MAIN` prompt ready to paste; risky joins have bridge/insert/repair prompts without the user inventing missing details
 
 Repair:
 
-- If two clips jump, redesign the join as a cut to a new shot size, angle, subject, or transition insert.
+- If two clips jump, first simplify the neighboring `VIDEO_MAIN` prompts or redesign the join as a cut to a new shot size, angle, subject, or transition insert.
 - If character positions drift, create an updated state reference image or add a precise state update before the next prompt.
 - If dialogue feels clipped, add 0.5-1s of silence, reaction, breath, or physical setup at the start/end of the neighboring clips.
 - If a same-subject cut feels jumpy, rotate the camera at least 30 degrees or cut to a prop/reaction shot.
