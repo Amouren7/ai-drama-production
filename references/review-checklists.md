@@ -107,6 +107,8 @@ Score 1-10:
 - narrative writing: reads like film direction rather than keyword tags
 - duration fit: action beats match seconds
 - camera feasibility: no contradictory camera moves; one coverage mode is chosen unless a planned cut sequence is explicitly supported
+- per-beat camera language: each time range states camera position/movement/focus together with the visible action
+- camera summary consistency: the final camera-language line only summarizes the per-beat camera path and does not introduce new angles, cuts, or motion
 - final-frame clarity: the segment stops on a concrete edit point and does not leak into the next plot event
 - audio design: at least ambience, dialogue, music, or sound effects are specified
 - continuity: prior and next shots can connect
@@ -120,6 +122,8 @@ Repair:
 - If the first frame is vague, add a Shot State Contract before rewriting the prompt body.
 - If a 5s prompt has 4+ actions, cut to 1-2 actions or make it 10-15s.
 - If a prompt asks for rapid hand/face/object alternation inside one continuous shot, split those into `VIDEO_INSERT` prompts or rewrite as a planned cut sequence.
+- If camera language appears only at the end, move the relevant camera position/movement into each time range.
+- If the final camera-language line adds a new angle, cut, or movement, add it to the right time beat or remove it.
 - If the final frame advances into the next story event, stop earlier and define the intended cliffhanger or edit point.
 - Replace negatives with positive instructions.
 - For 10s+ prompts, add time-coded segments.

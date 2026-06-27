@@ -285,7 +285,7 @@ For each shot:
 4. For every shot after the first, state updated state data inherited from the previous shot.
 5. State the join strategy: intentional cut, new shot size/subject, camera angle change of about 30 degrees or more when applicable, transition insert, breath gap, or match-action cut.
 6. Describe time-coded action if longer than 5 seconds or if the shot has more than one visible motion beat.
-7. Include camera movement, character action, emotion shift, dialogue, and sound cues.
+7. Put camera position and camera movement inside each time range together with character action, emotion shift, dialogue, and sound cues.
 8. **Embed sound inline without audio references**: every dialogue line, sound effect, ambience, and music cue goes directly in the prompt at the correct time position using `[对白]` `[音效]` `[配乐]` markers. Do not create or cite `@音频` entries.
 9. Keep prompts narrative and concrete.
 10. Write only changes not already shown by references.
@@ -301,12 +301,14 @@ Each `VIDEO_MAIN` should read like director instructions to the actor, camera, a
 - **Task:** one sentence saying the only job of this segment.
 - **Start state:** where everyone and every key prop begins.
 - **Time beats:** `0-1.5s`, `1.5-3s`, etc. Each beat describes a visible change.
-- **Camera:** shot size, angle, movement, and whether the camera may cut.
+- **Per-beat camera language:** every time beat states shot size/angle/movement/focus for that beat, following the camera coverage mode and path in the Shot State Contract.
 - **Sound inline:** dialogue, foley, ambience, and music at the beat where they happen.
 - **End state/edit point:** what final posture, prop state, or reaction the editor can cut on.
 - **Do-not-drift list:** only the most important identity, costume, location, prop, and subtitle constraints.
 
 Avoid writing a dense 10-second action scene as one prompt if it contains more than 4 physical actions, a location change, or more than two interacting bodies. Split it or add bridge/insert prompts.
+
+Do not leave camera language only as a final summary. Use the final camera-language line only as an audit of the per-beat camera path. If the final line introduces a new angle, cut, or movement that does not appear in the time ranges, either add it to the correct time range or remove it.
 
 Treat image references and prompt text differently: uploaded images should carry stable appearance, costume, face, prop design, and layout; prompt text should describe the dynamic change, camera path, audio, and final state. Repeating every static detail in every time beat increases drift and hides the real action.
 
