@@ -62,6 +62,7 @@ This skill solves four real problems:
 | **Two-stage character references** | Generate a clean white-background turnaround first, then a full character design board with portrait, turnaround, expressions, details, outfits, props, and mood stills |
 | **Reference-first design** | Character, scene, and prop prompts come before video prompts |
 | **Production locks** | Lock character, scene, style, camera, continuity, sound mood, and forbidden drift before shot prompts |
+| **Shot State Contract** | Each `VIDEO_MAIN` locks first frame, screen direction, subject/prop state, camera coverage mode, action transition, and final frame before the prompt body |
 | **Time-coded shot prompts** | `VIDEO_MAIN` uses fixed assets, style/texture, and screen action layers, with visible action written by time range |
 | **Join Contract** | Every adjacent shot pair has a continuity contract; risky hard cuts are blocked |
 | **Automatic bridge generation** | Location changes, carry/rescue actions, posture jumps, body interaction, and prop-state changes get `VIDEO_BRIDGE` or `VIDEO_INSERT` prompts |
@@ -83,7 +84,7 @@ This skill solves four real problems:
 ├── 🏠 Scene / Location / Prop Bible
 ├── 🎨 Style Bible + Production Locks
 ├── 🎬 Director Analysis
-├── 📊 Three-Layer Storyboard Table
+├── 📊 Three-Layer Storyboard Table + Shot State Contracts
 ├── 🔗 Continuity Plan + Join Contracts
 ├── 🖼️ Lightweight Rough-Cut Plan
 ├── 📋 Copy-Paste Prompt Pack
@@ -173,6 +174,7 @@ ai-drama-production/
 | **Story first** | Premise, conflict, and emotion drive retention |
 | **Lock the character before atmosphere** | Lead characters need a clean turnaround before cinematic design boards, variants, props, and mood scenes |
 | **Lock production constraints before shots** | Production locks keep character, scene, style, camera, continuity, sound, and forbidden drift consistent across prompts |
+| **Lock first and final frames before action** | Shot State Contracts tell the model what the shot begins with, what changes, and where it must stop |
 | **Time-code before prompting** | Time ranges constrain each segment to visible, feasible actions and reduce overloaded prompts |
 | **Lock references before video prompts** | Character, scene, and prop consistency must be designed up front |
 | **Rough cut before video generation** | Still-image rough cuts catch broken timing and composition cheaply |

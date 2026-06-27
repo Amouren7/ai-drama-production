@@ -101,10 +101,13 @@ Repair:
 Score 1-10:
 
 - reference roles: every `@` reference states its purpose
+- Shot State Contract: every `VIDEO_MAIN` has reference roles, first visible frame, screen layout, subject/prop state, camera coverage mode, action transition, final visible frame, and hard limits
+- first-frame clarity: the first frame can be drawn as a still image without guessing subject position, posture, eyeline, prop state, or environment
 - static/dynamic separation: prompt describes changes, not repeated reference details
 - narrative writing: reads like film direction rather than keyword tags
 - duration fit: action beats match seconds
-- camera feasibility: no contradictory camera moves
+- camera feasibility: no contradictory camera moves; one coverage mode is chosen unless a planned cut sequence is explicitly supported
+- final-frame clarity: the segment stops on a concrete edit point and does not leak into the next plot event
 - audio design: at least ambience, dialogue, music, or sound effects are specified
 - continuity: prior and next shots can connect
 - platform limits: per-shot references stay within allowed counts
@@ -114,7 +117,10 @@ Score 1-10:
 Repair:
 
 - If `@图片1 @图片2` is naked, rewrite as "以 @图片1 中的角色为主角，场景参考 @图片2 的空间布局".
+- If the first frame is vague, add a Shot State Contract before rewriting the prompt body.
 - If a 5s prompt has 4+ actions, cut to 1-2 actions or make it 10-15s.
+- If a prompt asks for rapid hand/face/object alternation inside one continuous shot, split those into `VIDEO_INSERT` prompts or rewrite as a planned cut sequence.
+- If the final frame advances into the next story event, stop earlier and define the intended cliffhanger or edit point.
 - Replace negatives with positive instructions.
 - For 10s+ prompts, add time-coded segments.
 
@@ -135,6 +141,7 @@ Score 1-10:
 - Join Contract completeness: every adjacent shot pair has previous end state, next start state, state delta, risk level, hard-cut permission, bridge requirement, safety inserts, sound bridge, and fallback edit
 - high-risk transition handling: every location change, posture jump, carry/rescue, two-body interaction, prop state change, or missing causal action has a generated bridge or insert prompt
 - copy-paste prompt readiness: every normal segment has one `VIDEO_MAIN` prompt ready to paste; risky joins have bridge/insert/repair prompts without the user inventing missing details
+- state-camera preflight: every `VIDEO_MAIN` passes first-frame, time-beat, camera-mode, and final-frame checks before delivery
 
 Repair:
 
@@ -144,6 +151,7 @@ Repair:
 - If a same-subject cut feels jumpy, rotate the camera at least 30 degrees or cut to a prop/reaction shot.
 - If raw clips contain subtitles or music, regenerate without them when possible, or repair/remove them before final edit.
 - If a Join Contract is missing, do not finalize. Add it before writing or delivering video prompts.
+- If a Shot State Contract is missing from a `VIDEO_MAIN`, do not finalize. Add it before writing or delivering the prompt.
 - If a high-risk join says "hard cut allowed", change it to a bridge shot, insert shot, match-action cut, or explicit time/space transition.
 - If the user would need to think up a missing bridge prompt, the skill failed. Generate the bridge prompt directly.
 

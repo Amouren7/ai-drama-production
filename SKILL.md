@@ -51,10 +51,10 @@ For a full production bible, the final Markdown must include:
 - scene/location bible with reference image prompts
 - **production locks** before shot prompts: character, scene, style, camera, continuity, sound mood, and forbidden drift
 - director analysis: beat-by-beat "讲戏" using concrete actions, camera movement, light, emotion, and sound
-- storyboard table with a three-layer shot structure: fixed assets, style/texture inheritance, and time-coded screen action
+- storyboard table with a three-layer shot structure: fixed assets, style/texture inheritance, and time-coded screen action, plus a Shot State Contract for each generated segment
 - continuity plan for generated video segments, including updated state data, cut points, shot-size/angle changes, transition shots, dialogue breath gaps, and match-action opportunities
 - **Join Contract table for every adjacent shot pair**: previous end state, next start state, state delta, risk level, hard-cut permission, bridge-shot requirement, optional keyframe suitability, safety inserts, sound bridge, and fallback edit
-- **copy-paste prompt pack**: one `VIDEO_MAIN` prompt per segment by default, with optional `VIDEO_BRIDGE`, `VIDEO_INSERT`, and `VIDEO_REPAIR` prompts for risky joins or failed generations
+- **copy-paste prompt pack**: one `VIDEO_MAIN` prompt per segment by default, each preceded by a Shot State Contract, with optional `VIDEO_BRIDGE`, `VIDEO_INSERT`, and `VIDEO_REPAIR` prompts for risky joins or failed generations
 - scene-by-scene video prompts with dialogue/SFX/ambience/music inline in each prompt using `[对白]` `[音效]` `[配乐]` markers
 - Seedance-style multimodal prompt pack using clear visual reference roles such as `@图片/@视频`; **do not create or cite `@音频` references in video prompts.** Dialogue, SFX, ambience, and music must be written only inside the matching time-coded prompt segments.
 - cover/thumbnail design prompt for each video, with title text placement described in the composition
@@ -90,25 +90,30 @@ For a quick prompt pack, include only the relevant subset: brief assumptions, pr
   1. **Fixed assets:** characters, expressions, costumes, props, and locations that must stay locked.
   2. **Style and texture:** the inherited production locks plus any shot-specific lens, lighting, color, or movement flavor.
   3. **Screen action:** shot size, composition, camera movement, visible action, state change, dialogue/sound, and timing.
+- Before every `VIDEO_MAIN`, write a **Shot State Contract**: reference roles, first visible frame, screen layout, subject state, prop state, camera coverage mode, action transition, final visible frame, and hard limits. If this contract is unclear, fix it before writing the prompt.
 - For every `VIDEO_MAIN`, use time-coded action beats whenever the segment is longer than 5 seconds or contains more than one motion beat. Each time range must say what changes on screen, not repeat static descriptions.
+- State the first visible frame and final visible frame as camera-readable facts. Avoid vague starts such as "continues riding" or "danger approaches" unless the prompt also states position, posture, screen direction, visible props, and what changes first.
 - Do not make video prompts dense action dumps. A normal 5-second prompt should contain 1-2 action beats; a 10-15 second prompt can contain several beats only if each beat is physically possible and has a clear edit point.
+- Use one camera coverage mode per generation unless the user explicitly wants an edit-sequence prompt and the model supports it: **continuous single shot**, **single shot with focus shift**, **planned cut sequence**, or **montage**. Do not write "hand close-up, wheel close-up, medium shot rapid alternation" inside a normal continuous prompt; split into inserts or a planned edit sequence.
 - Describe what changes in the shot. Do not repeat static details already visible in reference images.
 - Make every storyboard row image-actionable: who/what, where, camera viewpoint, shot size, expression, and the relationship to the previous/next shot.
 - Every storyboard row must be generation-actionable: it needs one complete video prompt, expected failure modes, and a repair strategy. Do not ask the user to invent missing bridge shots.
 - Keep each continuous shot within beat density: about 1 action beat per 2.5 seconds. For 5 seconds, 1-2 beats is usually enough; for 10-15 seconds, use ranges such as `0-3s`, `3-7s`, `7-12s`, `12-15s`.
 - Reserve the first and last 0.5 seconds for setup and natural settling; avoid key action or dialogue there.
-- Label every `@` reference by purpose, such as "以 @图片1 中的女主为主角" or "参考 @视频1 的运镜节奏".
+- Label every `@` reference by purpose, such as "以 @图片1 中的女主为主角", "参考 @图片2 的路口空间布局", or "参考 @视频1 的运镜节奏". Never leave naked references.
 - **Complete reference coverage: every item in the 场景与道具设定 table must have a corresponding reference image prompt.** If a prop or scene is important enough to list, it needs a `@图片` entry in the 素材对应表 with a dedicated reference prompt. Without a reference image, the AI model cannot consistently render that prop across shots.
 - **Every video prompt must cite the relevant visible references within platform limits.** The prompt header must explicitly reference visible character `@图片`(s), scene `@图片`, key prop `@图片`(s), and any visual/motion `@视频` reference used by that shot. If references exceed model limits, create a shot-specific reference bundle and prioritize visible characters, core costume, location, key props, and motion reference.
 - **Cross-reference completeness check before delivery:** verify that every `@图片` / `@视频` referenced in any video prompt actually exists in the 素材对应表, and vice versa — every visual entry in the 素材对应表 is actually used by at least one prompt.
 - Respect platform limits when writing per-shot prompts: visual references must stay within model limits; do not use `@音频` references in this workflow, and keep dialogue/SFX/music as inline text cues inside the prompt.
 - Avoid negative wording in prompts. Replace "不要切镜" with "全程一镜到底", and "不要说话" with "角色保持沉默".
+- When a prohibition is safety-critical, pair it with a positive target and a restrained exclusion list: "危险逼近但保持安全距离；画面停在未碰撞前" works better than only saying "不要撞车".
 - Avoid real-person face reference material, copyrighted IP dependence, political sensitivity, sexualized minors, explicit sexual content, graphic violence, and unsafe imitation.
 - Before video generation, do a lightweight rough cut using available references, thumbnails, storyboard stills, or placeholders to check shot size, perspective, dialogue timing, and scene continuity. Do not force a separate keyframe generation pass for every shot.
 - Plan sound like performance: dialogue/voiceover sets timing, ambience and effects carry scenes without music, and music should mark genre, suspense, reveal, or climax.
 - **Embed dialogue/SFX/ambience/music inline in every video prompt.** Sound is not a separate material reference, column, or afterthought — every video prompt must contain its dialogue lines, sound effects, ambient audio, and music cues embedded directly in the matching time-coded prompt segments. Use `[对白：台词内容]` for dialogue, `[音效：描述]` for sound effects and ambience, and `[配乐：描述]` for music. Do not add `@音频` entries to the 素材对应表 and do not cite audio references in prompt headers.
 - **Dialogue timing drives shot duration, not the other way around.** Before writing any video prompt, map each line of dialogue to its approximate spoken duration. If a line is ~2 seconds long, the shot containing it must be at least 2.5 seconds (including 0.5s buffer). Split long lines across multiple shots or shorten the line.
 - **Mentally simulate the generated video before generating.** Before committing to final prompts, do a "dry run" in your head: play the video from start to end, shot by shot. Verify: (1) 剧情逻辑是否通顺 — does each action follow from the previous one? (2) 场景连贯性 — does the location, lighting, character position, and prop state stay consistent from shot to shot? (3) 动作合理性 — can the character physically do what the prompt describes in the given time? (4) 对白与动作的匹配 — does the dialogue match what's happening on screen? If any step feels off during simulation, fix the script or prompt before generating.
+- **Run a state-camera preflight before delivery.** For each `VIDEO_MAIN`, check that the first frame can be drawn, every time beat follows from the previous beat, camera motion does not contradict the coverage mode, and the final frame can cut into the next Shot State Contract.
 - **Design a cover/thumbnail for each video.** The cover is a static image that captures the most iconic or funny moment of the short, with space for the title text. Write a dedicated cover prompt that: (1) uses the same character/scene reference images to maintain visual consistency, (2) composes the frame to leave room for title text overlay (top or bottom), (3) captures the emotional peak or comedic hook of the video. Specify in the prompt where text should be placed, e.g. "上方预留标题文字空间". The title itself is added in post-production, not generated as part of the AI image.
 
 ### Film Segment Continuity Rules
@@ -151,6 +156,7 @@ The workflow is distilled from six Feishu Wiki sources about AIGC video setting 
 - Convert scripts into visible physical actions before generating prompts.
 - Use a producer/director/art-designer/storyboarder mental model even when one person does all work.
 - Use reference images to lock identity, costume, scene layout, color, and atmosphere.
+- Use text prompts primarily to describe subject/action, environment, camera, sound, and temporal change; let uploaded images carry static appearance details when references are strong.
 - Use short 10-15 second scenes as testable units, often with one reversal or audience-retention hook.
 - Let generation results feed back into the next script iteration; do not force a fully frozen long script too early.
 - Use AI for structure, but manually audit storyboard shot size, viewpoint, expression, and adjacent-shot continuity.

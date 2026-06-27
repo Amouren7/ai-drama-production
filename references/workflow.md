@@ -239,6 +239,36 @@ Each storyboard row must answer:
 
 Avoid literary descriptions that cannot be drawn, such as "responds with affection" or "symbolizes fragile life." Rewrite as visible action.
 
+### Shot State Contract
+
+Before writing any `VIDEO_MAIN`, write a compact state contract. This is the guardrail against unclear initial states and broken camera logic.
+
+Required fields:
+
+| Field | Required answer |
+|---|---|
+| Reference roles | which reference locks identity, scene layout, prop design, expression, or motion rhythm |
+| First visible frame | exact subject, posture, screen side, eyeline, prop position, and environment at second 0 |
+| Screen layout | who/what is foreground, midground, background; left/right direction of motion |
+| Subject state | body posture, hand state, face direction, emotion, and immediate intention |
+| Prop/state data | location, ownership, visible condition, and what may change |
+| Camera coverage mode | continuous single shot / single shot with focus shift / planned cut sequence / montage |
+| Camera path | where the camera starts, how it moves, and where it ends |
+| Action transition | the single state change this segment must accomplish |
+| Final visible frame | final pose, prop state, eyeline, screen direction, and edit point |
+| Hard limits | what the model must not advance into, plus the positive state it should stop on |
+
+If the first visible frame cannot be drawn as a still image, the video prompt is not ready. If the final visible frame cannot connect to the next shot, revise the shot or add a bridge/insert.
+
+Choose one camera coverage mode per generation by default:
+
+- **Continuous single shot:** safest for action continuity; no hidden cuts.
+- **Single shot with focus shift:** one shot that changes emphasis, such as hand -> face, without changing location or time.
+- **Planned cut sequence:** only when the model/tool handles edit-like prompting; each cut must have a time range and a reason.
+- **Montage:** only for compressed time, memories, screens, travel, or stylized summaries; do not use it for precise physical continuity.
+
+When the prompt asks for multiple close-ups and medium shots inside one normal segment, first decide whether those are separate `VIDEO_INSERT` prompts, a planned cut sequence, or a simpler continuous shot. Do not let the model invent the edit.
+
 Create a material map first:
 
 | Reference | Purpose | Notes |
@@ -251,13 +281,14 @@ For each shot:
 
 1. State references and purpose.
 2. State duration and aspect ratio.
-3. For every shot after the first, state updated state data inherited from the previous shot.
-4. State the join strategy: intentional cut, new shot size/subject, camera angle change of about 30 degrees or more when applicable, transition insert, breath gap, or match-action cut.
-5. Describe time-coded action if longer than 5 seconds or if the shot has more than one visible motion beat.
-6. Include camera movement, character action, emotion shift, dialogue, and sound cues.
-7. **Embed sound inline without audio references**: every dialogue line, sound effect, ambience, and music cue goes directly in the prompt at the correct time position using `[对白]` `[音效]` `[配乐]` markers. Do not create or cite `@音频` entries.
-8. Keep prompts narrative and concrete.
-9. Write only changes not already shown by references.
+3. Write the Shot State Contract.
+4. For every shot after the first, state updated state data inherited from the previous shot.
+5. State the join strategy: intentional cut, new shot size/subject, camera angle change of about 30 degrees or more when applicable, transition insert, breath gap, or match-action cut.
+6. Describe time-coded action if longer than 5 seconds or if the shot has more than one visible motion beat.
+7. Include camera movement, character action, emotion shift, dialogue, and sound cues.
+8. **Embed sound inline without audio references**: every dialogue line, sound effect, ambience, and music cue goes directly in the prompt at the correct time position using `[对白]` `[音效]` `[配乐]` markers. Do not create or cite `@音频` entries.
+9. Keep prompts narrative and concrete.
+10. Write only changes not already shown by references.
 
 Use one generation prompt for one coherent generation unit. For complex action, split the action into smaller prompts, generate multiple variations, and plan edit points.
 
@@ -266,6 +297,7 @@ Use one generation prompt for one coherent generation unit. For complex action, 
 Each `VIDEO_MAIN` should read like director instructions to the actor, camera, and sound team:
 
 - **Inherited locks:** cite the production locks rather than rewriting the whole style bible.
+- **Shot State Contract:** lock first frame, screen layout, camera mode, action transition, final frame, and hard limits before the prompt body.
 - **Task:** one sentence saying the only job of this segment.
 - **Start state:** where everyone and every key prop begins.
 - **Time beats:** `0-1.5s`, `1.5-3s`, etc. Each beat describes a visible change.
@@ -275,6 +307,8 @@ Each `VIDEO_MAIN` should read like director instructions to the actor, camera, a
 - **Do-not-drift list:** only the most important identity, costume, location, prop, and subtitle constraints.
 
 Avoid writing a dense 10-second action scene as one prompt if it contains more than 4 physical actions, a location change, or more than two interacting bodies. Split it or add bridge/insert prompts.
+
+Treat image references and prompt text differently: uploaded images should carry stable appearance, costume, face, prop design, and layout; prompt text should describe the dynamic change, camera path, audio, and final state. Repeating every static detail in every time beat increases drift and hides the real action.
 
 ## 5.1 Single-Prompt Copy-Paste Packaging
 
@@ -303,10 +337,13 @@ When optional keyframes are used, label them as `OPTIONAL_KEYFRAME` or `OPTIONAL
 
 Do this:
 1. Read each prompt aloud in sequence, imagining what the video output would look like.
-2. **剧情逻辑检查**: Does each shot's action follow logically from the previous? If character A is sad about gas prices in shot 3, does their action in shot 4 (e.g., pulling out a wallet) make sense as a consequence?
-3. **场景连贯检查**: Would the lighting, character positions, and props be consistent across adjacent shots? Is a character's clothing the same? Is a mug that was full in shot 1 still full in shot 2?
-4. **动作-对白匹配检查**: When a character says "I'm charging my phone," are they actually holding a phone and a charger? Or are they doing something unrelated?
-5. **时间可行性检查**: Can the described action actually happen within the specified duration? (e.g., "stands up, walks 5 meters, pulls out phone, opens app" in 2 seconds is too much)
+2. **首帧检查**: Can the first frame be drawn as a still? Are subject, posture, screen side, eyeline, prop position, and environment concrete?
+3. **剧情逻辑检查**: Does each shot's action follow logically from the previous? If character A is sad about gas prices in shot 3, does their action in shot 4 (e.g., pulling out a wallet) make sense as a consequence?
+4. **场景连贯检查**: Would the lighting, character positions, and props be consistent across adjacent shots? Is a character's clothing the same? Is a mug that was full in shot 1 still full in shot 2?
+5. **镜头逻辑检查**: Does the camera coverage mode match the requested motion? A continuous shot cannot also demand rapid unrelated close-up alternation unless it is rewritten as a planned cut sequence.
+6. **动作-对白匹配检查**: When a character says "I'm charging my phone," are they actually holding a phone and a charger? Or are they doing something unrelated?
+7. **时间可行性检查**: Can the described action actually happen within the specified duration? (e.g., "stands up, walks 5 meters, pulls out phone, opens app" in 2 seconds is too much)
+8. **终帧检查**: Does the final frame stop at the intended cliffhanger/edit point without leaking into the next plot event?
 
 If the simulation reveals a logic gap or inconsistency, **rewrite the prompt before generating**. Do not "fix it in post" — fix it in the prompt.
 
