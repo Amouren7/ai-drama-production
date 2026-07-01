@@ -46,6 +46,8 @@ Repair:
 Score 1-10:
 
 - visible action: abstract emotion is translated into physical behavior
+- performance cause: important emotions have a visible trigger before the face/body/voice reaction
+- actor specificity: facial details, body action, breath, and voice tone are playable rather than generic labels
 - action chain: movement flows continuously
 - camera direction: lens distance and motion are clear
 - lighting specificity: source, direction, color temperature, and contrast are concrete
@@ -55,7 +57,7 @@ Score 1-10:
 
 Repair:
 
-- Replace "sad/angry/nervous" with posture, gesture, eye movement, breath, hand action, blocking.
+- Replace "sad/angry/nervous" with the performance formula: trigger -> facial details -> body action -> voice tone.
 - Replace "cinematic lighting" with exact source and direction.
 - Split overloaded shots or extend duration.
 
@@ -86,6 +88,7 @@ Score 1-10:
 - viewpoint clarity: first-person/third-person/over-the-shoulder/subjective POV is explicit
 - shot-size rhythm: adjacent shots vary intentionally
 - expression clarity: facial expression and psychology are concrete
+- performance logic: emotion arises from a visible or recently established cause
 - adjacent-shot continuity: each shot connects spatially and emotionally to the previous/next shot
 - imageability: each row can be drawn from the instruction
 - simplicity: each shot is reduced to a clear "who does what" or "what object is where"
@@ -102,6 +105,7 @@ Score 1-10:
 
 - reference roles: every `@` reference states its purpose
 - Shot State Contract: every `VIDEO_MAIN` has reference roles, first visible frame, screen layout, subject/prop state, camera coverage mode, action transition, final visible frame, and hard limits
+- Performance Cause Contract: every important emotion states trigger, facial details, body action, and voice tone
 - first-frame clarity: the first frame can be drawn as a still image without guessing subject position, posture, eyeline, prop state, or environment
 - static/dynamic separation: prompt describes changes, not repeated reference details
 - narrative writing: reads like film direction rather than keyword tags
@@ -110,6 +114,7 @@ Score 1-10:
 - per-beat camera language: each time range states camera position/movement/focus together with the visible action
 - camera summary consistency: the final camera-language line only summarizes the per-beat camera path and does not introduce new angles, cuts, or motion
 - final-frame clarity: the segment stops on a concrete edit point and does not leak into the next plot event
+- emotional continuity: emotion shifts emerge from the current or previous beat and do not appear as sudden camera-facing poses
 - audio design: at least ambience, dialogue, music, or sound effects are specified
 - continuity: prior and next shots can connect
 - platform limits: per-shot references stay within allowed counts
@@ -120,6 +125,8 @@ Repair:
 
 - If `@图片1 @图片2` is naked, rewrite as "以 @图片1 中的角色为主角，场景参考 @图片2 的空间布局".
 - If the first frame is vague, add a Shot State Contract before rewriting the prompt body.
+- If emotion is written as only "fearful/angry/moved", rewrite the beat as "what happens -> eyes/brows/mouth/breath -> hands/shoulders/body -> line delivery".
+- If the face, body, and voice imply different emotions, choose the dominant emotion and align all three.
 - If a 5s prompt has 4+ actions, cut to 1-2 actions or make it 10-15s.
 - If a prompt asks for rapid hand/face/object alternation inside one continuous shot, split those into `VIDEO_INSERT` prompts or rewrite as a planned cut sequence.
 - If camera language appears only at the end, move the relevant camera position/movement into each time range.

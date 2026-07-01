@@ -50,7 +50,7 @@ For a full production bible, the final Markdown must include:
 - **character reference package for every lead character**: clean turnaround sheet first, then full character design board when identity consistency matters
 - scene/location bible with reference image prompts
 - **production locks** before shot prompts: character, scene, style, camera, continuity, sound mood, and forbidden drift
-- director analysis: beat-by-beat "讲戏" using concrete actions, camera movement, light, emotion, and sound
+- director analysis: beat-by-beat "讲戏" using concrete actions, camera movement, light, performance cause, expression details, body action, voice tone, and sound
 - storyboard table with a three-layer shot structure: fixed assets, style/texture inheritance, and time-coded screen action, plus a Shot State Contract for each generated segment
 - continuity plan for generated video segments, including updated state data, cut points, shot-size/angle changes, transition shots, dialogue breath gaps, and match-action opportunities
 - **Join Contract table for every adjacent shot pair**: previous end state, next start state, state delta, risk level, hard-cut permission, bridge-shot requirement, optional keyframe suitability, safety inserts, sound bridge, and fallback edit
@@ -89,10 +89,12 @@ For a quick prompt pack, include only the relevant subset: brief assumptions, pr
 - Build each storyboard row in three layers before generating prompts:
   1. **Fixed assets:** characters, expressions, costumes, props, and locations that must stay locked.
   2. **Style and texture:** the inherited production locks plus any shot-specific lens, lighting, color, or movement flavor.
-  3. **Screen action:** shot size, composition, camera movement, visible action, state change, dialogue/sound, and timing.
+  3. **Screen action:** shot size, composition, camera movement, visible action, performance trigger, state change, dialogue/sound, and timing.
 - Before every `VIDEO_MAIN`, write a **Shot State Contract**: reference roles, first visible frame, screen layout, subject state, prop state, camera coverage mode, action transition, final visible frame, and hard limits. If this contract is unclear, fix it before writing the prompt.
+- When a character's emotion matters, add a **Performance Cause Contract** inside the Shot State Contract: `emotion trigger + facial details + body action + voice tone`. Do not write only abstract emotions such as "fearful", "angry", or "moved"; make the emotion arise from a visible event in the current or previous beat.
 - For every `VIDEO_MAIN`, use time-coded action beats whenever the segment is longer than 5 seconds or contains more than one motion beat. Each time range must say what changes on screen, not repeat static descriptions.
-- Put camera direction inside each time range, not only at the end. Each beat should say camera position/movement plus visible action plus sound, while following the single camera path declared in the Shot State Contract.
+- Put camera direction inside each time range, not only at the end. Each beat should say camera position/movement plus visible action plus performance reaction plus sound, while following the single camera path declared in the Shot State Contract.
+- In time-coded beats, write performance as a causal chain: what the character sees/hears/realizes -> what changes in the face -> what the body does -> how the line is spoken. Example: "刹车把松空，他先皱眉不信，随后瞳孔放大、肩膀僵住，压低嗓子急促说：'糟了'。"
 - State the first visible frame and final visible frame as camera-readable facts. Avoid vague starts such as "continues riding" or "danger approaches" unless the prompt also states position, posture, screen direction, visible props, and what changes first.
 - Do not make video prompts dense action dumps. A normal 5-second prompt should contain 1-2 action beats; a 10-15 second prompt can contain several beats only if each beat is physically possible and has a clear edit point.
 - Use one camera coverage mode per generation unless the user explicitly wants an edit-sequence prompt and the model supports it: **continuous single shot**, **single shot with focus shift**, **planned cut sequence**, or **montage**. Do not write "hand close-up, wheel close-up, medium shot rapid alternation" inside a normal continuous prompt; split into inserts or a planned edit sequence.
@@ -111,10 +113,11 @@ For a quick prompt pack, include only the relevant subset: brief assumptions, pr
 - When a prohibition is safety-critical, pair it with a positive target and a restrained exclusion list: "危险逼近但保持安全距离；画面停在未碰撞前" works better than only saying "不要撞车".
 - Avoid real-person face reference material, copyrighted IP dependence, political sensitivity, sexualized minors, explicit sexual content, graphic violence, and unsafe imitation.
 - Before video generation, do a lightweight rough cut using available references, thumbnails, storyboard stills, or placeholders to check shot size, perspective, dialogue timing, and scene continuity. Do not force a separate keyframe generation pass for every shot.
-- Plan sound like performance: dialogue/voiceover sets timing, ambience and effects carry scenes without music, and music should mark genre, suspense, reveal, or climax.
+- Plan sound like performance: dialogue/voiceover sets timing, voice tone reveals emotion, ambience and effects carry scenes without music, and music should mark genre, suspense, reveal, or climax.
 - **Embed dialogue/SFX/ambience/music inline in every video prompt.** Sound is not a separate material reference, column, or afterthought — every video prompt must contain its dialogue lines, sound effects, ambient audio, and music cues embedded directly in the matching time-coded prompt segments. Use `[对白：台词内容]` for dialogue, `[音效：描述]` for sound effects and ambience, and `[配乐：描述]` for music. Do not add `@音频` entries to the 素材对应表 and do not cite audio references in prompt headers.
 - **Dialogue timing drives shot duration, not the other way around.** Before writing any video prompt, map each line of dialogue to its approximate spoken duration. If a line is ~2 seconds long, the shot containing it must be at least 2.5 seconds (including 0.5s buffer). Split long lines across multiple shots or shorten the line.
 - **Mentally simulate the generated video before generating.** Before committing to final prompts, do a "dry run" in your head: play the video from start to end, shot by shot. Verify: (1) 剧情逻辑是否通顺 — does each action follow from the previous one? (2) 场景连贯性 — does the location, lighting, character position, and prop state stay consistent from shot to shot? (3) 动作合理性 — can the character physically do what the prompt describes in the given time? (4) 对白与动作的匹配 — does the dialogue match what's happening on screen? If any step feels off during simulation, fix the script or prompt before generating.
+- **Run a performance-cause preflight before delivery.** For each important emotion, verify that the prompt states the trigger, face details, body action, and voice tone. If the emotion could appear without the triggering event, or if the face/body/voice contradict each other, rewrite the beat.
 - **Run a state-camera preflight before delivery.** For each `VIDEO_MAIN`, check that the first frame can be drawn, every time beat follows from the previous beat, camera motion does not contradict the coverage mode, and the final frame can cut into the next Shot State Contract.
 - **Design a cover/thumbnail for each video.** The cover is a static image that captures the most iconic or funny moment of the short, with space for the title text. Write a dedicated cover prompt that: (1) uses the same character/scene reference images to maintain visual consistency, (2) composes the frame to leave room for title text overlay (top or bottom), (3) captures the emotional peak or comedic hook of the video. Specify in the prompt where text should be placed, e.g. "上方预留标题文字空间". The title itself is added in post-production, not generated as part of the AI image.
 
@@ -156,6 +159,7 @@ The workflow is distilled from six Feishu Wiki sources about AIGC video setting 
 
 - Start with four foundations: world, character, story, style.
 - Convert scripts into visible physical actions before generating prompts.
+- Convert emotional labels into playable performance: trigger, facial detail, body action, and voice tone.
 - Use a producer/director/art-designer/storyboarder mental model even when one person does all work.
 - Use reference images to lock identity, costume, scene layout, color, and atmosphere.
 - Use text prompts primarily to describe subject/action, environment, camera, sound, and temporal change; let uploaded images carry static appearance details when references are strong.

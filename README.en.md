@@ -48,7 +48,8 @@ This skill solves four real problems:
 1. **No clear starting point** — Intake, foundations, script discussion, director analysis, storyboard, and prompt pack are generated in one workflow.
 2. **Character drift** — A clean turnaround sheet locks face, body, costume, and props first; a full character design board then adds expressions, details, daily/work/story states, and mood stills. Every visual noun must trace back to an `@图片` or `@视频` reference.
 3. **Broken cuts** — `Join Contract` tables audit every adjacent shot pair: prior end state, next start state, state delta, risk level, hard-cut permission, bridge shot, sound bridge, and fallback edit.
-4. **No repair path after generation fails** — Risky shots ship with bridge, insert, and repair prompts so the user can retry by copy-paste instead of inventing fixes mid-edit.
+4. **Fake AI expressions** — The performance formula "trigger + facial details + body action + voice tone" makes characters react to events instead of posing emotions at the camera.
+5. **No repair path after generation fails** — Risky shots ship with bridge, insert, and repair prompts so the user can retry by copy-paste instead of inventing fixes mid-edit.
 
 ---
 
@@ -59,11 +60,12 @@ This skill solves four real problems:
 | **Low-input defaults** | Asks at most for genre, protagonist relationship, first hook, ending question, and target platform |
 | **Layered script development** | Quick prompt packs use a compact three-pass check; full production bibles expand to 3-5 multi-agent rounds |
 | **Director analysis** | Converts abstract emotion into concrete action, camera, light, sound, and edit points |
+| **Performance cause formula** | Important emotions must state trigger, facial details, body action, and voice tone to reduce fake expressions and sudden emotional jumps |
 | **Two-stage character references** | Generate a clean white-background turnaround first, then a full character design board with portrait, turnaround, expressions, details, outfits, props, and mood stills |
 | **Reference-first design** | Character, scene, and prop prompts come before video prompts |
 | **Production locks** | Lock character, scene, style, camera, continuity, sound mood, and forbidden drift before shot prompts |
 | **Shot State Contract** | Each `VIDEO_MAIN` locks first frame, screen direction, subject/prop state, camera coverage mode, action transition, and final frame before the prompt body |
-| **Time-coded shot prompts** | `VIDEO_MAIN` uses fixed assets, style/texture, and screen action layers; each time range includes camera position/movement, visible action, and sound |
+| **Time-coded shot prompts** | `VIDEO_MAIN` uses fixed assets, style/texture, and screen action layers; each time range includes camera position/movement, visible action, performance cause, and sound |
 | **Join Contract** | Every adjacent shot pair has a continuity contract; risky hard cuts are blocked |
 | **Automatic bridge generation** | Location changes, carry/rescue actions, posture jumps, body interaction, and prop-state changes get `VIDEO_BRIDGE` or `VIDEO_INSERT` prompts |
 | **Copy-paste prompt pack** | Each normal segment gets one ready-to-use `VIDEO_MAIN`; bridge, insert, and repair prompts are added only where needed |
@@ -175,7 +177,8 @@ ai-drama-production/
 | **Lock the character before atmosphere** | Lead characters need a clean turnaround before cinematic design boards, variants, props, and mood scenes |
 | **Lock production constraints before shots** | Production locks keep character, scene, style, camera, continuity, sound, and forbidden drift consistent across prompts |
 | **Lock first and final frames before action** | Shot State Contracts tell the model what the shot begins with, what changes, and where it must stop |
-| **Time-code before prompting** | Each time range carries camera position/movement, action, and sound, reducing overloaded actions and ineffective end-only camera notes |
+| **Give emotion a cause before expression** | Realistic emotion starts from an event, then becomes face detail, body action, and voice tone |
+| **Time-code before prompting** | Each time range carries camera position/movement, action, performance cause, and sound, reducing overloaded actions, fake expressions, and ineffective end-only camera notes |
 | **Lock references before video prompts** | Character, scene, and prop consistency must be designed up front |
 | **Rough cut before video generation** | Still-image rough cuts catch broken timing and composition cheaply |
 | **Audit joins before generation** | AI clips are memoryless; adjacent shots must be designed explicitly |

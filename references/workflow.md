@@ -57,6 +57,7 @@ For each important character:
 - arc: start state, midpoint shift, final change
 - consistency anchor: 3-5 details that must never drift
 - expression set: neutral, joy, anger, fear, shock, suspicion, sadness, triumph
+- performance anchors: how this character typically shows emotion through face, hands, posture, breath, and voice
 
 Make main characters visually distinctive; AI video consistency improves when silhouettes, costumes, and props are unmistakable.
 For anthropomorphic or stylized projects, choose the species/body type as part of characterization. The animal/object metaphor should express personality and story function, not just cuteness.
@@ -130,16 +131,30 @@ Do not scatter unrelated style phrases into every shot. If a shot needs a variat
 Do not merely summarize the script. "讲戏" like a director:
 
 - replace abstract emotion with visible behavior
+- for every important emotion, write the performance cause formula: **trigger -> facial details -> body action -> voice tone**
 - use continuous action chains
 - specify camera direction and lens distance
 - specify light source, direction, color temperature, and intensity
 - include dialogue, silence, breath, ambient sound, and music cues
 - preserve the dramatic intention of each beat
 
+Treat actors as responding to events, not displaying labels. "She is scared" is not ready for video generation; write what she sees or hears, then how her eyes, mouth, shoulders, hands, breath, and voice change. If the cause is missing, the AI often produces a fake pose toward the camera.
+
 Example transformation:
 
 - Weak: "She feels lonely when she gets home."
 - Strong: "She pushes the door open. The entryway sensor light fails to turn on. Only a cold strip of streetlight cuts through the living-room curtain. She sits without removing her coat, staring at the unwashed cup on the coffee table. The camera slowly pushes from her profile to the cup; half her face is pale blue, half disappears into shadow."
+
+Performance prompt pattern:
+
+```text
+真实情绪 = 发生原因 + 表情细节 + 肢体动作 + 说话语气
+```
+
+Example:
+
+- Weak: "Lu Ye becomes terrified."
+- Strong: "The brake lever suddenly goes loose while a truck enters the edge of the intersection. Lu Ye first frowns in disbelief, then his pupils widen and his jaw tightens; his right hand squeezes the brake again, shoulders locked, body lowering toward the motorcycle tank; he says '糟了' in a short, breathless voice."
 
 ## 4. Art Design: Lock Visual References
 
@@ -233,6 +248,7 @@ Each storyboard row must answer:
 - shot size: establishing shot, wide, medium, medium close-up, close-up, insert, detail
 - subject/action: "who does what" or "what object is where"
 - expression/psychology: concrete face or body state
+- performance cause: what visible event triggers the emotion, then face/body/voice response
 - adjacent-shot relation: why this shot follows the previous one and how it leads to the next one
 - updated state data for rows after the first: character position, standing/sitting state, eyeline, face direction, gesture, emotion, prop state, and lighting continuity
 - join strategy for rows after the first: cut type, shot-size/angle change, transition insert if needed, dialogue breath gap, and match-action opportunity
@@ -251,6 +267,7 @@ Required fields:
 | First visible frame | exact subject, posture, screen side, eyeline, prop position, and environment at second 0 |
 | Screen layout | who/what is foreground, midground, background; left/right direction of motion |
 | Subject state | body posture, hand state, face direction, emotion, and immediate intention |
+| Performance Cause Contract | emotion trigger, facial details, body action, voice tone; required when the shot depends on acting |
 | Prop/state data | location, ownership, visible condition, and what may change |
 | Camera coverage mode | continuous single shot / single shot with focus shift / planned cut sequence / montage |
 | Camera path | where the camera starts, how it moves, and where it ends |
@@ -285,7 +302,7 @@ For each shot:
 4. For every shot after the first, state updated state data inherited from the previous shot.
 5. State the join strategy: intentional cut, new shot size/subject, camera angle change of about 30 degrees or more when applicable, transition insert, breath gap, or match-action cut.
 6. Describe time-coded action if longer than 5 seconds or if the shot has more than one visible motion beat.
-7. Put camera position and camera movement inside each time range together with character action, emotion shift, dialogue, and sound cues.
+7. Put camera position and camera movement inside each time range together with character action, performance cause/reaction, dialogue, and sound cues.
 8. **Embed sound inline without audio references**: every dialogue line, sound effect, ambience, and music cue goes directly in the prompt at the correct time position using `[对白]` `[音效]` `[配乐]` markers. Do not create or cite `@音频` entries.
 9. Keep prompts narrative and concrete.
 10. Write only changes not already shown by references.
@@ -302,6 +319,7 @@ Each `VIDEO_MAIN` should read like director instructions to the actor, camera, a
 - **Start state:** where everyone and every key prop begins.
 - **Time beats:** `0-1.5s`, `1.5-3s`, etc. Each beat describes a visible change.
 - **Per-beat camera language:** every time beat states shot size/angle/movement/focus for that beat, following the camera coverage mode and path in the Shot State Contract.
+- **Per-beat performance logic:** when emotion changes, the same time beat states the trigger, facial detail, body action, and voice tone. Do not let emotion appear without a cause.
 - **Sound inline:** dialogue, foley, ambience, and music at the beat where they happen.
 - **End state/edit point:** what final posture, prop state, or reaction the editor can cut on.
 - **Do-not-drift list:** only the most important identity, costume, location, prop, and subtitle constraints.
@@ -343,9 +361,10 @@ Do this:
 3. **剧情逻辑检查**: Does each shot's action follow logically from the previous? If character A is sad about gas prices in shot 3, does their action in shot 4 (e.g., pulling out a wallet) make sense as a consequence?
 4. **场景连贯检查**: Would the lighting, character positions, and props be consistent across adjacent shots? Is a character's clothing the same? Is a mug that was full in shot 1 still full in shot 2?
 5. **镜头逻辑检查**: Does the camera coverage mode match the requested motion? A continuous shot cannot also demand rapid unrelated close-up alternation unless it is rewritten as a planned cut sequence.
-6. **动作-对白匹配检查**: When a character says "I'm charging my phone," are they actually holding a phone and a charger? Or are they doing something unrelated?
-7. **时间可行性检查**: Can the described action actually happen within the specified duration? (e.g., "stands up, walks 5 meters, pulls out phone, opens app" in 2 seconds is too much)
-8. **终帧检查**: Does the final frame stop at the intended cliffhanger/edit point without leaking into the next plot event?
+6. **表演因果检查**: Does every important emotion have a visible trigger, facial details, body action, and voice tone? If someone suddenly looks afraid, what made them afraid on screen?
+7. **动作-对白匹配检查**: When a character says "I'm charging my phone," are they actually holding a phone and a charger? Or are they doing something unrelated?
+8. **时间可行性检查**: Can the described action actually happen within the specified duration? (e.g., "stands up, walks 5 meters, pulls out phone, opens app" in 2 seconds is too much)
+9. **终帧检查**: Does the final frame stop at the intended cliffhanger/edit point without leaking into the next plot event?
 
 If the simulation reveals a logic gap or inconsistency, **rewrite the prompt before generating**. Do not "fix it in post" — fix it in the prompt.
 
