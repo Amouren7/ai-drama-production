@@ -19,7 +19,7 @@
 
 ## 🎯 一句话讲清楚
 
-**AI Drama Production** 是一个 [Claude Code](https://docs.anthropic.com/en/docs/claude-code/skills) 技能（skill），它把你的粗糙创意变成一份完整的 AI 短剧、AI 短片、预告片、动漫图轻动作视频制作方案。
+**AI Drama Production** 是一个安装在AI Agent（Claude Code、Codex、Open Code、Hermes Agent等）上的技能（skill），它把你的粗糙创意变成一份完整的 AI 短剧、AI 短片、预告片、动漫图轻动作视频制作方案。
 
 它不生成视频，而是生成**可生产蓝图**：剧本、分镜、参考图 prompt、单片段视频 prompt、桥接镜头、保险插入镜头、修复 prompt、声音设计、连续性管理和剪辑装配指南。你的工作重点可以放在前期想法和审核，提示词、设定、桥接、打磨交给 Skill。
 
